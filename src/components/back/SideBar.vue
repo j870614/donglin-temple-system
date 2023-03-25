@@ -1,0 +1,322 @@
+<template>
+  <aside :style="{ padding: isLogoShow ? '1.5rem' : '0.75rem' }">
+    {{ isLogoShow }}
+    <img src="LOGO.png" alt="LOGO" v-if="isLogoShow" />
+    <ul class="list-inline" :style="{ marginTop: isLogoShow ? '2rem' : '' }">
+      <template v-for="nav in sideNav" :key="nav.name + nav.icon">
+        <li
+          class="fs-5 style-sidebar flex-center"
+          :class="{
+            'bg-primary text-white': hoverNavName === nav.name + nav.icon,
+            'bg-neutral-10': nav.children && nav.isOpen && hoverNavName !== nav.name + nav.icon,
+          }"
+          @mouseenter="() => (hoverNavName = nav.name + nav.icon)"
+          @mouseleave="() => (hoverNavName = '')"
+          @click="() => (nav.isOpen = !nav.isOpen)"
+        >
+          <div class="fw-semibold d-flex align-items-center gap-3">
+            <span class="material-symbols-outlined fs-3">{{ nav.icon }} </span>
+            {{ nav.name }}
+          </div>
+          <span v-if="nav.children" class="material-symbols-outlined"> expand_more </span>
+        </li>
+        <template v-if="nav.children && nav.isOpen">
+          <template v-for="navChild in nav.children" :key="navChild.name + navChild.icon">
+            <template v-if="navChild.children.length">
+              <li
+                class="fs-5 flex-center style-sidebar"
+                :class="{
+                  'bg-primary text-white': hoverNavName === navChild.name + navChild.icon,
+                  'bg-neutral-10':
+                    navChild.isOpen && hoverNavName !== navChild.name + navChild.icon,
+                }"
+                @mouseenter="() => (hoverNavName = navChild.name + navChild.icon)"
+                @mouseleave="() => (hoverNavName = '')"
+                @click="() => (navChild.isOpen = !navChild.isOpen)"
+              >
+                <div class="fw-semibold d-flex align-items-center gap-3">
+                  <span class="material-symbols-outlined fs-3">{{ navChild.icon }} </span>
+                  {{ navChild.name }}
+                </div>
+                <span class="material-symbols-outlined"> expand_more </span>
+              </li>
+              <template v-if="navChild.isOpen">
+                <ul
+                  class="list-inline border-start border-neutral-40 border-4"
+                  style="margin-left: 2rem"
+                  v-for="innerChild in navChild.children"
+                  :key="innerChild.name"
+                >
+                  <li
+                    class="fs-5 style-sidebar"
+                    :class="{
+                      'bg-primary text-white': hoverNavName === innerChild.name,
+                    }"
+                    @mouseenter="() => (hoverNavName = innerChild.name)"
+                    @mouseleave="() => (hoverNavName = '')"
+                  >
+                    <div class="fw-semibold">{{ innerChild.name }}</div>
+                  </li>
+                </ul>
+              </template>
+            </template>
+            <li v-else class="fs-5 style-sidebar">
+              <div class="fw-semibold d-flex align-items-center gap-3">
+                <span class="material-symbols-outlined fs-3">{{ navChild.icon }} </span>
+                {{ navChild.name }}
+              </div>
+            </li>
+          </template>
+        </template>
+      </template>
+    </ul>
+    <router-link
+      to=""
+      class="fs-5 fw-semibold style-sidebar d-flex align-items-center gap-3"
+      :class="{ 'bg-primary text-white': hoverNavName === '登出' }"
+      @mouseenter="() => (hoverNavName = '登出')"
+      @mouseleave="() => (hoverNavName = '')"
+      ><span class="material-symbols-outlined"> logout </span>登出</router-link
+    >
+  </aside>
+</template>
+
+<script setup lang="ts">
+import { ref, defineProps, toRefs } from 'vue';
+
+const props = defineProps({
+  isLogoShow: {
+    type: Boolean,
+    default: true,
+  },
+});
+const { isLogoShow } = toRefs(props); // 控制當前是手機板 or 網頁版
+
+const nav = [
+  {
+    icon: 'house',
+    path: '',
+    name: '回首頁',
+    isOpen: false,
+  },
+  {
+    icon: 'build',
+    path: '',
+    name: '系統管理',
+    isOpen: false,
+    children: [
+      {
+        icon: 'vpn_key',
+        path: '',
+        name: '使用者權限',
+        isOpen: false,
+        children: [
+          {
+            path: '',
+            name: '使用者權限管理',
+          },
+          {
+            path: '',
+            name: '使用者權限核發',
+          },
+        ],
+      },
+      {
+        icon: 'settings',
+        path: '',
+        name: '系統設定',
+        isOpen: false,
+        children: [
+          {
+            path: '',
+            name: '佛七期數設定',
+          },
+          {
+            path: '',
+            name: '行事曆新增、修改',
+          },
+        ],
+      },
+      {
+        icon: 'notifications',
+        path: '',
+        name: '系統公告',
+        isOpen: false,
+        children: [
+          {
+            path: '',
+            name: '公告新增',
+          },
+          {
+            path: '',
+            name: '歷史公告查詢',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    icon: 'group',
+    path: '',
+    name: '知客',
+    isOpen: false,
+    children: [
+      {
+        icon: 'edit_calendar',
+        path: '',
+        name: '佛七報名預約',
+        isOpen: false,
+        children: [
+          {
+            path: '',
+            name: '佛七報名預約名單',
+          },
+          {
+            path: '',
+            name: '佛七報名',
+          },
+          {
+            path: '',
+            name: '佛七報到',
+          },
+        ],
+      },
+      {
+        icon: 'badge',
+        path: '',
+        name: '皈依報名',
+        isOpen: false,
+        children: [
+          {
+            path: '',
+            name: '皈依報名名單',
+          },
+          {
+            path: '',
+            name: '皈依報名',
+          },
+          {
+            path: '',
+            name: '皈依資料建檔',
+          },
+        ],
+      },
+      {
+        icon: 'calendar_month',
+        path: '',
+        name: '參訪及活動',
+        isOpen: false,
+        children: [
+          {
+            path: '',
+            name: '來寺參訪預約',
+          },
+          {
+            path: '',
+            name: '參與活動人數登記',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    icon: 'house_siding',
+    path: '',
+    name: '寮房',
+    isOpen: false,
+    children: [
+      {
+        icon: 'hotel',
+        path: '',
+        name: '預約及安單',
+        isOpen: false,
+        children: [
+          {
+            path: '',
+            name: '安排寮房',
+          },
+          {
+            path: '',
+            name: '報到安單',
+          },
+          {
+            path: '',
+            name: '離單',
+          },
+        ],
+      },
+      {
+        icon: 'help_clinic',
+        path: '',
+        name: '寮房資訊',
+        isOpen: false,
+        children: [
+          {
+            path: '',
+            name: '查詢寮房資訊',
+          },
+          {
+            path: '',
+            name: '更換寮房',
+          },
+          {
+            path: '',
+            name: '設備報修',
+          },
+        ],
+      },
+      {
+        icon: 'calendar_month',
+        path: '',
+        name: '日常坡事',
+        isOpen: false,
+        children: [
+          {
+            path: '',
+            name: '坡事列表',
+          },
+          {
+            path: '',
+            name: '坡事安排',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    icon: 'draft',
+    path: '',
+    name: '四眾個人資料',
+    isOpen: false,
+    children: [
+      {
+        icon: 'search',
+        path: '',
+        name: '查詢四眾個人資料',
+        isOpen: false,
+        children: [],
+      },
+    ],
+  },
+  {
+    icon: 'restaurant_menu',
+    path: '',
+    name: '查詢用齋人數',
+    isOpen: false,
+  },
+];
+const sideNav = ref(nav);
+const hoverNavName = ref();
+</script>
+<style lang="scss" scoped>
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.style-sidebar {
+  padding: 1.5rem 2rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+}
+</style>
