@@ -1,18 +1,20 @@
 <template>
   <aside :style="{ padding: isLogoShow ? '1.5rem' : '0.75rem' }">
-    {{ isLogoShow }}
     <img src="LOGO.png" alt="LOGO" v-if="isLogoShow" />
     <ul class="list-inline" :style="{ marginTop: isLogoShow ? '2rem' : '' }">
       <template v-for="nav in sideNav" :key="nav.name + nav.icon">
         <li
           class="fs-5 style-sidebar flex-center"
           :class="{
-            'bg-primary text-white': hoverNavName === nav.name + nav.icon,
-            'bg-neutral-10': nav.children && nav.isOpen && hoverNavName !== nav.name + nav.icon,
+            'bg-neutral-10': hoverNavName === nav.name + nav.icon && !nav.isOpen,
+            'bg-primary text-white': nav.isOpen && nav.children,
           }"
           @mouseenter="() => (hoverNavName = nav.name + nav.icon)"
           @mouseleave="() => (hoverNavName = '')"
-          @click="() => (nav.isOpen = !nav.isOpen)"
+          @click="() => {
+            nav.isOpen = !nav.isOpen;
+            nav.children?.forEach(child => child.isOpen = false)
+          }"
         >
           <div class="fw-semibold d-flex align-items-center gap-3">
             <span class="material-symbols-outlined fs-3">{{ nav.icon }} </span>
@@ -26,9 +28,9 @@
               <li
                 class="fs-5 flex-center style-sidebar"
                 :class="{
-                  'bg-primary text-white': hoverNavName === navChild.name + navChild.icon,
                   'bg-neutral-10':
-                    navChild.isOpen && hoverNavName !== navChild.name + navChild.icon,
+                    hoverNavName === navChild.name + navChild.icon && !navChild.isOpen,
+                  'bg-primary text-white': navChild.isOpen,
                 }"
                 @mouseenter="() => (hoverNavName = navChild.name + navChild.icon)"
                 @mouseleave="() => (hoverNavName = '')"
@@ -50,7 +52,7 @@
                   <li
                     class="fs-5 style-sidebar"
                     :class="{
-                      'bg-primary text-white': hoverNavName === innerChild.name,
+                      'bg-neutral-10': hoverNavName === innerChild.name,
                     }"
                     @mouseenter="() => (hoverNavName = innerChild.name)"
                     @mouseleave="() => (hoverNavName = '')"
@@ -92,7 +94,7 @@ const props = defineProps({
 });
 const { isLogoShow } = toRefs(props); // 控制當前是手機板 or 網頁版
 
-const nav = [
+const nav = ref([
   {
     icon: 'house',
     path: '',
@@ -304,9 +306,9 @@ const nav = [
     name: '查詢用齋人數',
     isOpen: false,
   },
-];
+]);
 const sideNav = ref(nav);
-const hoverNavName = ref();
+const hoverNavName = ref('');
 </script>
 <style lang="scss" scoped>
 .flex-center {
