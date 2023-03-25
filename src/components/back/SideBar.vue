@@ -1,90 +1,140 @@
 <template>
-  <aside :style="{ padding: isLogoShow ? '1.5rem' : '0.75rem' }">
+  <aside :style="{ padding: isLogoShow ? '1.5rem' : '0.75rem' }" style="min-height: 100vh">
     <img src="LOGO.png" alt="LOGO" v-if="isLogoShow" />
-    <ul class="list-inline" :style="{ marginTop: isLogoShow ? '2rem' : '' }">
-      <template v-for="nav in sideNav" :key="nav.name + nav.icon">
-        <li
-          class="fs-5 style-sidebar flex-center"
-          :class="{
-            'bg-neutral-10': hoverNavName === nav.name + nav.icon && !nav.isOpen,
-            'bg-primary text-white': nav.isOpen && nav.children,
-          }"
-          @mouseenter="() => (hoverNavName = nav.name + nav.icon)"
-          @mouseleave="() => (hoverNavName = '')"
-          @click="() => {
-            nav.isOpen = !nav.isOpen;
-            nav.children?.forEach(child => child.isOpen = false)
-          }"
-        >
-          <div class="fw-semibold d-flex align-items-center gap-3">
-            <span class="material-symbols-outlined fs-3">{{ nav.icon }} </span>
-            {{ nav.name }}
-          </div>
-          <span v-if="nav.children" class="material-symbols-outlined"> expand_more </span>
-        </li>
-        <template v-if="nav.children && nav.isOpen">
-          <template v-for="navChild in nav.children" :key="navChild.name + navChild.icon">
-            <template v-if="navChild.children.length">
+    <div class="d-flex flex-column justify-content-between">
+      <ul class="list-inline" :style="{ marginTop: isLogoShow ? '2rem' : '' }">
+        <template v-for="nav in sideNav" :key="nav.name + nav.icon">
+          <!-- 第一層級 -->
+          <li
+            class="fs-5 style-sidebar flex-center"
+            :class="{
+              'bg-neutral-10':
+                hoverNavName === nav.name + nav.icon && currentNavName !== nav.name + nav.path,
+              'bg-primary text-white': !nav.children && currentNavName === nav.name + nav.path,
+            }"
+            @mouseenter="() => (hoverNavName = nav.name + nav.icon)"
+            @mouseleave="() => (hoverNavName = '')"
+            @click="
+              () => {
+                nav.children ? changeOpen(nav, null) : changePath(nav.name, nav.path);
+              }
+            "
+          >
+            <div class="fw-semibold d-flex align-items-center gap-3">
+              <span class="material-symbols-outlined fs-3">{{ nav.icon }} </span>
+              {{ nav.name }}
+            </div>
+            <span
+              v-if="nav.children"
+              class="material-symbols-outlined"
+              :style="{
+                transform: nav.isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+              }"
+            >
+              expand_more
+            </span>
+          </li>
+          <template v-if="nav.children && nav.isOpen">
+            <template v-for="navChild in nav.children" :key="navChild.name + navChild.icon">
+              <template v-if="navChild.children && navChild.children.length">
+                <!-- 第二層級,有多層級 -->
+                <li
+                  class="fs-5 flex-center style-sidebar"
+                  :class="{
+                    'bg-neutral-10': hoverNavName === navChild.name + navChild.icon,
+                  }"
+                  @mouseenter="() => (hoverNavName = navChild.name + navChild.icon)"
+                  @mouseleave="() => (hoverNavName = '')"
+                  @click="
+                    () => {
+                      changeOpen(nav, navChild);
+                    }
+                  "
+                >
+                  <div class="fw-semibold d-flex align-items-center gap-3">
+                    <span class="material-symbols-outlined fs-3">{{ navChild.icon }} </span>
+                    {{ navChild.name }}
+                  </div>
+                  <span
+                    class="material-symbols-outlined"
+                    :style="{
+                      transform: navChild.isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                    }"
+                  >
+                    expand_more
+                  </span>
+                </li>
+                <template v-if="navChild.isOpen">
+                  <ul
+                    class="list-inline border-start border-neutral-40 border-4"
+                    style="margin-left: 2rem"
+                    v-for="innerChild in navChild.children"
+                    :key="innerChild.name"
+                  >
+                    <!-- 第三層級 -->
+                    <li
+                      class="fs-5 style-sidebar"
+                      :class="{
+                        'bg-primary text-white':
+                          $route.fullPath.split('/').pop() === innerChild.path,
+                        'bg-neutral-10':
+                          hoverNavName === innerChild.name &&
+                          $route.fullPath.split('/').pop() !== innerChild.path,
+                      }"
+                      @mouseenter="() => (hoverNavName = innerChild.name)"
+                      @mouseleave="() => (hoverNavName = '')"
+                      @click="() => changePath(innerChild.name, innerChild.path)"
+                    >
+                      <div class="fw-semibold">{{ innerChild.name }}</div>
+                    </li>
+                  </ul>
+                </template>
+              </template>
+              <!-- 僅第二層級 -->
               <li
-                class="fs-5 flex-center style-sidebar"
+                v-else
+                class="fs-5 style-sidebar"
                 :class="{
+                  'bg-primary text-white': $route.fullPath.split('/').pop() === navChild.path,
                   'bg-neutral-10':
-                    hoverNavName === navChild.name + navChild.icon && !navChild.isOpen,
-                  'bg-primary text-white': navChild.isOpen,
+                    hoverNavName === navChild.name && !$route.fullPath.includes(navChild.path),
                 }"
-                @mouseenter="() => (hoverNavName = navChild.name + navChild.icon)"
+                @mouseenter="() => (hoverNavName = navChild.name)"
                 @mouseleave="() => (hoverNavName = '')"
-                @click="() => (navChild.isOpen = !navChild.isOpen)"
+                @click="() => changePath(navChild.name, navChild.path)"
               >
                 <div class="fw-semibold d-flex align-items-center gap-3">
                   <span class="material-symbols-outlined fs-3">{{ navChild.icon }} </span>
                   {{ navChild.name }}
                 </div>
-                <span class="material-symbols-outlined"> expand_more </span>
               </li>
-              <template v-if="navChild.isOpen">
-                <ul
-                  class="list-inline border-start border-neutral-40 border-4"
-                  style="margin-left: 2rem"
-                  v-for="innerChild in navChild.children"
-                  :key="innerChild.name"
-                >
-                  <li
-                    class="fs-5 style-sidebar"
-                    :class="{
-                      'bg-neutral-10': hoverNavName === innerChild.name,
-                    }"
-                    @mouseenter="() => (hoverNavName = innerChild.name)"
-                    @mouseleave="() => (hoverNavName = '')"
-                  >
-                    <div class="fw-semibold">{{ innerChild.name }}</div>
-                  </li>
-                </ul>
-              </template>
             </template>
-            <li v-else class="fs-5 style-sidebar">
-              <div class="fw-semibold d-flex align-items-center gap-3">
-                <span class="material-symbols-outlined fs-3">{{ navChild.icon }} </span>
-                {{ navChild.name }}
-              </div>
-            </li>
           </template>
         </template>
-      </template>
-    </ul>
-    <router-link
-      to=""
-      class="fs-5 fw-semibold style-sidebar d-flex align-items-center gap-3"
-      :class="{ 'bg-primary text-white': hoverNavName === '登出' }"
-      @mouseenter="() => (hoverNavName = '登出')"
-      @mouseleave="() => (hoverNavName = '')"
-      ><span class="material-symbols-outlined"> logout </span>登出</router-link
-    >
+      </ul>
+      <router-link
+        to=""
+        class="fs-5 fw-semibold style-sidebar d-flex align-items-center gap-3"
+        :class="{ 'bg-neutral-10': hoverNavName === '登出' }"
+        @mouseenter="() => (hoverNavName = '登出')"
+        @mouseleave="() => (hoverNavName = '')"
+        ><span class="material-symbols-outlined"> logout </span>登出</router-link
+      >
+    </div>
   </aside>
 </template>
 
 <script setup lang="ts">
 import { ref, defineProps, toRefs } from 'vue';
+import { useRouter } from 'vue-router';
+
+interface NavItem {
+  icon?: string;
+  path: string;
+  name: string;
+  isOpen?: boolean;
+  children?: NavItem[];
+}
 
 const props = defineProps({
   isLogoShow: {
@@ -93,8 +143,9 @@ const props = defineProps({
   },
 });
 const { isLogoShow } = toRefs(props); // 控制當前是手機板 or 網頁版
+const router = useRouter();
 
-const nav = ref([
+const nav = ref<NavItem[]>([
   {
     icon: 'house',
     path: '',
@@ -309,6 +360,41 @@ const nav = ref([
 ]);
 const sideNav = ref(nav);
 const hoverNavName = ref('');
+const currentNavName = ref('');
+function changeCurrent(name: string, path: string) {
+  currentNavName.value = name + path;
+}
+function changePath(name: string, path: string) {
+  changeCurrent(name, path);
+  router.push(`/back/${path}`);
+}
+function changeOpen(firstNav: NavItem, secondNav: NavItem | null) {
+  const firstIndex = nav.value.findIndex((item) => item.name === firstNav.name);
+  if (secondNav) {
+    const outNav = nav.value[firstIndex];
+    if (outNav.children) {
+      const secondIndex: number = outNav.children.findIndex((item) => item.name === secondNav.name);
+      // 第二層級選單開關
+      outNav.children[secondIndex].isOpen = !outNav.children[secondIndex].isOpen;
+      changeCurrent(outNav.children[secondIndex].name, outNav.children[secondIndex].path);
+    }
+    return;
+  }
+
+  // 第一層級關掉默認關閉第二層級
+  if (nav.value[firstIndex].isOpen) {
+    const outNav = nav.value[firstIndex];
+    if (outNav?.children) {
+      outNav.children.forEach((item, index, childNav) => {
+        const arr = childNav;
+        arr[index].isOpen = false;
+      });
+    }
+  }
+  // 第一層級選單開關
+  nav.value[firstIndex].isOpen = !nav.value[firstIndex].isOpen;
+  changeCurrent(nav.value[firstIndex].name, nav.value[firstIndex].path);
+}
 </script>
 <style lang="scss" scoped>
 .flex-center {
