@@ -10,15 +10,8 @@ const router = createRouter({
     },
     {
       path: '/back',
+      name: 'back',
       component: () => import('@/views/back/BackLayout.vue'),
-      children: [
-        {
-          path: '',
-          components: {
-            sidebar: () => import('@/components/back/SideBar.vue'),
-          },
-        },
-      ],
     },
   ],
 });
