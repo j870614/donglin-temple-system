@@ -5,7 +5,7 @@
       <ul class="list-inline" :style="{ marginTop: isLogoShow ? '2rem' : '' }">
         <template v-for="nav in sideNav" :key="nav.name + nav.icon">
           <!-- 第一層級 -->
-          <li
+          <!-- <li
             class="fs-5 style-sidebar flex-center"
             :class="{
               'bg-neutral-10':
@@ -33,12 +33,12 @@
             >
               expand_more
             </span>
-          </li>
+          </li> -->
           <template v-if="nav.children && nav.isOpen">
             <template v-for="navChild in nav.children" :key="navChild.name + navChild.icon">
               <template v-if="navChild.children && navChild.children.length">
                 <!-- 第二層級,有多層級 -->
-                <li
+                <!-- <li
                   class="fs-5 flex-center style-sidebar"
                   :class="{
                     'bg-neutral-10': hoverNavName === navChild.name + navChild.icon,
@@ -63,7 +63,7 @@
                   >
                     expand_more
                   </span>
-                </li>
+                </li> -->
                 <template v-if="navChild.isOpen">
                   <ul
                     class="list-inline border-start border-neutral-40 border-4"
@@ -72,7 +72,7 @@
                     :key="innerChild.name"
                   >
                     <!-- 第三層級 -->
-                    <li
+                    <!-- <li
                       class="fs-5 style-sidebar"
                       :class="{
                         'bg-primary text-white':
@@ -86,12 +86,12 @@
                       @click="() => changePath(innerChild.name, innerChild.path)"
                     >
                       <div class="fw-semibold">{{ innerChild.name }}</div>
-                    </li>
+                    </li> -->
                   </ul>
                 </template>
               </template>
               <!-- 僅第二層級 -->
-              <li
+              <!-- <li
                 v-else
                 class="fs-5 style-sidebar"
                 :class="{
@@ -107,19 +107,19 @@
                   <span class="material-symbols-outlined fs-3">{{ navChild.icon }} </span>
                   {{ navChild.name }}
                 </div>
-              </li>
+              </li> -->
             </template>
           </template>
         </template>
       </ul>
-      <router-link
+      <!-- <router-link
         to=""
         class="fs-5 fw-semibold style-sidebar d-flex align-items-center gap-3"
         :class="{ 'bg-neutral-10': hoverNavName === '登出' }"
         @mouseenter="() => (hoverNavName = '登出')"
         @mouseleave="() => (hoverNavName = '')"
         ><span class="material-symbols-outlined"> logout </span>登出</router-link
-      >
+      > -->
     </div>
   </aside>
 </template>
@@ -359,16 +359,16 @@ const nav = ref<NavItem[]>([
   },
 ]);
 const sideNav = ref(nav);
-const hoverNavName = ref('');
+const hoverNavName = ref(''); // eslint-disable-line
 const currentNavName = ref('');
 function changeCurrent(name: string, path: string) {
   currentNavName.value = name + path;
 }
-function changePath(name: string, path: string) {
+function changePath(name: string, path: string) { // eslint-disable-line
   changeCurrent(name, path);
   router.push(`/back/${path}`);
 }
-function changeOpen(firstNav: NavItem, secondNav: NavItem | null) {
+function changeOpen(firstNav: NavItem, secondNav: NavItem | null) { // eslint-disable-line
   const firstIndex = nav.value.findIndex((item) => item.name === firstNav.name);
   if (secondNav) {
     const outNav = nav.value[firstIndex];
