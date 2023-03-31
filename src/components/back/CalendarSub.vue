@@ -29,9 +29,9 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
     <div class="calendarSub">
       <div class="calendarSub-dailySchedule">
         <div class="calendarSub-dailySchedule-header d-flex justify-content-between">
-          <h2>今日行程</h2>
+          <h2 class="fw-bold">今日行程</h2>
           <a href="javascript:;" class="d-flex pt-2 text-decoration-none text-black">
-            <p>查看全部</p>
+            <p class="fw-bold">查看全部</p>
             <span class="material-symbols-outlined fs-5 d-inline-block"> arrow_forward </span>
           </a>
         </div>
@@ -56,7 +56,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
       </div>
       <div class="calendarSub-todoList">
         <div class="calendarSub-todoList-header d-flex justify-content-between">
-          <h2>待辦事項</h2>
+          <h2 class="fw-bold">待辦事項</h2>
         </div>
         <div class="calendarSub-todoList-body mb-3" v-if="todoList.length">
           <div
@@ -65,11 +65,10 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
             :key="todo.id"
           >
             <input
+              type="checkbox"
               id="is_finished"
-              name="is_finished"
               v-model="todo.isFinished"
               class="form-check-input"
-              type="checkbox"
               :aria-label="todo.title"
             />
             <label
@@ -86,7 +85,10 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
             type="button"
             class="btn btn-outline-primary border border-primary rounded-4 py-3 border-2 fw-bold"
           >
-            <span class="me-1">⊕</span>新增待辦事項
+            <div class="d-flex justify-content-center lh-1">
+              <span class="material-symbols-outlined d-inline-block"> add_circle </span>
+              <p class="fs-6 pt-1 mb-0">新增待辦事項</p>
+            </div>
           </button>
         </div>
       </div>
