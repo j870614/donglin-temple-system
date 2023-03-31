@@ -1,4 +1,3 @@
-<!-- eslint-disable -->
 <template>
   <aside :style="{ padding: isLogoShow ? '1.5rem' : '0.75rem' }" style="min-height: 100vh">
     <img src="LOGO.png" alt="LOGO" v-if="isLogoShow" />
@@ -14,8 +13,15 @@
               'bg-primary text-white': !nav.children && currentNavName === nav.name + nav.path,
             }"
             @mouseenter="() => (hoverNavName = nav.name + nav.icon)"
+            @focus="() => (hoverNavName = nav.name + nav.icon)"
             @mouseleave="() => (hoverNavName = '')"
+            @blur="() => (hoverNavName = '')"
             @click="
+              () => {
+                nav.children ? changeOpen(nav, null) : changePath(nav.name, nav.path);
+              }
+            "
+            @keydown="
               () => {
                 nav.children ? changeOpen(nav, null) : changePath(nav.name, nav.path);
               }
@@ -45,8 +51,15 @@
                     'bg-neutral-10': hoverNavName === navChild.name + navChild.icon,
                   }"
                   @mouseenter="() => (hoverNavName = navChild.name + navChild.icon)"
+                  @focus="() => (hoverNavName = navChild.name + navChild.icon)"
                   @mouseleave="() => (hoverNavName = '')"
+                  @blur="() => (hoverNavName = '')"
                   @click="
+                    () => {
+                      changeOpen(nav, navChild);
+                    }
+                  "
+                  @keydown="
                     () => {
                       changeOpen(nav, navChild);
                     }
@@ -83,8 +96,11 @@
                           $route.fullPath.split('/').pop() !== innerChild.path,
                       }"
                       @mouseenter="() => (hoverNavName = innerChild.name)"
+                      @focus="() => (hoverNavName = innerChild.name)"
                       @mouseleave="() => (hoverNavName = '')"
+                      @blur="() => (hoverNavName = '')"
                       @click="() => changePath(innerChild.name, innerChild.path)"
+                      @keydown="() => changePath(innerChild.name, innerChild.path)"
                     >
                       <div class="fw-semibold">{{ innerChild.name }}</div>
                     </li>
@@ -101,8 +117,11 @@
                     hoverNavName === navChild.name && !$route.fullPath.includes(navChild.path),
                 }"
                 @mouseenter="() => (hoverNavName = navChild.name)"
+                @focus="() => (hoverNavName = navChild.name)"
                 @mouseleave="() => (hoverNavName = '')"
+                @blur="() => (hoverNavName = '')"
                 @click="() => changePath(navChild.name, navChild.path)"
+                @keydown="() => changePath(navChild.name, navChild.path)"
               >
                 <div class="fw-semibold d-flex align-items-center gap-3">
                   <span class="material-symbols-outlined fs-3">{{ navChild.icon }} </span>
@@ -118,7 +137,9 @@
         class="fs-5 fw-semibold style-sidebar d-flex align-items-center gap-3"
         :class="{ 'bg-neutral-10': hoverNavName === '登出' }"
         @mouseenter="() => (hoverNavName = '登出')"
+        @focus="() => (hoverNavName = '登出')"
         @mouseleave="() => (hoverNavName = '')"
+        @blur="() => (hoverNavName = '')"
         ><span class="material-symbols-outlined"> logout </span>登出</router-link
       >
     </div>
