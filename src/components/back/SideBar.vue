@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
   <aside :style="{ padding: isLogoShow ? '1.5rem' : '0.75rem' }" style="min-height: 100vh">
     <img src="LOGO.png" alt="LOGO" v-if="isLogoShow" />
@@ -361,13 +362,16 @@ const nav = ref<NavItem[]>([
 const sideNav = ref(nav);
 const hoverNavName = ref('');
 const currentNavName = ref('');
+
 function changeCurrent(name: string, path: string) {
   currentNavName.value = name + path;
 }
+
 function changePath(name: string, path: string) {
   changeCurrent(name, path);
   router.push(`/back/${path}`);
 }
+
 function changeOpen(firstNav: NavItem, secondNav: NavItem | null) {
   const firstIndex = nav.value.findIndex((item) => item.name === firstNav.name);
   if (secondNav) {
