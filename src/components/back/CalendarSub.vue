@@ -10,6 +10,7 @@ interface Todo {
   id: string;
   title: string;
   isFinished: boolean;
+  isHover: boolean;
 }
 
 const scheduleList: Ref<Schedule[]> = ref<Schedule[]>([
@@ -18,9 +19,9 @@ const scheduleList: Ref<Schedule[]> = ref<Schedule[]>([
   { id: '3', title: '開會', tags: ['17:00-22:00'] },
 ]);
 const todoList: Ref<Todo[]> = ref<Todo[]>([
-  { id: '1', title: '皈依證填寫', isFinished: true },
-  { id: '2', title: '請庫頭師補足專念服庫存', isFinished: false },
-  { id: '3', title: '開會', isFinished: false },
+  { id: '1', title: '皈依證填寫', isFinished: true, isHover: false },
+  { id: '2', title: '請庫頭師補足專念服庫存', isFinished: false, isHover: false },
+  { id: '3', title: '開會', isFinished: false, isHover: false },
 ]);
 </script>
 
@@ -60,29 +61,57 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
         </div>
         <div class="calendarSub-todoList-body mb-3" v-if="todoList.length">
           <div
-            class="calendarSub-todoList-input-group form-check mb-2 fs-5"
+            class="calendarSub-todoList-input form-check mb-2 fs-5 rounded-3 d-flex"
             v-for="todo in todoList"
             :key="todo.id"
+            :class="{
+              'bg-neutral-10': todo.isHover,
+            }"
+            @mouseenter="todo.isHover = true"
+            @focus="todo.isHover = true"
+            @mouseleave="todo.isHover = false"
+            @focusout="todo.isHover = false"
           >
             <input
               type="checkbox"
               :id="todo.id"
               v-model="todo.isFinished"
-              class="form-check-input"
+              class="form-check-input me-2"
             />
             <label
               :for="todo.id"
               class="form-check-label"
-              :class="todo.isFinished ? 'text-muted text-decoration-line-through' : ''"
+              :class="{ 'text-muted text-decoration-line-through': todo.isFinished }"
             >
               {{ todo.title }}
             </label>
+            <button
+              v-if="todo.isHover"
+              type="button"
+              class="btn btn-sm ms-auto text-end py-0 lh-1"
+              @click.prevent="
+                todoList.splice(
+                  todoList.findIndex((elem) => elem.id === todo.id),
+                  1,
+                )
+              "
+            >
+              <span class="material-symbols-outlined"> close </span>
+            </button>
           </div>
         </div>
         <div class="calendarSub-todoList-footer d-grid">
           <button
             type="button"
             class="btn btn-outline-primary border border-primary rounded-4 py-3 border-2 fw-bold"
+            @click.prevent="
+              todoList.push({
+                id: `${Math.floor(Math.random() * 1e7)}`,
+                title: '皈依證填寫',
+                isFinished: false,
+                isHover: false,
+              })
+            "
           >
             <div class="d-flex justify-content-center lh-1">
               <span class="material-symbols-outlined d-inline-block"> add_circle </span>
@@ -96,6 +125,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
 </template>
 
 <style scoped lang="scss">
+@import '@/assets/main.scss';
 .calendarSub-dailySchedule {
   margin-bottom: 40px;
   &-header {
@@ -107,6 +137,9 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
   &-body {
     .card {
       margin-top: 12px;
+      &:hover {
+        background: $neutral-10;
+      }
     }
   }
 }
@@ -115,10 +148,15 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
   &-header {
     margin-bottom: 24px;
   }
+  &-input {
+    input[type='checkbox'] {
+      margin-left: -1rem;
+    }
+  }
   &-footer {
     button {
       &:hover {
-        color: white;
+        color: $white;
       }
     }
   }
