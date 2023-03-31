@@ -66,13 +66,12 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
           >
             <input
               type="checkbox"
-              id="is_finished"
+              :id="todo.id"
               v-model="todo.isFinished"
               class="form-check-input"
-              :aria-label="todo.title"
             />
             <label
-              for="is_finished"
+              :for="todo.id"
               class="form-check-label"
               :class="todo.isFinished ? 'text-muted text-decoration-line-through' : ''"
             >
