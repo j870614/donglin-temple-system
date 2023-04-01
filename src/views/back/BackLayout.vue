@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import sideBarConfigStore from '@/stores/SideBarConfig.ts';
+import sideBarConfigStore from '@/stores/SideBarConfig';
 import { RouterView } from 'vue-router';
 import SideBar from '@/components/back/SideBar.vue';
 import CalendarSub from '@/components/back/CalendarSub.vue';
