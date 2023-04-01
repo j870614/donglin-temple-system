@@ -12,6 +12,12 @@ const router = createRouter({
       path: '/back',
       name: 'back',
       component: () => import('@/views/back/BackLayout.vue'),
+      children: [
+        {
+          path: 'announcement',
+          component: () => import('@/views/back/System_Notification.vue'),
+        },
+      ],
     },
   ],
 });

@@ -1,6 +1,6 @@
 <template>
-  <aside :style="{ padding: isLogoShow ? '1.5rem' : '0.75rem' }" style="min-height: 100vh">
-    <img src="LOGO.png" alt="LOGO" v-if="isLogoShow" />
+  <aside class="py-1 py-md-0" style="min-height: 100vh">
+    <img src="LOGO.png" alt="LOGO" v-if="isLogoShow" style="width: 100%" />
     <div class="d-flex flex-column justify-content-between">
       <ul class="list-inline" :style="{ marginTop: isLogoShow ? '2rem' : '' }">
         <template v-for="nav in sideNav" :key="nav.name + nav.icon">
