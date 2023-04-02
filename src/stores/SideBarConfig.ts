@@ -2,11 +2,6 @@ import { defineStore } from 'pinia';
 
 export default defineStore('sideBarConfigStore', {
   state: () => ({
-    isOpen: false,
+    isOpen: true,
   }),
-  actions: {
-    changeIsOpen() {
-      this.isOpen = !this.isOpen;
-    },
-  },
 });
