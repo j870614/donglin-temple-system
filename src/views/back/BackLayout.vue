@@ -2,7 +2,6 @@
 import sideBarConfigStore from '@/stores/SideBarConfig';
 import { RouterView } from 'vue-router';
 import SideBar from '@/components/back/SideBar.vue';
-import CalendarSub from '@/components/back/CalendarSub.vue';
 
 const sideBarStore = sideBarConfigStore();
 </script>
@@ -21,17 +20,9 @@ const sideBarStore = sideBarConfigStore();
         <nav class="row">
           <div class="col-12 bg-dark text-white">Nav</div>
         </nav>
-        <div class="row h-100">
-          <main class="col bg-info">
-            <RouterView />
-          </main>
-          <div class="col-12 col-md-3 bg-body">
-            <div class="mb-5 mb-md-0">
-              <!-- 行事曆 -->
-            </div>
-            <CalendarSub />
-          </div>
-        </div>
+        <main class="row bg-info h-100">
+          <RouterView />
+        </main>
       </div>
     </div>
   </div>

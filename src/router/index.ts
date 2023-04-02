@@ -15,7 +15,12 @@ const router = createRouter({
       children: [
         {
           path: 'announcement',
-          component: () => import('@/views/back/System_Notification.vue'),
+          children: [
+            {
+              path: 'history',
+              component: () => import('@/views/back/System_Notification.vue'),
+            },
+          ],
         },
       ],
     },
