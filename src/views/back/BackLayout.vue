@@ -8,14 +8,14 @@ const sideBarStore = sideBarConfigStore();
 
 <template>
   <div class="container-fluid">
+    <nav class="row">
+      <div class="col bg-dark text-white">Nav</div>
+    </nav>
     <div class="row">
       <aside class="col-12 col-md-3 gx-md-5" v-if="sideBarStore.isOpen">
         <SideBar />
       </aside>
       <div class="col" style="background-color: #f6f6f6">
-        <nav class="row">
-          <div class="bg-dark text-white">Nav</div>
-        </nav>
         <RouterView />
       </div>
     </div>
