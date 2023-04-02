@@ -14,11 +14,15 @@ const router = createRouter({
       component: () => import('@/views/back/BackLayout.vue'),
       children: [
         {
+          path: '',
+          component: () => import('@/views/back/BackIndex.vue'),
+        },
+        {
           path: 'announcement',
           children: [
             {
               path: 'history',
-              component: () => import('@/views/back/System_Notification.vue'),
+              component: () => import('@/views/back/SystemNotification.vue'),
             },
           ],
         },

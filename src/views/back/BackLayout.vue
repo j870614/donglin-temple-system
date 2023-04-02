@@ -16,13 +16,11 @@ const sideBarStore = sideBarConfigStore();
       >
         <SideBar />
       </aside>
-      <div class="col-12 col-md gap-4">
+      <div class="col" style="background-color: #f6f6f6">
         <nav class="row">
           <div class="col-12 bg-dark text-white">Nav</div>
         </nav>
-        <main class="row bg-info h-100">
-          <RouterView />
-        </main>
+        <RouterView />
       </div>
     </div>
   </div>

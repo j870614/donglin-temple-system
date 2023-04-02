@@ -1,7 +1,7 @@
 <template>
   <span
     class="material-symbols-outlined fs-2"
-    style="cursor: pointer"
+    style="cursor: pointer; margin-right: 20px"
     :style="{ transform: sideBarStore.isOpen ? 'rotate(180deg)' : '' }"
     @click="() => (sideBarStore.isOpen = !sideBarStore.isOpen)"
     @keydown="() => (sideBarStore.isOpen = !sideBarStore.isOpen)"
