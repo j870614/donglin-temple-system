@@ -2,6 +2,7 @@
 import sideBarConfigStore from '@/stores/SideBarConfig';
 import { RouterView } from 'vue-router';
 import SideBar from '@/components/back/SideBar.vue';
+import NavBar from '@/components/back/NavBar.vue';
 
 const sideBarStore = sideBarConfigStore();
 </script>
@@ -9,7 +10,7 @@ const sideBarStore = sideBarConfigStore();
 <template>
   <div class="container-fluid">
     <nav class="row">
-      <div class="col bg-dark text-white">Nav</div>
+      <NavBar />
     </nav>
     <div class="row">
       <aside class="col-12 col-md-3 gx-md-5 max-sideBar" v-if="sideBarStore.isOpen">
