@@ -1,0 +1,35 @@
+.calendarSub-dailySchedule {
+  margin-bottom: 40px;
+  &-header {
+    margin-bottom: 24px;
+    span {
+      padding-top: 1px;
+    }
+  }
+  &-body {
+    .card {
+      margin-top: 12px;
+      &:hover {
+        background: $neutral-10;
+      }
+    }
+  }
+}
+
+.calendarSub-todoList {
+  &-header {
+    margin-bottom: 24px;
+  }
+  &-input {
+    input[type='checkbox'] {
+      margin-left: -1rem;
+    }
+  }
+  &-footer {
+    button {
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+}

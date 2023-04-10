@@ -44,14 +44,4 @@
   </div>
 </template>
 
-<style>
-.adminLogin {
-  display: flex;
-  justify-content: center;
-}
-.card {
-  border: none;
-}
-</style>
-
 <script setup lang="ts"></script>
