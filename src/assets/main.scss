@@ -1,3 +1,10 @@
 @import '../node_modules/bootstrap/scss/functions';
 @import './variables';
 @import '../node_modules/bootstrap/scss/bootstrap';
+
+.box-style {
+    border-radius: 12px;
+    box-shadow: 0px 2px 40px rgba(0, 0, 0, 0.05);
+    background-color: $white;
+  }
+

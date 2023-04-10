@@ -5,3 +5,6 @@ a.router-link-active {
   text-decoration: none;
   color: inherit;
 }
+#app {
+  font-family: 'Noto Sans TC', sans-serif;
+}
