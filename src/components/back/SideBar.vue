@@ -410,3 +410,15 @@ function changeOpen(firstNav: NavItem, secondNav: NavItem | null) {
   changeCurrent(nav.value[firstIndex].name, nav.value[firstIndex].path);
 }
 </script>
+<style scoped lang="scss">
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.style-sidebar {
+  padding: 1.5rem 2rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+}
+</style>

@@ -28,13 +28,15 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
 <template>
   <div class="container">
     <div class="calendarSub">
-      <div class="calendarSub-dailySchedule">
-        <div class="calendarSub-dailySchedule-header d-flex justify-content-between">
+      <div class="calendarSub-dailySchedule" style="margin-bottom: 40px">
+        <div
+          class="calendarSub-dailySchedule-header mb-4 d-flex align-items-center justify-content-between"
+        >
           <h2 class="fw-bold">今日行程</h2>
-          <a href="javascript:;" class="d-flex pt-2 text-decoration-none text-black">
-            <p class="fw-bold">查看全部</p>
+          <router-link to="" class="d-flex align-items-center text-decoration-none text-black">
+            <p class="fw-bold mb-0">查看全部</p>
             <span class="material-symbols-outlined fs-5 d-inline-block"> arrow_forward </span>
-          </a>
+          </router-link>
         </div>
         <div class="calendarSub-dailySchedule-body" v-if="scheduleList.length">
           <div
@@ -42,7 +44,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
             v-for="schedule in scheduleList"
             :key="schedule.id"
           >
-            <div class="card rounded-4">
+            <div class="card box-hover border-neutral-40 rounded-4" style="margin-top: 12px">
               <div class="card-body d-flex justify-content-between">
                 <p class="card-text d-inline align-middle m-2 fs-5">{{ schedule.title }}</p>
                 <div class="d-inline-block mt-1" v-for="tag in schedule.tags" :key="tag">
@@ -56,7 +58,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
         </div>
       </div>
       <div class="calendarSub-todoList">
-        <div class="calendarSub-todoList-header d-flex justify-content-between">
+        <div class="calendarSub-todoList-header mb-4 d-flex justify-content-between">
           <h2 class="fw-bold">待辦事項</h2>
         </div>
         <div class="calendarSub-todoList-body mb-3" v-if="todoList.length">
@@ -123,3 +125,20 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
     </div>
   </div>
 </template>
+<style scoped lang="scss">
+@import '@/assets/stylesheets/all.scss';
+.calendarSub-todoList {
+  &-input {
+    input[type='checkbox'] {
+      margin-left: -1rem;
+    }
+  }
+  &-footer {
+    button {
+      &:hover {
+        color: $white;
+      }
+    }
+  }
+}
+</style>

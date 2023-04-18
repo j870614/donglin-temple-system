@@ -9,7 +9,7 @@ const sideBarStore = sideBarConfigStore();
 
 <template>
   <div class="container-fluid">
-    <nav class="row bg-white sticky-top">
+    <nav class="row bg-white sticky-top border-bottom border-neutral-40">
       <NavBar />
     </nav>
     <div class="row">
@@ -22,3 +22,10 @@ const sideBarStore = sideBarConfigStore();
     </div>
   </div>
 </template>
+<style scoped lang="scss">
+.max-sideBar {
+  @media (min-width: 768px) {
+    max-width: 360px;
+  }
+}
+</style>
