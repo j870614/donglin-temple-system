@@ -32,7 +32,9 @@
   <!-- 手機 start -->
   <div class="col-8 d-flex d-lg-none">
     <div class="d-flex align-items-center">
-      <img class="svg menu" src="@/assets/img/menu.svg" alt="menu" />
+      <OpenSideBar>
+        <template #icon-name> menu </template>
+      </OpenSideBar>
       <img class="logo-mobile ms-4" src="@/assets/img/Logo-mobile-sm.png" alt="Logo-mobile" />
       <div class="h5 ms-1 mb-0 logo-mobile-title">寺務管理系統</div>
     </div>
@@ -55,6 +57,9 @@
   </div>
   <!-- 手機 end -->
 </template>
+<script setup lang="ts">
+import OpenSideBar from './OpenSideBar.vue';
+</script>
 <style scoped lang="scss">
 @import '@/assets/stylesheets/all.scss';
 .logo {
