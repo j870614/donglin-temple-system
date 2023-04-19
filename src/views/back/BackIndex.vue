@@ -10,26 +10,17 @@
         ref="indexSwitch"
       >
         <p
+          v-for="item in ['公告', '行程']"
+          :key="item"
           class="flex-grow-1 text-center mb-0 rounded-switch"
           :class="{
-            'text-neutral-80 fs-7': currentPage !== '公告',
-            'bg-white fs-6 fw-semibold': currentPage === '公告',
+            'text-neutral-80 fs-7': currentPage !== item,
+            'bg-white fs-6 fw-semibold': currentPage === item,
           }"
-          @click="() => (currentPage = '公告')"
-          @keydown="() => (currentPage = '公告')"
+          @click="() => (currentPage = item)"
+          @keydown="() => (currentPage = item)"
         >
-          公告
-        </p>
-        <p
-          class="flex-grow-1 text-center mb-0 rounded-switch"
-          :class="{
-            'text-neutral-80 fs-7': currentPage !== '行程',
-            'bg-white fs-6 fw-semibold': currentPage === '行程',
-          }"
-          @click="() => (currentPage = '行程')"
-          @keydown="() => (currentPage = '行程')"
-        >
-          行程
+          {{ item }}
         </p>
       </div>
       <div
@@ -37,13 +28,20 @@
         v-if="webWidth >= 992 || (webWidth < 992 && currentPage === '公告')"
       >
         <div class="col-lg-5">
-          <div class="box-style">
+          <div
+            class="box-style"
+            :class="{ 'mt-lg-4 mt-3': index !== 0 }"
+            v-for="(item, index) in [
+              { title: '彌陀之家東林寺公告', data: announcement, url: '' },
+              { title: '系統公告', data: systemNotification, url: '' },
+            ]"
+            :key="item.title + item.url"
+          >
             <h2 class="p-4 pb-0 h4 fw-semibold d-flex align-items-center justify-content-between">
-              彌陀之家東林寺公告
+              {{ item.title }}
               <router-link
                 to=""
                 class="fs-6 fw-semibold d-flex align-items-center flex-shrink-0 mb-0"
-                style="cursor: pointer"
               >
                 顯示更多
                 <span
@@ -57,49 +55,9 @@
             <ul class="px-4 list-unstyled mb-0">
               <li
                 class="py-4 box-hover"
-                v-for="(info, index) in announcement"
+                v-for="(info, index) in item.data"
                 :key="info.tag + info.content"
-                :class="{ 'border-bottom border-neutral-40': index !== announcement.length - 1 }"
-              >
-                <AnnouncementInfo>
-                  <template #info-tag>
-                    <span class="py-2 px-3 rounded-4 d-inline-block" :class="tags[info.tag]">{{
-                      info.tag
-                    }}</span>
-                  </template>
-                  <template #info-content>
-                    <p>{{ info.content }}</p>
-                  </template>
-                  <template #info-timer>{{ info.timer }}</template>
-                </AnnouncementInfo>
-              </li>
-            </ul>
-          </div>
-          <div class="box-style mt-lg-4 mt-3">
-            <h2 class="p-4 pb-0 h4 fw-semibold d-flex align-items-center justify-content-between">
-              系統公告
-              <router-link
-                to=""
-                class="fs-6 fw-semibold d-flex align-items-center flex-shrink-0 mb-0"
-                style="cursor: pointer"
-              >
-                顯示更多
-                <span
-                  class="material-symbols-outlined fs-5 fw-semibold d-inline-block"
-                  data-v-1a886170=""
-                >
-                  arrow_forward
-                </span>
-              </router-link>
-            </h2>
-            <ul class="px-4 list-unstyled mb-0">
-              <li
-                class="py-4 box-hover"
-                v-for="(info, index) in systemNotification"
-                :key="info.tag + info.content"
-                :class="{
-                  'border-bottom border-neutral-40': index !== systemNotification.length - 1,
-                }"
+                :class="{ 'border-bottom border-neutral-40': index !== item.data.length - 1 }"
               >
                 <AnnouncementInfo>
                   <template #info-tag>
@@ -123,7 +81,6 @@
               <router-link
                 to=""
                 class="fs-6 fw-semibold d-flex align-items-center flex-shrink-0 mb-0"
-                style="cursor: pointer"
               >
                 顯示更多
                 <span
