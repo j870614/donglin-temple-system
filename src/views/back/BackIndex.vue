@@ -178,28 +178,27 @@ import { ref, onMounted, onBeforeMount } from 'vue';
 import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import CalendarSub from '@/components/back/CalendarSub.vue';
 import AnnouncementInfo from '@/components/back/AnnouncementInfo.vue';
+import sideBarConfigStore from '@/stores/SideBarConfig';
 
+const sideBarStore = sideBarConfigStore();
 const currentPage = ref<String>('公告');
-interface Info {
-  tag: string;
-  content: string;
-  timer: string;
-  user?: string;
-}
-const indexSwitch = ref(null);
-const webWidth = ref<number>(0);
-onMounted(() => {
-  webWidth.value = window.innerWidth;
 
+const indexSwitch = ref(null);
+
+const webWidth = ref<number>(0);
+function resizeWidth() {
+  webWidth.value = window.innerWidth;
   window.addEventListener('resize', () => {
     webWidth.value = window.innerWidth;
+    if (webWidth.value < 992) {
+      sideBarStore.isOpen = false;
+    } else {
+      sideBarStore.isOpen = true;
+    }
   });
-});
-onBeforeMount(() => {
-  window.removeEventListener('resize', () => {
-    webWidth.value = window.innerWidth;
-  });
-});
+}
+onMounted(resizeWidth);
+onBeforeMount(resizeWidth);
 
 // 標籤樣式定義
 const tags: { [key: string]: string } = {
@@ -211,6 +210,12 @@ const tags: { [key: string]: string } = {
   系統維護: 'bg-secondary-tint text-secondary',
 };
 
+interface Info {
+  tag: string;
+  content: string;
+  timer: string;
+  user?: string;
+}
 // 彌陀之家東林寺公告
 const announcement: Info[] = [
   {
