@@ -10,6 +10,7 @@
       <div class="position-relative">
         <div
           class="icon-radius cursor-point"
+          :class="{ 'bg-neutral-10': isNotifyOpen }"
           style="margin-right: 1.125rem"
           @click.prevent="
             () => {
@@ -77,6 +78,7 @@
       <div class="pe-3 position-relative d-flex justify-content-around">
         <span
           class="material-symbols-outlined svg cursor-point box-hover"
+          :class="{ 'bg-neutral-10': isUserSettingOpen }"
           :style="{ transform: isUserSettingOpen ? 'rotate(180deg)' : 'rotate(0)' }"
           @click.prevent="
             () => {
@@ -128,6 +130,7 @@
       <div class="position-relative">
         <div
           class="icon-radius cursor-point"
+          :class="{ 'bg-neutral-10': isNotifyOpen }"
           style="margin-right: 1.125rem"
           @click.prevent="
             () => {
@@ -218,6 +221,9 @@ const isUserSettingOpen = ref<Boolean>(false);
   border: 1px solid $neutral-40;
   position: relative;
   flex-shrink: 0;
+  &:hover {
+    background: $neutral-10;
+  }
 }
 .icon-position {
   position: absolute;
