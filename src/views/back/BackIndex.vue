@@ -186,17 +186,22 @@ const currentPage = ref<String>('公告');
 const indexSwitch = ref(null);
 
 const webWidth = ref<number>(0);
+function currentWidth(webSize: number) {
+  if (webSize < 992) {
+    sideBarStore.isOpen = false;
+  } else {
+    sideBarStore.isOpen = true;
+  }
+}
 function resizeWidth() {
   webWidth.value = window.innerWidth;
+  currentWidth(webWidth.value);
   window.addEventListener('resize', () => {
     webWidth.value = window.innerWidth;
-    if (webWidth.value < 992) {
-      sideBarStore.isOpen = false;
-    } else {
-      sideBarStore.isOpen = true;
-    }
+    currentWidth(webWidth.value);
   });
 }
+
 onMounted(resizeWidth);
 onBeforeMount(resizeWidth);
 
