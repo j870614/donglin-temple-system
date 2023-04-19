@@ -1,29 +1,3 @@
-<script setup lang="ts">
-import { RouterView } from 'vue-router';
-</script>
-
 <template>
-  <RouterView />
+  <router-view></router-view>
 </template>
-
-<style lang="scss">
-@import '@/assets/stylesheets/all.scss';
-
-a.router-link-exact-active,
-a.router-link-active {
-  text-decoration: none;
-  color: inherit;
-}
-#app {
-  font-family: 'Noto Sans TC', sans-serif;
-}
-
-.box-style {
-  border-radius: 12px;
-  box-shadow: 0px 2px 40px rgba(0, 0, 0, 0.05);
-  background-color: $white;
-}
-.box-hover:hover {
-  background: $neutral-10;
-}
-</style>

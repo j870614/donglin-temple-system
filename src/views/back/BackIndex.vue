@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col gx-md-5 py-4">
       <h1 class="h1 fw-semibold d-flex align-items-center" style="margin-bottom: 36px">
-        <OpenSideBar />彌陀之家東林寺常年佛七第422期
+        <OpenSideBar /> <span style="margin-left: 20px">彌陀之家東林寺常年佛七第422期</span>
       </h1>
       <div class="row gy-3 gy-md-0">
         <div class="col-md-5">
@@ -130,7 +130,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 bg-body">
       <div class="mb-5 mb-md-0">
         <!-- 行事曆 -->
       </div>

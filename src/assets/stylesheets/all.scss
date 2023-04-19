@@ -51,20 +51,5 @@
 @import './utilities/custom';
 
 //@import "./utilities/utilities";
-//base 會使得資料重複 就不引入了
-//  @import './base/base';
+ @import './base/global';
 
-//components
-@import './components/Navbar';
-@import './components/CalendarSub';
-@import './components/OpenSideBar';
-@import './components/SideBar';
-@import './components/AnnouncementInfo';
-
-
-//pages
-@import './pages/BackIndex';
-@import './pages/BackLayout';
-@import './pages/SystemNotification';
-@import './pages/FrontLayout';
-@import './pages/AdminLogin';
