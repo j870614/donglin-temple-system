@@ -1,10 +1,41 @@
 <template>
-  <div class="row">
-    <div class="col gx-lg-5 py-4">
-      <h1 class="h1 fw-semibold d-flex align-items-center" style="margin-bottom: 36px">
+  <div class="row py-4 py-lg-0" :class="{ 'bg-white': webWidth < 992 && currentPage === '行程' }">
+    <div class="col gx-lg-5 py-lg-4 py-0">
+      <h1 class="h1 fw-semibold d-flex align-items-center mb-3 pb-2 mb-lg-4">
         <OpenSideBar /> <span style="margin-left: 20px">彌陀之家東林寺常年佛七第422期</span>
       </h1>
-      <div class="row gy-3 gy-lg-0">
+      <div
+        class="d-flex bg-neutral-40 rounded-switch p-1 d-lg-none"
+        style="margin-bottom: 24px"
+        ref="indexSwitch"
+      >
+        <p
+          class="flex-grow-1 text-center mb-0 rounded-switch"
+          :class="{
+            'text-neutral-80 fs-7': currentPage !== '公告',
+            'bg-white fs-6 fw-semibold': currentPage === '公告',
+          }"
+          @click="() => (currentPage = '公告')"
+          @keydown="() => (currentPage = '公告')"
+        >
+          公告
+        </p>
+        <p
+          class="flex-grow-1 text-center mb-0 rounded-switch"
+          :class="{
+            'text-neutral-80 fs-7': currentPage !== '行程',
+            'bg-white fs-6 fw-semibold': currentPage === '行程',
+          }"
+          @click="() => (currentPage = '行程')"
+          @keydown="() => (currentPage = '行程')"
+        >
+          行程
+        </p>
+      </div>
+      <div
+        class="row gy-3 gy-lg-0"
+        v-if="webWidth >= 992 || (webWidth < 992 && currentPage === '公告')"
+      >
         <div class="col-lg-5">
           <div class="box-style">
             <h2 class="p-4 pb-0 h4 fw-semibold d-flex align-items-center justify-content-between">
@@ -130,8 +161,11 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-3 bg-body">
-      <div class="mb-5 mb-lg-0">
+    <div
+      class="col-lg-3 bg-body"
+      v-if="webWidth >= 992 || (webWidth < 992 && currentPage === '行程')"
+    >
+      <div class="">
         <!-- 行事曆 -->
       </div>
       <CalendarSub />
@@ -139,16 +173,33 @@
   </div>
 </template>
 <script setup lang="ts">
+import { ref, onMounted, onBeforeMount } from 'vue';
+
 import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import CalendarSub from '@/components/back/CalendarSub.vue';
 import AnnouncementInfo from '@/components/back/AnnouncementInfo.vue';
 
+const currentPage = ref<String>('公告');
 interface Info {
   tag: string;
   content: string;
   timer: string;
   user?: string;
 }
+const indexSwitch = ref(null);
+const webWidth = ref<number>(0);
+onMounted(() => {
+  webWidth.value = window.innerWidth;
+
+  window.addEventListener('resize', () => {
+    webWidth.value = window.innerWidth;
+  });
+});
+onBeforeMount(() => {
+  window.removeEventListener('resize', () => {
+    webWidth.value = window.innerWidth;
+  });
+});
 
 // 標籤樣式定義
 const tags: { [key: string]: string } = {
@@ -217,3 +268,9 @@ const notify: Info[] = [
   },
 ];
 </script>
+<style scoped lang="scss">
+.rounded-switch {
+  border-radius: 100px;
+  padding: 12px;
+}
+</style>

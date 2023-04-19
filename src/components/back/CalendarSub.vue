@@ -26,7 +26,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
 </script>
 
 <template>
-  <div class="container">
+  <div class="container gx-0 gx-lg-4">
     <div class="calendarSub">
       <div class="calendarSub-dailySchedule" style="margin-bottom: 40px">
         <div
