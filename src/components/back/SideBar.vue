@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100 d-flex flex-column justify-content-between py-2 my-1 my-md-3 pt-md-0">
+  <div class="h-100 d-flex flex-column justify-content-between py-2 my-1 my-lg-3 pt-lg-0">
     <ul class="list-inline">
       <template v-for="nav in sideNav" :key="nav.name + nav.icon">
         <!-- 第一層級 -->

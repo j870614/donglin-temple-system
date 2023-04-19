@@ -17,11 +17,7 @@
       ></span>
     </router-link>
     <router-link to="" class="icon-radius">
-      <img
-        class="svg account-circle icon-position"
-        src="@/assets/img/account-circle-outline.svg"
-        alt="account-circle"
-      />
+      <span class="material-symbols-outlined text-primary svg icon-position"> account_circle </span>
     </router-link>
     <div class="login-name h5 py-5 mb-0">知客 普謀菩薩</div>
     <div class="pe-4">
@@ -32,7 +28,7 @@
   <!-- 手機 start -->
   <div class="col-8 d-flex d-lg-none">
     <div class="d-flex align-items-center">
-      <OpenSideBar>
+      <OpenSideBar page="nav">
         <template #icon-name> menu </template>
       </OpenSideBar>
       <img class="logo-mobile ms-4" src="@/assets/img/Logo-mobile-sm.png" alt="Logo-mobile" />
@@ -48,11 +44,7 @@
       />
     </div>
     <div class="icon-radius">
-      <img
-        class="svg account-circle icon-position"
-        src="@/assets/img/account-circle-outline.svg"
-        alt="account-circle"
-      />
+      <span class="material-symbols-outlined text-primary svg icon-position"> account_circle </span>
     </div>
   </div>
   <!-- 手機 end -->

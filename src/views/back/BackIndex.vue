@@ -1,11 +1,11 @@
 <template>
   <div class="row">
-    <div class="col gx-md-5 py-4">
+    <div class="col gx-lg-5 py-4">
       <h1 class="h1 fw-semibold d-flex align-items-center" style="margin-bottom: 36px">
         <OpenSideBar /> <span style="margin-left: 20px">彌陀之家東林寺常年佛七第422期</span>
       </h1>
-      <div class="row gy-3 gy-md-0">
-        <div class="col-md-5">
+      <div class="row gy-3 gy-lg-0">
+        <div class="col-lg-5">
           <div class="box-style">
             <h2 class="p-4 pb-0 h4 fw-semibold d-flex align-items-center justify-content-between">
               彌陀之家東林寺公告
@@ -44,7 +44,7 @@
               </li>
             </ul>
           </div>
-          <div class="box-style mt-md-4 mt-3">
+          <div class="box-style mt-lg-4 mt-3">
             <h2 class="p-4 pb-0 h4 fw-semibold d-flex align-items-center justify-content-between">
               系統公告
               <router-link
@@ -130,8 +130,8 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3 bg-body">
-      <div class="mb-5 mb-md-0">
+    <div class="col-lg-3 bg-body">
+      <div class="mb-5 mb-lg-0">
         <!-- 行事曆 -->
       </div>
       <CalendarSub />
