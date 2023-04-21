@@ -1,10 +1,13 @@
 <template>
   <!-- 桌機 start -->
   <div class="d-none d-lg-flex">
-    <div class="col d-flex align-items-center gx-5">
-      <img class="logo pe-4" src="@/assets/img/LOGO.png" alt="spar-cat-eye" />
+    <h1 class="col d-flex align-items-center gx-5 mb-0">
+      <router-link to="/back" class="pe-4"
+        ><img class="logo" src="@/assets/img/LOGO.png" alt="spar-cat-eye"
+      /></router-link>
+
       <div class="h1 fw-semibold ps-4">寺務管理系統</div>
-    </div>
+    </h1>
     <div class="col-lg-3 d-flex align-items-center d-flex justify-content-end">
       <!-- 通知 start -->
       <div class="position-relative">
@@ -38,7 +41,7 @@
         <div
           v-if="isNotifyOpen"
           class="position-absolute end-0 bg-white border rounded-4 p-3"
-          style="width: 25vw; max-width: 450px"
+          style="width: 35vw; max-width: 350px"
         >
           <div class="d-flex gap-2 align-items-center justify-content-between mb-2 mb-lg-3">
             <p class="mb-0 fs-4 fw-semibold">新通知</p>
@@ -69,48 +72,53 @@
         </div>
       </div>
       <!-- 通知 end -->
-      <router-link to="" class="icon-radius">
-        <span class="material-symbols-outlined text-primary svg icon-position">
-          account_circle
-        </span>
-      </router-link>
-      <div class="login-name fs-5 py-5 d-flex">知客 普謀菩薩</div>
-      <div class="pe-3 position-relative d-flex justify-content-around">
-        <span
-          class="material-symbols-outlined svg cursor-point box-hover"
-          :class="{ 'bg-neutral-10': isUserSettingOpen }"
-          :style="{ transform: isUserSettingOpen ? 'rotate(180deg)' : 'rotate(0)' }"
-          @click.prevent="
-            () => {
-              isUserSettingOpen = !isUserSettingOpen;
-              isNotifyOpen = false;
-            }
-          "
-          @keydown.prevent="
-            () => {
-              isUserSettingOpen = !isUserSettingOpen;
-              isNotifyOpen = false;
-            }
-          "
-        >
-          expand_more
-        </span>
-        <ul
-          v-if="isUserSettingOpen"
-          class="d-flex flex-column mb-0 position-absolute end-50 list-inline bg-white border rounded-4 overflow-hidden"
-          style="width: 13vw; top: 150%"
-        >
-          <li>
-            <router-link to="" class="btn box-hover p-3 rounded-0 d-flex align-items-center"
-              ><span class="material-symbols-outlined me-2"> manage_accounts </span
-              >帳號設定</router-link
-            >
-          </li>
-          <li class="btn box-hover p-3 rounded-0 d-flex align-items-center">
-            <span class="material-symbols-outlined me-2"> logout </span>登出
-          </li>
-        </ul>
+      <!-- user start -->
+      <div
+        class="d-flex align-items-center"
+        @click.prevent="
+          () => {
+            isUserSettingOpen = !isUserSettingOpen;
+            isNotifyOpen = false;
+          }
+        "
+        @keydown.prevent="
+          () => {
+            isUserSettingOpen = !isUserSettingOpen;
+            isNotifyOpen = false;
+          }
+        "
+      >
+        <div class="icon-radius cursor-point" :class="{ 'bg-neutral-10': isUserSettingOpen }">
+          <span class="material-symbols-outlined text-primary svg icon-position">
+            account_circle
+          </span>
+        </div>
+        <div class="login-name fs-5 d-flex py-5 my-3">知客 普謀菩薩</div>
+        <div class="pe-3 position-relative d-flex justify-content-around">
+          <span
+            class="material-symbols-outlined svg cursor-point"
+            :style="{ transform: isUserSettingOpen ? 'rotate(180deg)' : 'rotate(0)' }"
+          >
+            expand_more
+          </span>
+          <ul
+            v-if="isUserSettingOpen"
+            class="d-flex flex-column mb-0 position-absolute end-50 list-inline bg-white border rounded-4 overflow-hidden"
+            style="width: 15vw; top: 150%"
+          >
+            <li>
+              <router-link to="" class="btn box-hover p-3 rounded-0 d-flex align-items-center"
+                ><span class="material-symbols-outlined me-2"> manage_accounts </span
+                >帳號設定</router-link
+              >
+            </li>
+            <li class="btn box-hover p-3 rounded-0 d-flex align-items-center">
+              <span class="material-symbols-outlined me-2"> logout </span>登出
+            </li>
+          </ul>
+        </div>
       </div>
+      <!-- user end -->
     </div>
   </div>
   <!-- 桌機 end -->
@@ -121,8 +129,12 @@
         <OpenSideBar page="nav">
           <template #icon-name> menu </template>
         </OpenSideBar>
-        <img class="logo-mobile ms-4" src="@/assets/img/Logo-mobile-sm.png" alt="Logo-mobile" />
-        <div class="h5 ms-1 mb-0 logo-mobile-title">寺務管理系統</div>
+        <h1 class="d-flex align-items-center mb-0">
+          <router-link to="/back" class="ms-4"
+            ><img class="logo-mobile" src="@/assets/img/Logo-mobile-sm.png" alt="Logo-mobile"
+          /></router-link>
+          <span class="h5 ms-1 mb-0 logo-mobile-title">寺務管理系統</span>
+        </h1>
       </div>
     </div>
     <div class="col-4 align-items-center d-flex justify-content-end">
@@ -157,8 +169,8 @@
         </div>
         <div
           v-if="isNotifyOpen"
-          class="position-absolute end-0 bg-white border rounded-4 p-3"
-          style="min-width: 50vw"
+          class="position-absolute bg-white border rounded-4 p-3"
+          style="width: 100vw; right: -56px"
         >
           <div class="d-flex gap-2 align-items-center justify-content-between mb-2 mb-lg-3">
             <p class="mb-0 fs-5 fw-semibold">新通知</p>
@@ -168,25 +180,73 @@
             </div>
           </div>
           <ul class="list-inline d-flex flex-column gap-2 gap-lg-3 mb-0">
-            <li class="p-2 box-style box-hover border border-neutral-40">
-              <b class="fs-6">知客 普乙</b>
+            <li class="d-flex gap-3 p-2 box-style box-hover border border-neutral-40">
+              <img
+                src="https://picsum.photos/500/500"
+                alt=""
+                class="rounded-circle"
+                style="width: 15vw; height: 15vw; max-width: 50px; max-height: 50px"
+              />
+              <div class="flex-grow-1">
+                <b class="fs-6">知客 普乙</b>
+                <div class="d-flex gap-2 align-items-center justify-content-between">
+                  <p class="mb-0 d-flex flex-column" style="white-space: pre-wrap">
+                    <span> 法眷<b>普乙</b>已預約報名佛七。 </span>
+                  </p>
+                  <p class="mb-0 btn btn-neutral-40 fw-light rounded-4">15:00</p>
+                </div>
+              </div>
+              <!-- <b class="fs-6">知客 普乙</b>
               <div class="d-flex gap-2 align-items-center justify-content-between">
                 <p class="mb-0 d-flex flex-column" style="white-space: pre-wrap">
                   <span> 法眷<b>普乙</b>已預約報名佛七。 </span>
                 </p>
                 <p class="mb-0 btn btn-neutral-40 fw-light rounded-4">15:00</p>
-              </div>
+              </div> -->
             </li>
           </ul>
         </div>
       </div>
       <!-- 通知 end -->
-
-      <router-link to="" class="icon-radius">
-        <span class="material-symbols-outlined text-primary svg icon-position">
-          account_circle
-        </span>
-      </router-link>
+      <!-- user start -->
+      <div class="position-relative">
+        <div
+          class="icon-radius cursor-point"
+          :class="{ 'bg-neutral-10': isUserSettingOpen }"
+          @click.prevent="
+            () => {
+              isUserSettingOpen = !isUserSettingOpen;
+              isNotifyOpen = false;
+            }
+          "
+          @keydown.prevent="
+            () => {
+              isUserSettingOpen = !isUserSettingOpen;
+              isNotifyOpen = false;
+            }
+          "
+        >
+          <span class="material-symbols-outlined text-primary svg icon-position">
+            account_circle
+          </span>
+        </div>
+        <ul
+          v-if="isUserSettingOpen"
+          class="d-flex flex-column mb-0 position-absolute end-0 list-inline bg-white border rounded-4 overflow-hidden"
+          style="width: 50vw; max-width: 250px"
+        >
+          <li>
+            <router-link to="" class="btn box-hover p-3 rounded-0 d-flex align-items-center"
+              ><span class="material-symbols-outlined me-2"> manage_accounts </span
+              >帳號設定</router-link
+            >
+          </li>
+          <li class="btn box-hover p-3 rounded-0 d-flex align-items-center">
+            <span class="material-symbols-outlined me-2"> logout </span>登出
+          </li>
+        </ul>
+      </div>
+      <!-- user end -->
     </div>
   </div>
   <!-- 手機 end -->
