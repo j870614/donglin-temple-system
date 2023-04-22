@@ -23,7 +23,6 @@
         >
           <li>佛七介紹</li>
           <li v-scroll-to="'#transportation'">交通資訊</li>
-          <li>聯絡我們</li>
         </ul>
         <p class="d-flex align-items-center text-neutral-80 me-2 mb-0">
           <span class="material-symbols-outlined me-2"> account_circle </span>
