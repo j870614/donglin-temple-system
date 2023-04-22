@@ -1,18 +1,47 @@
 <template>
-  <div class="row">
-    <div class="col gx-md-5 py-4">
-      <h1 class="h1 fw-semibold d-flex align-items-center" style="margin-bottom: 36px">
+  <div class="row py-4 py-lg-0" :class="{ 'bg-white': webWidth < 992 && currentPage === '行程' }">
+    <div class="col gx-lg-5 py-lg-4 py-0">
+      <h1 class="h1 fw-semibold d-flex align-items-center mb-3 pb-2 mb-lg-4">
         <OpenSideBar /> <span style="margin-left: 20px">彌陀之家東林寺常年佛七第422期</span>
       </h1>
-      <div class="row gy-3 gy-md-0">
-        <div class="col-md-5">
-          <div class="box-style">
+      <div
+        class="d-flex bg-neutral-40 rounded-switch p-1 d-lg-none"
+        style="margin-bottom: 24px"
+        ref="indexSwitch"
+      >
+        <p
+          v-for="item in ['公告', '行程']"
+          :key="item"
+          class="flex-grow-1 text-center mb-0 rounded-switch"
+          :class="{
+            'text-neutral-80 fs-7': currentPage !== item,
+            'bg-white fs-6 fw-semibold': currentPage === item,
+          }"
+          @click="() => (currentPage = item)"
+          @keydown="() => (currentPage = item)"
+        >
+          {{ item }}
+        </p>
+      </div>
+      <div
+        class="row gy-3 gy-lg-0"
+        v-if="webWidth >= 992 || (webWidth < 992 && currentPage === '公告')"
+      >
+        <div class="col-lg-5">
+          <div
+            class="box-style"
+            :class="{ 'mt-lg-4 mt-3': index !== 0 }"
+            v-for="(item, index) in [
+              { title: '彌陀之家東林寺公告', data: announcement, url: '' },
+              { title: '系統公告', data: systemNotification, url: '' },
+            ]"
+            :key="item.title + item.url"
+          >
             <h2 class="p-4 pb-0 h4 fw-semibold d-flex align-items-center justify-content-between">
-              彌陀之家東林寺公告
+              {{ item.title }}
               <router-link
                 to=""
                 class="fs-6 fw-semibold d-flex align-items-center flex-shrink-0 mb-0"
-                style="cursor: pointer"
               >
                 顯示更多
                 <span
@@ -26,49 +55,9 @@
             <ul class="px-4 list-unstyled mb-0">
               <li
                 class="py-4 box-hover"
-                v-for="(info, index) in announcement"
+                v-for="(info, index) in item.data"
                 :key="info.tag + info.content"
-                :class="{ 'border-bottom border-neutral-40': index !== announcement.length - 1 }"
-              >
-                <AnnouncementInfo>
-                  <template #info-tag>
-                    <span class="py-2 px-3 rounded-4 d-inline-block" :class="tags[info.tag]">{{
-                      info.tag
-                    }}</span>
-                  </template>
-                  <template #info-content>
-                    <p>{{ info.content }}</p>
-                  </template>
-                  <template #info-timer>{{ info.timer }}</template>
-                </AnnouncementInfo>
-              </li>
-            </ul>
-          </div>
-          <div class="box-style mt-md-4 mt-3">
-            <h2 class="p-4 pb-0 h4 fw-semibold d-flex align-items-center justify-content-between">
-              系統公告
-              <router-link
-                to=""
-                class="fs-6 fw-semibold d-flex align-items-center flex-shrink-0 mb-0"
-                style="cursor: pointer"
-              >
-                顯示更多
-                <span
-                  class="material-symbols-outlined fs-5 fw-semibold d-inline-block"
-                  data-v-1a886170=""
-                >
-                  arrow_forward
-                </span>
-              </router-link>
-            </h2>
-            <ul class="px-4 list-unstyled mb-0">
-              <li
-                class="py-4 box-hover"
-                v-for="(info, index) in systemNotification"
-                :key="info.tag + info.content"
-                :class="{
-                  'border-bottom border-neutral-40': index !== systemNotification.length - 1,
-                }"
+                :class="{ 'border-bottom border-neutral-40': index !== item.data.length - 1 }"
               >
                 <AnnouncementInfo>
                   <template #info-tag>
@@ -92,7 +81,6 @@
               <router-link
                 to=""
                 class="fs-6 fw-semibold d-flex align-items-center flex-shrink-0 mb-0"
-                style="cursor: pointer"
               >
                 顯示更多
                 <span
@@ -130,8 +118,11 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3 bg-body">
-      <div class="mb-5 mb-md-0">
+    <div
+      class="col-lg-3 bg-body"
+      v-if="webWidth >= 992 || (webWidth < 992 && currentPage === '行程')"
+    >
+      <div class="">
         <!-- 行事曆 -->
       </div>
       <CalendarSub />
@@ -139,16 +130,37 @@
   </div>
 </template>
 <script setup lang="ts">
+import { ref, onMounted, onBeforeMount } from 'vue';
+
 import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import CalendarSub from '@/components/back/CalendarSub.vue';
 import AnnouncementInfo from '@/components/back/AnnouncementInfo.vue';
+import sideBarConfigStore from '@/stores/SideBarConfig';
 
-interface Info {
-  tag: string;
-  content: string;
-  timer: string;
-  user?: string;
+const sideBarStore = sideBarConfigStore();
+const currentPage = ref<String>('公告');
+
+const indexSwitch = ref(null);
+
+const webWidth = ref<number>(0);
+function currentWidth(webSize: number) {
+  if (webSize < 992) {
+    sideBarStore.isOpen = false;
+  } else {
+    sideBarStore.isOpen = true;
+  }
 }
+function resizeWidth() {
+  webWidth.value = window.innerWidth;
+  currentWidth(webWidth.value);
+  window.addEventListener('resize', () => {
+    webWidth.value = window.innerWidth;
+    currentWidth(webWidth.value);
+  });
+}
+
+onMounted(resizeWidth);
+onBeforeMount(resizeWidth);
 
 // 標籤樣式定義
 const tags: { [key: string]: string } = {
@@ -160,6 +172,12 @@ const tags: { [key: string]: string } = {
   系統維護: 'bg-secondary-tint text-secondary',
 };
 
+interface Info {
+  tag: string;
+  content: string;
+  timer: string;
+  user?: string;
+}
 // 彌陀之家東林寺公告
 const announcement: Info[] = [
   {
@@ -217,3 +235,9 @@ const notify: Info[] = [
   },
 ];
 </script>
+<style scoped lang="scss">
+.rounded-switch {
+  border-radius: 100px;
+  padding: 12px;
+}
+</style>

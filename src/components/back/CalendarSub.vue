@@ -26,7 +26,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
 </script>
 
 <template>
-  <div class="container">
+  <div class="container gx-0 gx-lg-4">
     <div class="calendarSub">
       <div class="calendarSub-dailySchedule" style="margin-bottom: 40px">
         <div
@@ -105,7 +105,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
         <div class="calendarSub-todoList-footer d-grid">
           <button
             type="button"
-            class="btn btn-outline-primary border border-primary rounded-4 py-3 border-2 fw-bold"
+            class="btn btn-outline-primary border border-primary rounded-4 py-3 border-2 fw-bold text-focus"
             @click.prevent="
               todoList.push({
                 id: `${Math.floor(Math.random() * 1e7)}`,
@@ -115,9 +115,9 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
               })
             "
           >
-            <div class="d-flex justify-content-center lh-1">
+            <div class="d-flex align-items-center justify-content-center lh-1">
+              <p class="fs-6 mb-0 pe-1">新增待辦事項</p>
               <span class="material-symbols-outlined d-inline-block"> add_circle </span>
-              <p class="fs-6 pt-1 mb-0">新增待辦事項</p>
             </div>
           </button>
         </div>
