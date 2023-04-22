@@ -12,6 +12,10 @@ const router = createRouter({
           path: '/',
           component: () => import('@/views/front/FrontIndex.vue'),
         },
+        {
+          path: 'buddha',
+          component: () => import('@/views/front/BuddhaSeven.vue'),
+        },
       ],
     },
     {
@@ -20,7 +24,7 @@ const router = createRouter({
       component: () => import('@/views/back/BackLayout.vue'),
       children: [
         {
-          path: '',
+          path: '/',
           component: () => import('@/views/back/BackIndex.vue'),
         },
         {

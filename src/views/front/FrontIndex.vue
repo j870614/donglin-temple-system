@@ -76,12 +76,12 @@
           "
         ></div>
         <div>
-          <button
-            type="button"
-            class="btn btn-outline-primary rounded-4 border border-2 border-primary text-primary d-flex align-items-center fw-semibold py-3 px-5 py-lg-3 px-lg-2-5"
+          <router-link
+            to="/buddha"
+            class="float-start btn btn-outline-primary rounded-4 border border-2 border-primary text-primary d-flex align-items-center fw-semibold py-3 px-5 py-lg-3 px-lg-2-5"
           >
             更多關於佛七<span class="material-symbols-outlined"> arrow_forward </span>
-          </button>
+          </router-link>
         </div>
       </div>
       <div class="col-12 col-lg" v-for="(item, index) in buddha" :key="item.title + index">
@@ -253,10 +253,6 @@ onMounted(() => {
     width: 4rem;
   }
 }
-// .btn {
-//   border-width: 2px;
-//   border-radius: 12px;
-// }
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
