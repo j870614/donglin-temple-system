@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <router-link to="" class="d-inline-block mb-4">
+          <router-link to="/" class="d-inline-block mb-4">
             <img src="@/assets/img/LOGO.png" alt="logo" style="width: 240px; height: 62px" />
           </router-link>
           <h3 class="fw-semibold h5">彌陀之家東林寺</h3>

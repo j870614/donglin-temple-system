@@ -148,7 +148,15 @@ import { ref, onMounted } from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const buddha = ref([
+interface Buddha {
+  title: string;
+  dates: string[];
+  content: string;
+  color: string;
+  secondaryColor: string;
+  textColor: string;
+}
+const buddha = ref<Buddha[]>([
   {
     title: '佛七',
     dates: ['1-7', '11-17', '21-27'],
@@ -167,7 +175,12 @@ const buddha = ref([
   },
 ]);
 
-const transportation = ref([
+interface Transportation {
+  icon: string;
+  title: string;
+  content: string;
+}
+const transportation = ref<Transportation[]>([
   {
     icon: 'directions_car',
     title: '開車前往',
