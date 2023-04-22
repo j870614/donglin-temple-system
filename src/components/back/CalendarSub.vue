@@ -82,15 +82,15 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
             />
             <label
               :for="todo.id"
-              class="form-check-label"
+              class="form-check-label flex-grow-1"
               :class="{ 'text-muted text-decoration-line-through': todo.isFinished }"
             >
               {{ todo.title }}
             </label>
             <button
-              v-if="todo.isHover"
               type="button"
-              class="btn btn-sm ms-auto text-end py-0 lh-1"
+              class="btn btn-sm text-end py-0 lh-1"
+              :class="{ 'opacity-100': todo.isHover, 'opacity-0': !todo.isHover }"
               @click.prevent="
                 todoList.splice(
                   todoList.findIndex((elem) => elem.id === todo.id),
@@ -136,7 +136,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
   &-footer {
     button {
       &:hover {
-        color: $white;
+        color: $primary;
       }
     }
   }

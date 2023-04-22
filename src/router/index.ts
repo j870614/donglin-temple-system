@@ -7,6 +7,12 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('@/views/front/FrontLayout.vue'),
+      children: [
+        {
+          path: '/',
+          component: () => import('@/views/front/FrontIndex.vue'),
+        },
+      ],
     },
     {
       path: '/back',
