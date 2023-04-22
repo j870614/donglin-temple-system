@@ -78,7 +78,7 @@
         <div>
           <button
             type="button"
-            class="btn btn-outline-primary text-primary d-flex align-items-center fw-semibold py-3 px-5 py-lg-3 px-lg-2-5"
+            class="btn btn-outline-primary rounded-4 border border-2 border-primary text-primary d-flex align-items-center fw-semibold py-3 px-5 py-lg-3 px-lg-2-5"
           >
             更多關於佛七<span class="material-symbols-outlined"> arrow_forward </span>
           </button>
@@ -253,13 +253,10 @@ onMounted(() => {
     width: 4rem;
   }
 }
-.btn {
-  border-width: 2px;
-  border-radius: 12px;
-  &:hover {
-    background: $primary-tint;
-  }
-}
+// .btn {
+//   border-width: 2px;
+//   border-radius: 12px;
+// }
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }

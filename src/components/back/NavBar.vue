@@ -46,7 +46,7 @@
           <div class="d-flex gap-2 align-items-center justify-content-between mb-2 mb-lg-3">
             <p class="mb-0 fs-4 fw-semibold">新通知</p>
             <div class="d-flex gap-1">
-              <button type="button" class="btn btn-primary">顯示更多</button>
+              <button type="button" class="btn btn-primary text-white">顯示更多</button>
               <button type="button" class="btn btn-outline-danger">清除通知</button>
             </div>
           </div>
@@ -175,7 +175,7 @@
           <div class="d-flex gap-2 align-items-center justify-content-between mb-2 mb-lg-3">
             <p class="mb-0 fs-5 fw-semibold">新通知</p>
             <div class="d-flex gap-1">
-              <button type="button" class="btn btn-primary fs-7">顯示更多</button>
+              <button type="button" class="btn btn-primary text-white fs-7">顯示更多</button>
               <button type="button" class="btn btn-outline-danger fs-7">清除通知</button>
             </div>
           </div>
@@ -196,13 +196,6 @@
                   <p class="mb-0 btn btn-neutral-40 fw-light rounded-4">15:00</p>
                 </div>
               </div>
-              <!-- <b class="fs-6">知客 普乙</b>
-              <div class="d-flex gap-2 align-items-center justify-content-between">
-                <p class="mb-0 d-flex flex-column" style="white-space: pre-wrap">
-                  <span> 法眷<b>普乙</b>已預約報名佛七。 </span>
-                </p>
-                <p class="mb-0 btn btn-neutral-40 fw-light rounded-4">15:00</p>
-              </div> -->
             </li>
           </ul>
         </div>

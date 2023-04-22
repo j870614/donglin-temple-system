@@ -13,7 +13,7 @@
 import FooterBar from '@/components/front/FooterBar.vue';
 import NavBar from '@/components/front/NavBar.vue';
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .mt-footer {
   margin-top: 60px;
   @media (min-width: 992px) {
