@@ -22,7 +22,7 @@
           style="gap: 24px"
         >
           <li>佛七介紹</li>
-          <li>交通資訊</li>
+          <li v-scroll-to="'#transportation'">交通資訊</li>
           <li>聯絡我們</li>
         </ul>
         <p class="d-flex align-items-center text-neutral-80 me-2 mb-0">
@@ -40,10 +40,13 @@
     class="d-flex flex-column justify-content-between position-sticky top-0"
     style="height: calc(100vh - 50px)"
   >
-    <ul class="list-inline text-center d-flex flex-column gap-3 mb-0">
+    <ul
+      class="list-inline text-center d-flex flex-column gap-3 mb-0"
+      @click="() => (isMenuOpen = false)"
+      @keydown="() => (isMenuOpen = false)"
+    >
       <li class="box-hover py-2-5">佛七介紹</li>
-      <li class="box-hover py-2-5">交通資訊</li>
-      <li class="box-hover py-2-5">聯絡我們</li>
+      <li class="box-hover py-2-5" v-scroll-to="'#transportation'">交通資訊</li>
     </ul>
     <button type="button" class="btn btn-primary text-white fw-semibold py-3 text-center w-100">
       登入 / 註冊

@@ -1,5 +1,5 @@
 <template>
-  <nav class="position-sticky top-0 bg-white">
+  <nav class="position-sticky top-0 bg-white" style="z-index: 9999">
     <NavBar />
   </nav>
   <main>

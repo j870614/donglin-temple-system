@@ -87,7 +87,7 @@
       <div class="col-12 col-lg" v-for="(item, index) in buddha" :key="item.title + index">
         <section
           class="border border-2 d-flex flex-column align-items-center justify-content-center p-5 h-100"
-          :class="`border-${item.color} ${index === 0 ? 'me-4' : ''}`"
+          :class="`border-${item.color}`"
           style="border-radius: 20px"
         >
           <h3 class="mb-3">{{ item.title }}</h3>
@@ -108,10 +108,12 @@
         </section>
       </div>
     </div>
-    <h2 class="h3 mb-5">交通資訊</h2>
-    <div class="row">
-      <div class="col-12 col-lg">地圖</div>
-      <div class="col-12 col-lg">
+    <h2 class="h3 mb-5" id="transportation">交通資訊</h2>
+    <div class="row gx-lg-5 gap-lg-5">
+      <div class="col-12 col-lg indexMap mb-5 mb-lg-0">
+        <div ref="indexMap" class="h-100 w-100 rounded-4"></div>
+      </div>
+      <div class="col-12 col-lg mt-2 mt-lg-0 ms-lg-3">
         <h3 class="h5">彌陀之家東林寺</h3>
         <p class="fs-4 text-neutral-80 mb-4">宜蘭縣冬山鄉太和村寶和路638號</p>
         <div
@@ -124,7 +126,7 @@
         ></div>
         <ul class="mt-2 mb-0 list-inline d-flex flex-column gap-4">
           <li
-            class="border border-neutral-40 p-4 rounded-3"
+            class="border border-neutral-40 p-4 rounded-3 box-hover"
             v-for="info in transportation"
             :key="info.icon"
           >
@@ -142,7 +144,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const buddha = ref([
   {
@@ -181,6 +185,18 @@ const transportation = ref([
     content: '搭乘國光客運或統聯客運於羅東轉運站下車，搭乘計程車車程約20分鐘左右抵達。',
   },
 ]);
+
+const indexMap = ref<string | HTMLElement>('null');
+onMounted(() => {
+  const map = L.map(indexMap.value).setView([24.623211, 121.765145], 16);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution:
+      "Map data &copy; <a href='https://www.openstreetmap.org/'>OpenStreetMap</a> contributors",
+    maxZoom: 25,
+  }).addTo(map);
+
+  L.marker([24.623211, 121.765145]).addTo(map).bindPopup('彌陀之家東林寺');
+});
 </script>
 
 <style scoped lang="scss">
@@ -246,5 +262,11 @@ const transportation = ref([
 }
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+.indexMap {
+  @media (max-width: 992px) {
+    height: calc(100vw - 24px);
+    max-height: 500px;
+  }
 }
 </style>

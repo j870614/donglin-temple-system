@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-neutral-10">
+  <div class="bg-neutral-10 py-5">
     <div class="container">
       <div class="row">
         <div class="col">
