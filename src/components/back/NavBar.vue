@@ -261,7 +261,7 @@ const isUserSettingOpen = ref<Boolean>(false);
 <style scoped lang="scss">
 @import '@/assets/stylesheets/all.scss';
 .logo {
-  width: 22.5rem;
+  width: 19.5rem;
   height: 5rem;
   &-mobile {
     height: 2rem;
