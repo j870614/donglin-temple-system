@@ -53,13 +53,26 @@
 //@import "./utilities/utilities";
 @import './base/global';
 
-.btn-primary:hover {
-  background-color: $primary-dark;
+.btn-primary {
+  color: $white;
+  &:hover{
+    color: $white;
+    background-color: $primary-dark;
+  }
 }
-.btn-outline-primary:hover {
-  background-color: $primary-tint;
+.btn-outline-primary {
+  color: $primary;
+  background-color: $white;
+  &:hover{
+    color: $primary;
+    background-color: $primary-tint;
+  }
 }
-.btn-outline-danger:hover{
-  background-color: $danger-10;
+.btn-outline-danger{
   color: $danger;
+  background-color: $white;
+  &:hover{
+    color: $danger;
+    background-color: $danger-10;
+  }
 }

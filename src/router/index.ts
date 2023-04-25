@@ -9,8 +9,13 @@ const router = createRouter({
       component: () => import('@/views/front/FrontLayout.vue'),
       children: [
         {
-          path: '/',
+          path: '',
+          name: 'frontIndex',
           component: () => import('@/views/front/FrontIndex.vue'),
+        },
+        {
+          path: 'buddha',
+          component: () => import('@/views/front/BuddhaSeven.vue'),
         },
       ],
     },
@@ -21,8 +26,18 @@ const router = createRouter({
       children: [
         {
           path: '',
+          name: 'backIndex',
           component: () => import('@/views/back/BackIndex.vue'),
         },
+        // {
+        //   path: 'buddha',
+        //   children: [
+        //     {
+        //       path: 'list',
+        //       component: () => import('@/views/back/BuddhaList.vue'),
+        //     },
+        //   ],
+        // },
         {
           path: 'announcement',
           children: [
@@ -40,6 +55,9 @@ const router = createRouter({
       component: () => import('@/views/AdminLogin.vue'),
     },
   ],
+  scrollBehavior() {
+    return { top: 0 };
+  },
 });
 
 export default router;

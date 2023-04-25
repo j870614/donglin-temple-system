@@ -76,12 +76,12 @@
           "
         ></div>
         <div>
-          <button
-            type="button"
-            class="btn btn-outline-primary rounded-4 border border-2 border-primary text-primary d-flex align-items-center fw-semibold py-3 px-5 py-lg-3 px-lg-2-5"
+          <router-link
+            to="/buddha"
+            class="float-start btn btn-outline-primary rounded-4 border border-2 border-primary text-primary d-flex align-items-center fw-semibold py-3 px-5 py-lg-3 px-lg-2-5"
           >
             更多關於佛七<span class="material-symbols-outlined"> arrow_forward </span>
-          </button>
+          </router-link>
         </div>
       </div>
       <div class="col-12 col-lg" v-for="(item, index) in buddha" :key="item.title + index">
@@ -148,7 +148,15 @@ import { ref, onMounted } from 'vue';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const buddha = ref([
+interface Buddha {
+  title: string;
+  dates: string[];
+  content: string;
+  color: string;
+  secondaryColor: string;
+  textColor: string;
+}
+const buddha = ref<Buddha[]>([
   {
     title: '佛七',
     dates: ['1-7', '11-17', '21-27'],
@@ -167,7 +175,12 @@ const buddha = ref([
   },
 ]);
 
-const transportation = ref([
+interface Transportation {
+  icon: string;
+  title: string;
+  content: string;
+}
+const transportation = ref<Transportation[]>([
   {
     icon: 'directions_car',
     title: '開車前往',
@@ -253,10 +266,6 @@ onMounted(() => {
     width: 4rem;
   }
 }
-// .btn {
-//   border-width: 2px;
-//   border-radius: 12px;
-// }
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }

@@ -21,8 +21,10 @@
           class="list-inline d-flex text-neutral-80 border-end border-neutral-80 pe-4 me-4 mb-0"
           style="gap: 24px"
         >
-          <li><router-link to="">佛七介紹</router-link></li>
-          <li class="cursor-point" v-scroll-to="'#transportation'">交通資訊</li>
+          <li><router-link to="/buddha">佛七介紹</router-link></li>
+          <li class="cursor-point" v-scroll-to="'#transportation'">
+            <router-link to="/">交通資訊</router-link>
+          </li>
         </ul>
         <p class="d-flex align-items-center text-neutral-80 me-2 mb-0">
           <span class="material-symbols-outlined me-2"> account_circle </span>
@@ -44,8 +46,12 @@
       @click="() => (isMenuOpen = false)"
       @keydown="() => (isMenuOpen = false)"
     >
-      <li class="box-hover cursor-point py-2-5">佛七介紹</li>
-      <li class="box-hover cursor-point py-2-5" v-scroll-to="'#transportation'">交通資訊</li>
+      <li class="box-hover cursor-point py-2-5">
+        <router-link to="/buddha">佛七介紹</router-link>
+      </li>
+      <li class="box-hover cursor-point py-2-5" v-scroll-to="'#transportation'">
+        <router-link to="/">交通資訊</router-link>
+      </li>
     </ul>
     <button type="button" class="btn btn-primary text-white fw-semibold py-3 text-center w-100">
       登入 / 註冊
