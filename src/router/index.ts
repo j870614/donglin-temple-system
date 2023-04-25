@@ -29,15 +29,15 @@ const router = createRouter({
           name: 'backIndex',
           component: () => import('@/views/back/BackIndex.vue'),
         },
-        {
-          path: 'buddha',
-          children: [
-            {
-              path: 'list',
-              component: () => import('@/views/back/BuddhaList.vue'),
-            },
-          ],
-        },
+        // {
+        //   path: 'buddha',
+        //   children: [
+        //     {
+        //       path: 'list',
+        //       component: () => import('@/views/back/BuddhaList.vue'),
+        //     },
+        //   ],
+        // },
         {
           path: 'announcement',
           children: [
