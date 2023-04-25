@@ -24,9 +24,9 @@
               value="2022"
               v-for="i in new Date().getFullYear() - 2009"
               :key="i"
-              :selected="i + 2010 === new Date().getFullYear()"
+              :selected="i + 2010 === currentDate.getFullYear() - 2009"
             >
-              {{ new Date().getFullYear() + 1 - i }}
+              {{ currentDate.getFullYear() + 1 - i }}
             </option>
           </select>
         </div>
@@ -41,7 +41,7 @@
               value="2022"
               v-for="i in 12"
               :key="i"
-              :selected="i === new Date().getMonth() + 1"
+              :selected="i === currentDate.getMonth() + 1"
             >
               {{ i }}
             </option>
@@ -121,6 +121,8 @@
 import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
 import { ref } from 'vue';
+
+const currentDate: Date = new Date();
 
 interface TagStyle {
   [key: string]: {
