@@ -157,22 +157,22 @@ const process: Process[] = [
         timer: 'PM 16:00 - PM 17:00',
         todo: '自由香&emsp;',
       },
-      {
-        timer: 'PM 19:00 - PM 19:30',
-        todo: '靜坐念佛',
-      },
     ],
   },
   {
     period: '晚上',
     step: [
       {
+        timer: 'PM 19:00 - PM 19:30',
+        todo: '靜坐念佛',
+      },
+      {
         timer: 'PM 19:30 - PM 20:30',
         todo: '拜佛&emsp;&emsp;',
       },
       {
         timer: 'PM 21:00 -',
-        todo: '拜佛&emsp;&emsp;',
+        todo: '安板&emsp;&emsp;',
       },
     ],
   },
