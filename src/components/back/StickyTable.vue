@@ -1,8 +1,6 @@
 <template>
   <div class="table-responsive">
-    <table
-      class="table table-style table-striped table-hover align-middle text-center box-style text-nowrap"
-    >
+    <table class="table table-style table-hover align-middle text-center box-style text-nowrap">
       <thead class="sticky-top">
         <slot name="thead">
           <tr>

@@ -48,6 +48,9 @@ a {
       border-bottom-right-radius: 12px;
     }
   }
+  tr:nth-child(even){
+    background-color: $neutral-10;
+  }
 
   @media (max-width: 992px) {
     th:last-child,

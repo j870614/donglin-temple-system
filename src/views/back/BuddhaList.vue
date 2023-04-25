@@ -64,7 +64,12 @@
           </tr>
         </template>
         <template #tbody>
-          <tr v-for="(info, index) in trInfo" :key="info.id">
+          <tr
+            v-for="(info, index) in trInfo"
+            :key="info.id + index"
+            :class="{ 'table-active': currentUser.id === info.id }"
+            @click.prevent="currentUser = info"
+          >
             <td>{{ index + 1 }}</td>
             <td>{{ info.sex }}</td>
             <td>{{ info.legalName }}</td>
@@ -107,6 +112,7 @@
           type="button"
           class="btn btn-outline-primary py-3 flex-grow-1"
           style="max-width: 184px"
+          @click.prevent="cancelAppointment(currentUser)"
         >
           取消預約
         </button>
@@ -121,6 +127,7 @@
 import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
 import { ref } from 'vue';
+import mySwal from '@/stores/sweetAlert';
 
 const currentDate: Date = new Date();
 
@@ -218,7 +225,7 @@ interface TrInfo {
 }
 const trInfo = ref<TrInfo[]>([
   {
-    id: '用戶id-01',
+    id: '1',
     sex: '男',
     legalName: '普己',
     originalName: '王大信',
@@ -231,7 +238,7 @@ const trInfo = ref<TrInfo[]>([
     editorDate: '8/5',
   },
   {
-    id: '用戶id-02',
+    id: '2',
     sex: '男',
     legalName: '普戊',
     originalName: '林大為',
@@ -244,7 +251,7 @@ const trInfo = ref<TrInfo[]>([
     editorDate: '9/4',
   },
   {
-    id: '用戶id-02',
+    id: '3',
     sex: '男',
     legalName: '普戊',
     originalName: '林大為',
@@ -257,7 +264,7 @@ const trInfo = ref<TrInfo[]>([
     editorDate: '9/4',
   },
   {
-    id: '用戶id-02',
+    id: '4',
     sex: '男',
     legalName: '普戊',
     originalName: '林大為',
@@ -270,7 +277,7 @@ const trInfo = ref<TrInfo[]>([
     editorDate: '9/4',
   },
   {
-    id: '用戶id-02',
+    id: '5',
     sex: '男',
     legalName: '普戊',
     originalName: '林大為',
@@ -283,7 +290,7 @@ const trInfo = ref<TrInfo[]>([
     editorDate: '9/4',
   },
   {
-    id: '用戶id-02',
+    id: '6',
     sex: '男',
     legalName: '普戊',
     originalName: '林大為',
@@ -296,7 +303,7 @@ const trInfo = ref<TrInfo[]>([
     editorDate: '9/4',
   },
   {
-    id: '用戶id-02',
+    id: '7',
     sex: '男',
     legalName: '普戊',
     originalName: '林大為',
@@ -309,6 +316,60 @@ const trInfo = ref<TrInfo[]>([
     editorDate: '9/4',
   },
 ]);
+
+const currentUser = ref<TrInfo>({
+  id: '',
+  sex: '',
+  legalName: '',
+  originalName: '',
+  tel: '',
+  registrationDate: '',
+  leaveDate: '',
+  meals: '',
+  state: '',
+  editorId: '',
+  editorDate: '',
+});
+async function cancelAppointment(current: TrInfo) {
+  const index: number = trInfo.value.findIndex((user: TrInfo) => user.id === current.id);
+  if (index === -1) {
+    mySwal.fire({
+      icon: 'error',
+      title: '還未選擇信眾',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    return;
+  }
+  if (trInfo.value[index].state === '已取消') {
+    mySwal.fire({
+      icon: 'warning',
+      title: '此信眾已取消佛七',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    return;
+  }
+  const res = await mySwal.fire({
+    html: `<p class="mb-0 fs-3">是否取消<b class="px-2 text-danger fw-semibold">${current.originalName}</b>的預約</p>`,
+    showCancelButton: true,
+  });
+  if (res.isConfirmed) {
+    mySwal.fire({
+      icon: 'success',
+      title: '已取消佛七預約',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    trInfo.value[index].state = '已取消';
+  }
+}
+// onMounted(() => {
+//   const Toast = Swal.mixin({
+//     confirmButtonColor: '#FF7640',
+//   });
+//   Toast.fire('ww');
+// });
 </script>
 <style scoped lang="scss">
 .form-select {
