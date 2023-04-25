@@ -233,7 +233,7 @@ const nav = ref<NavItem[]>([
         isOpen: false,
         children: [
           {
-            path: '',
+            path: '/buddha/list',
             name: '佛七報名預約名單',
           },
           {
@@ -380,7 +380,7 @@ function changeCurrent(name: string, path: string): void {
 
 function changePath(name: string, path: string): void {
   changeCurrent(name, path);
-  router.push(`/back/${path}`);
+  router.push(`/back${path}`);
 }
 
 function changeOpen(firstNav: NavItem, secondNav: NavItem | null): void {
