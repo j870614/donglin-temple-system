@@ -2,7 +2,7 @@
   <div class="row py-4 py-lg-0" :class="{ 'bg-white': webWidth < 992 && currentPage === '行程' }">
     <div class="col gx-lg-5 py-lg-4 py-0">
       <h1 class="h1 fw-semibold d-flex align-items-center mb-3 pb-2 mb-lg-4">
-        <OpenSideBar /> <span style="margin-left: 20px">彌陀之家東林寺常年佛七第422期</span>
+        <OpenSideBar /> <span class="ms-0 ms-lg-2-5">彌陀之家東林寺常年佛七第422期</span>
       </h1>
       <div
         class="d-flex bg-neutral-40 rounded-switch p-1 d-lg-none"
