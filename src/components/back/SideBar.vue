@@ -87,10 +87,11 @@
                   <li
                     class="fs-5 style-sidebar"
                     :class="{
-                      'bg-primary text-white': $route.fullPath.split('/').pop() === innerChild.path,
+                      'bg-primary text-white':
+                        $route.fullPath.split('/back').pop() === innerChild.path,
                       'bg-neutral-10':
                         hoverNavName === innerChild.name &&
-                        $route.fullPath.split('/').pop() !== innerChild.path,
+                        $route.fullPath.split('/back').pop() !== innerChild.path,
                     }"
                     @mouseenter="() => (hoverNavName = innerChild.name)"
                     @focus="() => (hoverNavName = innerChild.name)"
@@ -109,7 +110,7 @@
               v-else
               class="fs-5 style-sidebar"
               :class="{
-                'bg-primary text-white': $route.fullPath.split('/').pop() === navChild.path,
+                'bg-primary text-white': $route.fullPath.split('/back').pop() === navChild.path,
                 'bg-neutral-10':
                   hoverNavName === navChild.name && !$route.fullPath.includes(navChild.path),
               }"

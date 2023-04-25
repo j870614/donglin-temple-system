@@ -133,12 +133,5 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
       margin-left: -1rem;
     }
   }
-  &-footer {
-    button {
-      &:hover {
-        color: $primary;
-      }
-    }
-  }
 }
 </style>
