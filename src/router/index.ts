@@ -9,7 +9,8 @@ const router = createRouter({
       component: () => import('@/views/front/FrontLayout.vue'),
       children: [
         {
-          path: '/',
+          path: '',
+          name: 'frontIndex',
           component: () => import('@/views/front/FrontIndex.vue'),
         },
         {
@@ -24,8 +25,18 @@ const router = createRouter({
       component: () => import('@/views/back/BackLayout.vue'),
       children: [
         {
-          path: '/',
+          path: '',
+          name: 'backIndex',
           component: () => import('@/views/back/BackIndex.vue'),
+        },
+        {
+          path: 'buddha',
+          children: [
+            {
+              path: 'list',
+              component: () => import('@/views/back/BuddhaList.vue'),
+            },
+          ],
         },
         {
           path: 'announcement',
