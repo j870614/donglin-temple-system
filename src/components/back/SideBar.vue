@@ -373,16 +373,16 @@ const sideNav = ref(nav);
 const hoverNavName = ref('');
 const currentNavName = ref('');
 
-function changeCurrent(name: string, path: string) {
+function changeCurrent(name: string, path: string): void {
   currentNavName.value = name + path;
 }
 
-function changePath(name: string, path: string) {
+function changePath(name: string, path: string): void {
   changeCurrent(name, path);
   router.push(`/back/${path}`);
 }
 
-function changeOpen(firstNav: NavItem, secondNav: NavItem | null) {
+function changeOpen(firstNav: NavItem, secondNav: NavItem | null): void {
   const firstIndex = nav.value.findIndex((item) => item.name === firstNav.name);
   if (secondNav) {
     const outNav = nav.value[firstIndex];

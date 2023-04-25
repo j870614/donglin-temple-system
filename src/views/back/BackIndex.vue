@@ -143,14 +143,14 @@ const currentPage = ref<String>('公告');
 const indexSwitch = ref(null);
 
 const webWidth = ref<number>(0);
-function currentWidth(webSize: number) {
+function currentWidth(webSize: number): void {
   if (webSize < 992) {
     sideBarStore.isOpen = false;
   } else {
     sideBarStore.isOpen = true;
   }
 }
-function resizeWidth() {
+function resizeWidth(): void {
   webWidth.value = window.innerWidth;
   currentWidth(webWidth.value);
   window.addEventListener('resize', () => {
