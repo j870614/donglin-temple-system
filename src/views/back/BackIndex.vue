@@ -17,8 +17,8 @@
             'text-neutral-80 fs-7': currentPage !== item,
             'bg-white fs-6 fw-semibold': currentPage === item,
           }"
-          @click="() => (currentPage = item)"
-          @keydown="() => (currentPage = item)"
+          @click.prevent="() => (currentPage = item)"
+          @keydown.prevent="() => (currentPage = item)"
         >
           {{ item }}
         </p>

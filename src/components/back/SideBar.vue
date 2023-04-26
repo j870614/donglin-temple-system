@@ -10,16 +10,16 @@
               hoverNavName === nav.name + nav.icon && currentNavName !== nav.name + nav.path,
             'bg-primary text-white': !nav.children && currentNavName === nav.name + nav.path,
           }"
-          @mouseenter="() => (hoverNavName = nav.name + nav.icon)"
-          @focus="() => (hoverNavName = nav.name + nav.icon)"
-          @mouseleave="() => (hoverNavName = '')"
-          @blur="() => (hoverNavName = '')"
-          @click="
+          @mouseenter.self="() => (hoverNavName = nav.name + nav.icon)"
+          @focus.prevent="() => (hoverNavName = nav.name + nav.icon)"
+          @mouseleave.self="() => (hoverNavName = '')"
+          @blur.prevent="() => (hoverNavName = '')"
+          @click.prevent="
             () => {
               nav.children ? changeOpen(nav, null) : changePath(nav.name, nav.path);
             }
           "
-          @keydown="
+          @keydown.prevent="
             () => {
               nav.children ? changeOpen(nav, null) : changePath(nav.name, nav.path);
             }
@@ -48,16 +48,16 @@
                 :class="{
                   'bg-neutral-10': hoverNavName === navChild.name + navChild.icon,
                 }"
-                @mouseenter="() => (hoverNavName = navChild.name + navChild.icon)"
-                @focus="() => (hoverNavName = navChild.name + navChild.icon)"
-                @mouseleave="() => (hoverNavName = '')"
-                @blur="() => (hoverNavName = '')"
-                @click="
+                @mouseenter.self="() => (hoverNavName = navChild.name + navChild.icon)"
+                @focus.prevent="() => (hoverNavName = navChild.name + navChild.icon)"
+                @mouseleave.self="() => (hoverNavName = '')"
+                @blur.prevent="() => (hoverNavName = '')"
+                @click.prevent="
                   () => {
                     changeOpen(nav, navChild);
                   }
                 "
-                @keydown="
+                @keydown.prevent="
                   () => {
                     changeOpen(nav, navChild);
                   }
@@ -93,12 +93,12 @@
                         hoverNavName === innerChild.name &&
                         $route.fullPath.split('/back').pop() !== innerChild.path,
                     }"
-                    @mouseenter="() => (hoverNavName = innerChild.name)"
-                    @focus="() => (hoverNavName = innerChild.name)"
-                    @mouseleave="() => (hoverNavName = '')"
-                    @blur="() => (hoverNavName = '')"
-                    @click="() => changePath(innerChild.name, innerChild.path)"
-                    @keydown="() => changePath(innerChild.name, innerChild.path)"
+                    @mouseenter.self="() => (hoverNavName = innerChild.name)"
+                    @focus.prevent="() => (hoverNavName = innerChild.name)"
+                    @mouseleave.self="() => (hoverNavName = '')"
+                    @blur.prevent="() => (hoverNavName = '')"
+                    @click.prevent="() => changePath(innerChild.name, innerChild.path)"
+                    @keydown.prevent="() => changePath(innerChild.name, innerChild.path)"
                   >
                     <div class="fw-semibold">{{ innerChild.name }}</div>
                   </li>
@@ -114,12 +114,12 @@
                 'bg-neutral-10':
                   hoverNavName === navChild.name && !$route.fullPath.includes(navChild.path),
               }"
-              @mouseenter="() => (hoverNavName = navChild.name)"
-              @focus="() => (hoverNavName = navChild.name)"
-              @mouseleave="() => (hoverNavName = '')"
-              @blur="() => (hoverNavName = '')"
-              @click="() => changePath(navChild.name, navChild.path)"
-              @keydown="() => changePath(navChild.name, navChild.path)"
+              @mouseenter.self="() => (hoverNavName = navChild.name)"
+              @focus.prevent="() => (hoverNavName = navChild.name)"
+              @mouseleave.self="() => (hoverNavName = '')"
+              @blur.prevent="() => (hoverNavName = '')"
+              @click.prevent="() => changePath(navChild.name, navChild.path)"
+              @keydown.prevent="() => changePath(navChild.name, navChild.path)"
             >
               <div class="fw-semibold d-flex align-items-center gap-3">
                 <span class="material-symbols-outlined fs-3">{{ navChild.icon }} </span>
@@ -134,10 +134,10 @@
       to=""
       class="fs-5 fw-semibold style-sidebar d-flex align-items-center gap-3"
       :class="{ 'bg-neutral-10': hoverNavName === '登出' }"
-      @mouseenter="() => (hoverNavName = '登出')"
-      @focus="() => (hoverNavName = '登出')"
-      @mouseleave="() => (hoverNavName = '')"
-      @blur="() => (hoverNavName = '')"
+      @mouseenter.self="() => (hoverNavName = '登出')"
+      @focus.prevent="() => (hoverNavName = '登出')"
+      @mouseleave.self="() => (hoverNavName = '')"
+      @blur.prevent="() => (hoverNavName = '')"
       ><span class="material-symbols-outlined"> logout </span>登出</router-link
     >
   </div>

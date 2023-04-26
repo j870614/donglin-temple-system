@@ -65,7 +65,7 @@
         </template>
         <template #tbody>
           <tr
-            v-for="(info, index) in trInfo"
+            v-for="(info, index) in users"
             :key="info.id + index"
             :class="{ 'table-active': currentUser.id === info.id }"
             @click.prevent="currentUser = info"
@@ -127,7 +127,8 @@
 import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
 import { ref } from 'vue';
-import mySwal from '@/stores/sweetAlert';
+import Swal from '@/plug/sweetAlert';
+import type { SweetAlertResult } from 'sweetalert2';
 
 const currentDate: Date = new Date();
 
@@ -210,7 +211,7 @@ const thInfo = ref<ThInfo[]>([
     needSort: false,
   },
 ]);
-interface TrInfo {
+interface UserInfo {
   id: string;
   sex: string;
   legalName: string;
@@ -223,7 +224,7 @@ interface TrInfo {
   editorId: string;
   editorDate: string;
 }
-const trInfo = ref<TrInfo[]>([
+const users = ref<UserInfo[]>([
   {
     id: '1',
     sex: '男',
@@ -317,7 +318,7 @@ const trInfo = ref<TrInfo[]>([
   },
 ]);
 
-const currentUser = ref<TrInfo>({
+const currentUser = ref<UserInfo>({
   id: '',
   sex: '',
   legalName: '',
@@ -330,10 +331,10 @@ const currentUser = ref<TrInfo>({
   editorId: '',
   editorDate: '',
 });
-async function cancelAppointment(current: TrInfo) {
-  const index: number = trInfo.value.findIndex((user: TrInfo) => user.id === current.id);
+async function cancelAppointment(current: UserInfo) {
+  const index: number = users.value.findIndex((user: UserInfo) => user.id === current.id);
   if (index === -1) {
-    mySwal.fire({
+    Swal.fire({
       icon: 'error',
       title: '還未選擇信眾',
       showConfirmButton: false,
@@ -341,8 +342,8 @@ async function cancelAppointment(current: TrInfo) {
     });
     return;
   }
-  if (trInfo.value[index].state === '已取消') {
-    mySwal.fire({
+  if (users.value[index].state === '已取消') {
+    Swal.fire({
       icon: 'warning',
       title: '此信眾已取消佛七',
       showConfirmButton: false,
@@ -350,26 +351,25 @@ async function cancelAppointment(current: TrInfo) {
     });
     return;
   }
-  const res = await mySwal.fire({
-    html: `<p class="mb-0 fs-3">是否取消<b class="px-2 text-danger fw-semibold">${current.originalName}</b>的預約</p>`,
-    showCancelButton: true,
-  });
-  if (res.isConfirmed) {
-    mySwal.fire({
-      icon: 'success',
-      title: '已取消佛七預約',
-      showConfirmButton: false,
-      timer: 1500,
+  try {
+    const res: SweetAlertResult = await Swal.fire({
+      html: `<p class="mb-0 fs-3">是否取消<b class="px-2 text-danger fw-semibold">${current.originalName}</b>的預約</p>`,
+      showCancelButton: true,
     });
-    trInfo.value[index].state = '已取消';
+
+    if (res.isConfirmed) {
+      Swal.fire({
+        icon: 'success',
+        title: '已取消佛七預約',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      users.value[index].state = '已取消';
+    }
+  } catch (err) {
+    console.error(err);
   }
 }
-// onMounted(() => {
-//   const Toast = Swal.mixin({
-//     confirmButtonColor: '#FF7640',
-//   });
-//   Toast.fire('ww');
-// });
 </script>
 <style scoped lang="scss">
 .form-select {
