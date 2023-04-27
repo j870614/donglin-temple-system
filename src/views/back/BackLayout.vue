@@ -30,9 +30,9 @@ const sideBarStore = sideBarConfigStore();
 }
 .max-heighScroll {
   overflow-y: scroll;
-  max-height: calc(100vh - 64px);
+  height: calc(100vh - 64px);
   @media (min-width: 992px) {
-    max-height: calc(100vh - 116px);
+    height: calc(100vh - 116px);
   }
 }
 </style>
