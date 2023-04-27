@@ -22,3 +22,9 @@
     </table>
   </div>
 </template>
+<script setup lang="ts">
+export interface ThInfo {
+  title: string;
+  needSort: boolean;
+}
+</script>

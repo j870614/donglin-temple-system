@@ -55,23 +55,32 @@
 
 .btn-primary {
   color: $white;
-  &:hover{
+  &:hover {
     color: $white;
     background-color: $primary-dark;
+  }
+  &:disabled {
+    color: $neutral-60;
+    background-color: $neutral-40;
   }
 }
 .btn-outline-primary {
   color: $primary;
   background-color: $white;
-  &:hover{
+  &:hover {
     color: $primary;
     background-color: $primary-tint;
   }
+  &:disabled {
+    color: $neutral-60;
+    border-color: $neutral-60;
+    background-color: $white;
+  }
 }
-.btn-outline-danger{
+.btn-outline-danger {
   color: $danger;
   background-color: $white;
-  &:hover{
+  &:hover {
     color: $danger;
     background-color: $danger-10;
   }

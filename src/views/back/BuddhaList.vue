@@ -1,15 +1,17 @@
 <template>
   <main class="row">
     <div class="col-12 h-100 gx-lg-5 pt-lg-4 pb-lg-5 py-3 mb-lg-2">
-      <div class="d-flex align-items-center justify-content-between mb-lg-4 mb-3 pb-2">
+      <div
+        class="d-flex align-items-center justify-content-between mb-lg-4 mb-3 pb-2 position-relative"
+      >
         <h1 class="h1 fw-semibold d-flex align-items-center mb-0">
           <OpenSideBar /> <span class="ms-0 ms-lg-2-5">佛七預約報名表單</span>
         </h1>
         <img
           src="@/assets/img/Logo2.png"
           alt="淨土行門"
-          class="img-fluid"
-          style="max-height: 48px"
+          class="position-absolute end-0 img-fluid d-none d-lg-block"
+          style="max-height: 80px"
         />
       </div>
       <div class="d-flex flex-column flex-lg-row gap-lg-4 gap-2 mb-3 mb-lg-4">
@@ -48,7 +50,7 @@
           </select>
         </div>
       </div>
-      <StickyTable style="max-height: 21rem">
+      <StickyTable style="max-height: 35rem">
         <template #thead>
           <tr>
             <th
@@ -75,12 +77,15 @@
             <td>{{ info.legalName }}</td>
             <td>{{ info.originalName }}</td>
             <td>{{ info.tel }}</td>
-            <td>{{ info.registrationDate }}</td>
-            <td>{{ info.leaveDate }}</td>
+            <td>
+              {{ getCurrentMonth(info.registrationDate) }} /
+              {{ getCurrentDay(info.registrationDate) }}
+            </td>
+            <td>{{ getCurrentMonth(info.leaveDate) }} / {{ getCurrentDay(info.leaveDate) }}</td>
             <td>
               <template v-if="info.state === '已取消'">已取消</template>
               <template v-else>
-                <p class="mb-0">{{ info.meals ? `用${info.meals}` : '不用齋' }}</p>
+                <p class="mb-0">{{ info.meal ? `用${info.meal}` : '不用齋' }}</p>
               </template>
             </td>
             <td>
@@ -113,6 +118,7 @@
           class="btn btn-outline-primary py-3 flex-grow-1"
           style="max-width: 184px"
           @click.prevent="cancelAppointment(currentUser)"
+          :disabled="currentUser.state === '已取消'"
         >
           取消預約
         </button>
@@ -124,11 +130,13 @@
   </main>
 </template>
 <script setup lang="ts">
+import { ref } from 'vue';
 import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
-import { ref } from 'vue';
-import Swal from '@/plug/sweetAlert';
+import type { ThInfo } from '@/components/back/StickyTable.vue';
+import Swal from '@/plug/SweetAlert';
 import type { SweetAlertResult } from 'sweetalert2';
+import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
 
 const currentDate: Date = new Date();
 
@@ -157,10 +165,6 @@ const tagStyle = ref<TagStyle>({
   },
 });
 
-interface ThInfo {
-  title: string;
-  needSort: boolean;
-}
 const thInfo = ref<ThInfo[]>([
   {
     title: '報名序號',
@@ -212,140 +216,66 @@ const thInfo = ref<ThInfo[]>([
   },
 ]);
 interface UserInfo {
-  id: string;
+  id: number;
   sex: string;
   legalName: string;
   originalName: string;
   tel: string;
-  registrationDate: string;
-  leaveDate: string;
-  meals: string;
+  registrationDate: number;
+  leaveDate: number;
+  meal: string;
   state: string;
-  editorId: string;
-  editorDate: string;
+  editorId: number;
+  editorDate: number;
 }
 const users = ref<UserInfo[]>([
   {
-    id: '1',
+    id: 1,
+    sex: '男',
+    legalName: '',
+    originalName: '王小信',
+    tel: '0910111222',
+    registrationDate: 1696089600000,
+    leaveDate: 1696608000000,
+    meal: '午齋',
+    state: '已報到',
+    editorId: 3,
+    editorDate: 1682575205902,
+  },
+  {
+    id: 2,
     sex: '男',
     legalName: '普己',
     originalName: '王大信',
     tel: '0910111222',
-    registrationDate: '8/31',
-    leaveDate: '9/7',
-    meals: '午齋',
+    registrationDate: 1696089600000,
+    leaveDate: 1696608000000,
+    meal: '午齋',
     state: '已報到',
-    editorId: '修改者id關聯',
-    editorDate: '8/5',
-  },
-  {
-    id: '2',
-    sex: '男',
-    legalName: '普戊',
-    originalName: '林大為',
-    tel: '0910111222',
-    registrationDate: '9/10',
-    leaveDate: '9/17',
-    meals: '午齋',
-    state: '寮房師已確認',
-    editorId: '修改者id關聯',
-    editorDate: '9/4',
-  },
-  {
-    id: '3',
-    sex: '男',
-    legalName: '普戊',
-    originalName: '林大為',
-    tel: '0910111222',
-    registrationDate: '9/10',
-    leaveDate: '9/17',
-    meals: '午齋',
-    state: '已取消',
-    editorId: '修改者id關聯',
-    editorDate: '9/4',
-  },
-  {
-    id: '4',
-    sex: '男',
-    legalName: '普戊',
-    originalName: '林大為',
-    tel: '0910111222',
-    registrationDate: '9/10',
-    leaveDate: '9/17',
-    meals: '午齋',
-    state: '新登錄報名',
-    editorId: '修改者id關聯',
-    editorDate: '9/4',
-  },
-  {
-    id: '5',
-    sex: '男',
-    legalName: '普戊',
-    originalName: '林大為',
-    tel: '0910111222',
-    registrationDate: '9/10',
-    leaveDate: '9/17',
-    meals: '午齋',
-    state: '寮房師已確認',
-    editorId: '修改者id關聯',
-    editorDate: '9/4',
-  },
-  {
-    id: '6',
-    sex: '男',
-    legalName: '普戊',
-    originalName: '林大為',
-    tel: '0910111222',
-    registrationDate: '9/10',
-    leaveDate: '9/17',
-    meals: '午齋',
-    state: '寮房師已確認',
-    editorId: '修改者id關聯',
-    editorDate: '9/4',
-  },
-  {
-    id: '7',
-    sex: '男',
-    legalName: '普戊',
-    originalName: '林大為',
-    tel: '0910111222',
-    registrationDate: '9/10',
-    leaveDate: '9/17',
-    meals: '午齋',
-    state: '寮房師已確認',
-    editorId: '修改者id關聯',
-    editorDate: '9/4',
+    editorId: 3,
+    editorDate: 1682575205902,
   },
 ]);
 
 const currentUser = ref<UserInfo>({
-  id: '',
+  id: 0,
   sex: '',
   legalName: '',
   originalName: '',
   tel: '',
-  registrationDate: '',
-  leaveDate: '',
-  meals: '',
+  registrationDate: 1682575205902,
+  leaveDate: 1682575205902,
+  meal: '',
   state: '',
-  editorId: '',
-  editorDate: '',
+  editorId: 0,
+  editorDate: 1682575205902,
 });
 async function cancelAppointment(current: UserInfo) {
   const index: number = users.value.findIndex((user: UserInfo) => user.id === current.id);
   if (index === -1) {
     Swal.fire({
       icon: 'error',
-      title: '還未選擇信眾',
-      showConfirmButton: false,
-      timer: 1500,
-    });
-    return;
-  }
-  if (users.value[index].state === '已取消') {
-    Swal.fire({
-      icon: 'warning',
-      title: '此信眾已取消佛七',
+      title: '還未選擇四眾法眷',
       showConfirmButton: false,
       timer: 1500,
     });
@@ -353,7 +283,9 @@ async function cancelAppointment(current: UserInfo) {
   }
   try {
     const res: SweetAlertResult = await Swal.fire({
-      html: `<p class="mb-0 fs-3">是否取消<b class="px-2 text-danger fw-semibold">${current.originalName}</b>的預約</p>`,
+      html: `<p class="mb-0 fs-3">是否取消<b class="px-2 text-danger fw-semibold">${
+        current.legalName ? `${current.legalName}-` : ''
+      }${current.originalName}-${current.sex}</b>的預約</p>`,
       showCancelButton: true,
     });
 
