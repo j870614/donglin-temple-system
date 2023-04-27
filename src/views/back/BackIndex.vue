@@ -61,9 +61,11 @@
               >
                 <AnnouncementInfo>
                   <template #info-tag>
-                    <span class="py-2 px-3 rounded-4 d-inline-block" :class="tags[info.tag]">{{
-                      info.tag
-                    }}</span>
+                    <span
+                      class="py-2 px-3 rounded-4 d-inline-block"
+                      :class="`text-${tags[info.tag].textColor} bg-${tags[info.tag].bgColor}`"
+                      >{{ info.tag }}</span
+                    >
                   </template>
                   <template #info-content>
                     <p>{{ info.content }}</p>
@@ -100,9 +102,11 @@
               >
                 <AnnouncementInfo>
                   <template #info-tag>
-                    <span class="py-2 px-3 rounded-4 d-inline-block" :class="tags[info.tag]">{{
-                      info.tag
-                    }}</span>
+                    <span
+                      class="py-2 px-3 rounded-4 d-inline-block"
+                      :class="`text-${tags[info.tag].textColor} bg-${tags[info.tag].bgColor}`"
+                      >{{ info.tag }}</span
+                    >
                   </template>
                   <template #user>
                     {{ info.user }}
@@ -136,6 +140,7 @@ import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import CalendarSub from '@/components/back/CalendarSub.vue';
 import AnnouncementInfo from '@/components/back/AnnouncementInfo.vue';
 import sideBarConfigStore from '@/stores/SideBarConfig';
+import type TagStyle from '@/interface/TagStyle';
 
 const sideBarStore = sideBarConfigStore();
 const currentPage = ref<String>('公告');
@@ -163,14 +168,32 @@ onMounted(resizeWidth);
 onBeforeMount(resizeWidth);
 
 // 標籤樣式定義
-const tags: { [key: string]: string } = {
-  皈依報名: 'bg-primary text-white',
-  執事異動: 'bg-primary-tint text-primary',
-  權限申請: 'bg-primary-tint text-primary',
-  系統管理員: 'bg-neutral-40 text-neutral-80',
-  已離單: 'bg-neutral-40 text-neutral-80',
-  系統維護: 'bg-secondary-tint text-secondary',
-};
+const tags = ref<TagStyle>({
+  皈依報名: {
+    textColor: 'white',
+    bgColor: 'primary',
+  },
+  執事異動: {
+    textColor: 'primary',
+    bgColor: 'primary-tint',
+  },
+  權限申請: {
+    textColor: 'primary',
+    bgColor: 'primary-tint',
+  },
+  系統管理員: {
+    textColor: 'neutral-80',
+    bgColor: 'neutral-40',
+  },
+  已離單: {
+    textColor: 'neutral-80',
+    bgColor: 'neutral-40',
+  },
+  系統維護: {
+    textColor: 'secondary',
+    bgColor: 'secondary-tint',
+  },
+});
 
 interface Info {
   tag: string;

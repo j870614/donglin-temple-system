@@ -21,30 +21,29 @@
             id="year"
             class="form-select form-select-lg fs-7"
             aria-label=".form-select-lg example"
+            v-model="currentYear"
+            @change="filterUsers(currentYear, currentMonth, originData, users)"
           >
             <option
-              value="2022"
+              :value="currentYear + 1 - i"
               v-for="i in new Date().getFullYear() - 2009"
               :key="i"
-              :selected="i + 2010 === currentDate.getFullYear() - 2009"
+              :selected="i + 2010 === currentYear - 2009"
             >
-              {{ currentDate.getFullYear() + 1 - i }}
+              {{ currentYear + 1 - i }}
             </option>
           </select>
         </div>
         <div>
-          <label class="form-label fw-semibold" for="year">月份</label>
+          <label class="form-label fw-semibold" for="month">月份</label>
           <select
-            id="year"
+            id="month"
             class="form-select form-select-lg fs-7"
             aria-label=".form-select-lg example"
+            v-model="currentMonth"
+            @change="filterUsers(currentYear, currentMonth, originData, users)"
           >
-            <option
-              value="2022"
-              v-for="i in 12"
-              :key="i"
-              :selected="i === currentDate.getMonth() + 1"
-            >
+            <option :value="i" v-for="i in 12" :key="i" :selected="i === currentMonth">
               {{ i }}
             </option>
           </select>
@@ -66,50 +65,59 @@
           </tr>
         </template>
         <template #tbody>
-          <tr
-            v-for="(info, index) in users"
-            :key="info.id + index"
-            :class="{ 'table-active': currentUser.id === info.id }"
-            @click.prevent="currentUser = info"
-          >
-            <td>{{ index + 1 }}</td>
-            <td>{{ info.sex }}</td>
-            <td>{{ info.legalName }}</td>
-            <td>{{ info.originalName }}</td>
-            <td>{{ info.tel }}</td>
-            <td>
-              {{ getCurrentMonth(info.registrationDate) }} /
-              {{ getCurrentDay(info.registrationDate) }}
-            </td>
-            <td>{{ getCurrentMonth(info.leaveDate) }} / {{ getCurrentDay(info.leaveDate) }}</td>
-            <td>
-              <template v-if="info.state === '已取消'">已取消</template>
-              <template v-else>
-                <p class="mb-0">{{ info.meal ? `用${info.meal}` : '不用齋' }}</p>
-              </template>
-            </td>
-            <td>
-              <p
-                class="py-2 px-3 mb-0 rounded-4"
-                :class="`bg-${tagStyle[info.state].bgColor} text-${tagStyle[info.state].textColor}`"
-              >
-                {{ info.state }}
-              </p>
-            </td>
-            <td>{{ info.editorId }}</td>
-            <td>{{ info.editorDate }}</td>
-            <td
-              :class="{
-                'cursor-point': info.state !== '已取消',
-                'text-neutral-60': info.state === '已取消',
-              }"
+          <template v-if="!users.length">
+            <tr>
+              <td colspan="12">當前月份無報名資訊</td>
+            </tr>
+          </template>
+          <template v-else>
+            <tr
+              v-for="(info, index) in users"
+              :key="info.id + index"
+              :class="{ 'table-active': currentUser.id === info.id }"
+              @click.prevent="currentUser = info"
             >
-              <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
-                <span class="material-symbols-outlined"> edit </span
-                ><span class="d-none d-lg-block">修改</span>
-              </p>
-            </td>
-          </tr>
+              <td>{{ index + 1 }}</td>
+              <td>{{ info.sex }}</td>
+              <td>{{ info.legalName }}</td>
+              <td>{{ info.originalName }}</td>
+              <td>{{ info.tel }}</td>
+              <td>
+                {{ getCurrentMonth(info.registrationDate) }} /
+                {{ getCurrentDay(info.registrationDate) }}
+              </td>
+              <td>{{ getCurrentMonth(info.leaveDate) }} / {{ getCurrentDay(info.leaveDate) }}</td>
+              <td>
+                <template v-if="info.state === '已取消'">已取消</template>
+                <template v-else>
+                  <p class="mb-0">{{ info.meal ? `用${info.meal}` : '不用齋' }}</p>
+                </template>
+              </td>
+              <td>
+                <p
+                  class="py-2 px-3 mb-0 rounded-4"
+                  :class="`bg-${tagStyle[info.state].bgColor} text-${
+                    tagStyle[info.state].textColor
+                  }`"
+                >
+                  {{ info.state }}
+                </p>
+              </td>
+              <td>{{ info.editorId }}</td>
+              <td>{{ getCurrentMonth(info.editorDate) }} / {{ getCurrentDay(info.editorDate) }}</td>
+              <td
+                :class="{
+                  'cursor-point': info.state !== '已取消',
+                  'text-neutral-60': info.state === '已取消',
+                }"
+              >
+                <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
+                  <span class="material-symbols-outlined"> edit </span
+                  ><span class="d-none d-lg-block">修改</span>
+                </p>
+              </td>
+            </tr>
+          </template>
         </template>
       </StickyTable>
       <div class="d-flex justify-content-end gap-3 mt-5">
@@ -130,22 +138,19 @@
   </main>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
 import type { ThInfo } from '@/components/back/StickyTable.vue';
 import Swal from '@/plug/SweetAlert';
 import type { SweetAlertResult } from 'sweetalert2';
 import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
+import filterUsers from '@/plug/FilterData';
+import type TagStyle from '@/interface/TagStyle';
 
-const currentDate: Date = new Date();
+const currentYear: number = new Date().getFullYear();
+const currentMonth: number = new Date().getMonth() + 1;
 
-interface TagStyle {
-  [key: string]: {
-    textColor: string;
-    bgColor: string;
-  };
-}
 const tagStyle = ref<TagStyle>({
   已報到: {
     textColor: 'success',
@@ -228,15 +233,15 @@ interface UserInfo {
   editorId: number;
   editorDate: number;
 }
-const users = ref<UserInfo[]>([
+const originData = ref<UserInfo[]>([
   {
     id: 1,
     sex: '男',
     legalName: '',
-    originalName: '王小信',
+    originalName: '王一信',
     tel: '0910111222',
-    registrationDate: 1696089600000,
-    leaveDate: 1696608000000,
+    registrationDate: 1651334400000,
+    leaveDate: 1651680000000,
     meal: '午齋',
     state: '已報到',
     editorId: 3,
@@ -246,7 +251,20 @@ const users = ref<UserInfo[]>([
     id: 2,
     sex: '男',
     legalName: '普己',
-    originalName: '王大信',
+    originalName: '王二信',
+    tel: '0910111222',
+    registrationDate: 1682579440377,
+    leaveDate: 1683043200000,
+    meal: '午齋',
+    state: '已報到',
+    editorId: 3,
+    editorDate: 1681315200000,
+  },
+  {
+    id: 3,
+    sex: '男',
+    legalName: '普己',
+    originalName: '王三',
     tel: '0910111222',
     registrationDate: 1696089600000,
     leaveDate: 1696608000000,
@@ -255,8 +273,26 @@ const users = ref<UserInfo[]>([
     editorId: 3,
     editorDate: 1682575205902,
   },
+  {
+    id: 4,
+    sex: '男',
+    legalName: '普己',
+    originalName: '王四',
+    tel: '0910111222',
+    registrationDate: 1696089600000,
+    leaveDate: 1696608000000,
+    meal: '午齋',
+    state: '已報到',
+    editorId: 3,
+    editorDate: 1696608000000,
+  },
 ]);
+const users = ref<UserInfo[]>([]);
+onMounted(() => {
+  filterUsers(currentYear, currentMonth, originData.value, users.value);
+});
 
+// 取消預約
 const currentUser = ref<UserInfo>({
   id: 0,
   sex: '',
@@ -297,6 +333,7 @@ async function cancelAppointment(current: UserInfo) {
         timer: 1500,
       });
       users.value[index].state = '已取消';
+      users.value[index].editorDate = Date.now();
     }
   } catch (err) {
     console.error(err);
