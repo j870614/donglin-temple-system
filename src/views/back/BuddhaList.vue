@@ -39,7 +39,7 @@
           </select>
         </div>
       </div>
-      <StickyTable style="max-height: 35rem">
+      <StickyTable>
         <template #thead>
           <tr>
             <th
