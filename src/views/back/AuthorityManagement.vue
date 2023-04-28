@@ -51,7 +51,11 @@
               <td>{{ user.deacon }}</td>
               <td>{{ user.editorId }}</td>
               <td>{{ getCurrentMonth(user.editorDate) }} / {{ getCurrentDay(user.editorDate) }}</td>
-              <td class="cursor-point">
+              <td
+                class="cursor-point"
+                @click.prevent="() => editorPermissions(user)"
+                @keydown.prevent="() => editorPermissions(user)"
+              >
                 <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
                   <span class="material-symbols-outlined"> edit </span
                   ><span class="d-none d-lg-block">修改</span>
@@ -177,11 +181,72 @@ async function deletePermissions(current: UserInfo): Promise<void> {
         showConfirmButton: false,
         timer: 1500,
       });
-      originDate.value[index].hall = '';
-      originDate.value[index].deacon = '';
-      originDate.value[index].editorDate = Date.now();
+      originDate.value.splice(index, 1);
       filterUserHall();
     }
+  } catch (err) {
+    console.error(err);
+  }
+}
+// 修改權限
+async function editorPermissions(current: UserInfo): Promise<void> {
+  const index: number = originDate.value.findIndex((user: UserInfo) => user.id === current.id);
+  if (index === -1) {
+    Swal.fire({
+      icon: 'error',
+      title: '還未選擇四眾法眷',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    return;
+  }
+  try {
+    const { value: res } = await Swal.fire({
+      html: `<p class="mb-0 fs-3">是否修改<b class="px-2 text-danger fw-semibold">${
+        current.legalName ? `${current.legalName}-` : ''
+      }${current.originalName ? `${current.originalName}-` : ''}${current.sex}</b>的權限</p>`,
+      input: 'select',
+      inputOptions: {
+        知客: {
+          總知客: '總知客',
+          副總知客: '副總知客',
+          知客志工: '知客志工',
+        },
+        寮房: {
+          寮房師: '寮房師',
+          副寮房師: '副寮房師',
+          寮房志工: '寮房志工',
+        },
+      },
+      inputPlaceholder: '權限選擇',
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return new Promise((resolve) => {
+          if (value === '') {
+            resolve('尚未選擇新的權限');
+          } else {
+            resolve('');
+          }
+        });
+      },
+    });
+    if (!res) return;
+    if (originDate.value[index].deacon === res) return;
+    if (res.includes('知客')) {
+      originDate.value[index].hall = '知客';
+      originDate.value[index].deacon = res;
+    } else {
+      originDate.value[index].hall = '寮房';
+      originDate.value[index].deacon = res;
+    }
+    originDate.value[index].editorDate = Date.now();
+    Swal.fire({
+      icon: 'success',
+      title: '已修改權限',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    filterUserHall();
   } catch (err) {
     console.error(err);
   }
