@@ -4,6 +4,9 @@
       <BackTitle>
         <template #title> 使用者權限核發 </template>
       </BackTitle>
+      <div>
+        <span class="bg-neutral-40 text-neutral-60 mb-0 d-block step-circle"> 1 </span>
+      </div>
     </div>
   </main>
 </template>
