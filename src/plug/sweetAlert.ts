@@ -2,7 +2,7 @@ import sweetalert2 from 'sweetalert2';
 import type { SweetAlertOptions } from 'sweetalert2';
 
 const option: SweetAlertOptions = {
-  confirmButtonColor: '#0CCFA1',
+  confirmButtonColor: '#0DA97E',
   cancelButtonColor: '#EE4055',
   reverseButtons: true,
   confirmButtonText: '確認',

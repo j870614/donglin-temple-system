@@ -1,6 +1,9 @@
 <template>
   <div class="table-responsive">
     <table class="table table-style table-hover align-middle text-center box-style text-nowrap">
+      <caption class="caption-top fs-4">
+        <slot name="caption"></slot>
+      </caption>
       <thead class="sticky-top">
         <slot name="thead">
           <tr>

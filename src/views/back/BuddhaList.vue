@@ -1,6 +1,6 @@
 <template>
   <main class="row">
-    <div class="col-12 h-100 gx-lg-5 pt-lg-4 pb-lg-5 py-3 mb-lg-2">
+    <div class="col h-100 gx-lg-5 pt-lg-4 pb-lg-5 py-3 mb-lg-2">
       <BackTitle>
         <template #title> 佛七預約報名表單 </template>
       </BackTitle>
@@ -55,11 +55,9 @@
           </tr>
         </template>
         <template #tbody>
-          <template v-if="!users.length">
-            <tr>
-              <td colspan="12">當前月份無報名資訊</td>
-            </tr>
-          </template>
+          <tr v-if="!users.length">
+            <td colspan="12">當前月份無報名資訊</td>
+          </tr>
           <template v-else>
             <tr
               v-for="(info, index) in users"
@@ -241,7 +239,7 @@ const originData = ref<UserInfo[]>([
     id: 2,
     sex: '男',
     legalName: '普己',
-    originalName: '王二信',
+    originalName: '',
     tel: '0910111222',
     registrationDate: 1682579440377,
     leaveDate: 1683043200000,
@@ -296,7 +294,7 @@ const currentUser = ref<UserInfo>({
   editorId: 0,
   editorDate: 1682575205902,
 });
-async function cancelAppointment(current: UserInfo) {
+async function cancelAppointment(current: UserInfo): Promise<void> {
   const index: number = users.value.findIndex((user: UserInfo) => user.id === current.id);
   if (index === -1) {
     Swal.fire({
@@ -311,7 +309,7 @@ async function cancelAppointment(current: UserInfo) {
     const res: SweetAlertResult = await Swal.fire({
       html: `<p class="mb-0 fs-3">是否取消<b class="px-2 text-danger fw-semibold">${
         current.legalName ? `${current.legalName}-` : ''
-      }${current.originalName}-${current.sex}</b>的預約</p>`,
+      }${current.originalName ? `${current.originalName}-` : ''}${current.sex}</b>的預約</p>`,
       showCancelButton: true,
     });
 
