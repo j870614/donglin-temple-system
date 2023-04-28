@@ -6,10 +6,10 @@
       </BackTitle>
       <div class="d-flex flex-column flex-lg-row gap-lg-4 gap-2 mb-3 mb-lg-4">
         <div>
-          <label class="form-label fw-semibold" for="year">年份</label>
+          <label class="form-label fw-semibold fs-5" for="year">年份</label>
           <select
             id="year"
-            class="form-select form-select-lg fs-7"
+            class="form-select form-select-lg fs-5"
             aria-label=".form-select-lg example"
             v-model="currentYear"
             @change="filterUsers(currentYear, currentMonth, originData, users)"
@@ -25,10 +25,10 @@
           </select>
         </div>
         <div>
-          <label class="form-label fw-semibold" for="month">月份</label>
+          <label class="form-label fw-semibold fs-5" for="month">月份</label>
           <select
             id="month"
-            class="form-select form-select-lg fs-7"
+            class="form-select form-select-lg fs-5"
             aria-label=".form-select-lg example"
             v-model="currentMonth"
             @change="filterUsers(currentYear, currentMonth, originData, users)"

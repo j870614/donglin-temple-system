@@ -4,12 +4,33 @@
       <BackTitle>
         <template #title> 使用者權限核發 </template>
       </BackTitle>
+      <ProcessSteps :steps="steps"></ProcessSteps>
       <div>
-        <span class="bg-neutral-40 text-neutral-60 mb-0 d-block step-circle"> 1 </span>
+        <beforeSearch></beforeSearch>
       </div>
     </div>
   </main>
 </template>
 <script setup lang="ts">
 import BackTitle from '@/components/back/BackTitle.vue';
+import ProcessSteps from '@/components/back/ProcessSteps.vue';
+import beforeSearch from '@/components/information/beforeSearch.vue';
+
+import { ref } from 'vue';
+
+// const steps = ref([
+//   {
+//     stepTitle: '個資查詢',
+//     isFinish: false,
+//   },
+//   {
+//     stepTitle: '權限設定',
+//     isFinish: false,
+//   },
+//   {
+//     stepTitle: '註冊連結',
+//     isFinish: false,
+//   },
+// ]);
+const steps = ref(['個資查詢', '權限設定', '註冊連結']);
 </script>

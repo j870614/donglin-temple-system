@@ -4,10 +4,10 @@
       <BackTitle>
         <template #title> 使用者權限管理 </template>
       </BackTitle>
-      <label class="form-label fw-semibold" for="search">查詢權限名單</label>
+      <label class="form-label fw-semibold fs-5" for="search">查詢權限名單</label>
       <select
         id="search"
-        class="form-select form-select-lg fs-7 mb-4"
+        class="form-select form-select-lg fs-5 mb-4"
         style="max-width: 400px"
         aria-label=".form-select-lg example"
         v-model="search"
