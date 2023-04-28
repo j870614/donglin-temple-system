@@ -1,19 +1,9 @@
 <template>
   <main class="row">
     <div class="col-12 h-100 gx-lg-5 pt-lg-4 pb-lg-5 py-3 mb-lg-2">
-      <div
-        class="d-flex align-items-center justify-content-between mb-lg-4 mb-3 pb-2 position-relative"
-      >
-        <h1 class="h1 fw-semibold d-flex align-items-center mb-0">
-          <OpenSideBar /> <span class="ms-0 ms-lg-2-5">佛七預約報名表單</span>
-        </h1>
-        <img
-          src="@/assets/img/Logo2.png"
-          alt="淨土行門"
-          class="position-absolute end-0 img-fluid d-none d-lg-block"
-          style="max-height: 80px"
-        />
-      </div>
+      <BackTitle>
+        <template #title> 佛七預約報名表單 </template>
+      </BackTitle>
       <div class="d-flex flex-column flex-lg-row gap-lg-4 gap-2 mb-3 mb-lg-4">
         <div>
           <label class="form-label fw-semibold" for="year">年份</label>
@@ -139,8 +129,8 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
+import BackTitle from '@/components/back/BackTitle.vue';
 import type { ThInfo } from '@/components/back/StickyTable.vue';
 import Swal from '@/plug/SweetAlert';
 import type { SweetAlertResult } from 'sweetalert2';

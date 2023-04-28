@@ -1,7 +1,7 @@
 <template>
   <main>
     <BackTitle>
-      <template #title> 歷史公告查詢 </template>
+      <template #title> 佛七預約報名表單 </template>
     </BackTitle>
   </main>
 </template>

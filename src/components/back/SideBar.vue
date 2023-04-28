@@ -177,7 +177,7 @@ const nav = ref<NavItem[]>([
         isOpen: false,
         children: [
           {
-            path: '',
+            path: '/permissions/manage',
             name: '使用者權限管理',
           },
           {

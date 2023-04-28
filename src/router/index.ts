@@ -39,6 +39,19 @@ const router = createRouter({
           ],
         },
         {
+          path: 'permissions',
+          children: [
+            {
+              path: 'manage',
+              component: () => import('@/views/back/AuthorityManagement.vue'),
+            },
+            // { 權限核發
+            //   path: 'issued',
+            //   component: () => import('@/views/back/SystemNotification.vue'),
+            // },
+          ],
+        },
+        {
           path: 'announcement',
           children: [
             {
