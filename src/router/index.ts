@@ -45,10 +45,20 @@ const router = createRouter({
               path: 'manage',
               component: () => import('@/views/back/AuthorityManagement.vue'),
             },
-            // { 權限核發
-            //   path: 'issued',
-            //   component: () => import('@/views/back/SystemNotification.vue'),
-            // },
+            {
+              path: 'authorized',
+              children: [
+                {
+                  path: '',
+                  component: () => import('@/views/back/AdminAuthorization.vue'),
+                },
+                {
+                  path: 'new',
+                  name: 'addNewAuthorized',
+                  component: () => import('@/views/back/AddAuthorization.vue'),
+                },
+              ],
+            },
           ],
         },
         {
