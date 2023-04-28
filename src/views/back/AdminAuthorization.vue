@@ -5,7 +5,7 @@
         <template #title> 使用者權限核發 </template>
       </BackTitle>
       <div class="d-flex justify-content-end py-3">
-        <router-link :to="{ name: 'addNewAuthorized' }" class="btn btn-lg btn-primary"
+        <router-link to="/back/permissions/authorized/new?step=1" class="btn btn-lg btn-primary"
           >新增使用者權限帳號</router-link
         >
       </div>

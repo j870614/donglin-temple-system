@@ -18,19 +18,5 @@ import beforeSearch from '@/components/information/beforeSearch.vue';
 
 import { ref } from 'vue';
 
-// const steps = ref([
-//   {
-//     stepTitle: '個資查詢',
-//     isFinish: false,
-//   },
-//   {
-//     stepTitle: '權限設定',
-//     isFinish: false,
-//   },
-//   {
-//     stepTitle: '註冊連結',
-//     isFinish: false,
-//   },
-// ]);
 const steps = ref(['個資查詢', '權限設定', '註冊連結']);
 </script>
