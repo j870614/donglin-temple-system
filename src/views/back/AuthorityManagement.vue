@@ -17,8 +17,8 @@
         <option value="知客" selected>知客</option>
         <option value="寮房">寮房</option>
       </select>
+      <p class="fs-3">{{ search }}</p>
       <StickyTable>
-        <template #caption>{{ search }}</template>
         <template #thead>
           <tr>
             <th>編號</th>

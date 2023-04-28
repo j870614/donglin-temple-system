@@ -1,12 +1,6 @@
 <template>
-  <div class="table-responsive">
-    <table
-      class="table table-sticky table-hover align-middle text-center box-style text-nowrap"
-      style="max-height: 35rem"
-    >
-      <caption class="caption-top fs-4">
-        <slot name="caption"></slot>
-      </caption>
+  <div class="table-responsive" style="max-height: 35rem">
+    <table class="table table-sticky table-hover align-middle text-center box-style text-nowrap">
       <thead class="sticky-top">
         <slot name="thead">
           <tr>
