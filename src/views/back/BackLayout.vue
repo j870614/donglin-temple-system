@@ -1,23 +1,29 @@
 <script setup lang="ts">
+import NavInfoConfig from '@/stores/NavInfoConfig';
 import sideBarConfigStore from '@/stores/SideBarConfig';
 import { RouterView } from 'vue-router';
 import SideBar from '@/components/back/SideBar.vue';
 import NavBar from '@/components/back/NavBar.vue';
 
 const sideBarStore = sideBarConfigStore();
+const navInfoStore = NavInfoConfig();
 </script>
 
 <template>
   <div class="container-fluid overflow-hidden" style="max-height: 100vh">
-    <nav class="row bg-white sticky-top border-bottom border-neutral-40">
+    <nav class="bg-white sticky-top border-bottom border-neutral-40">
       <NavBar />
     </nav>
-    <div class="row flex-grow-1">
+    <div
+      class="row flex-grow-1"
+      @click.prevent="navInfoStore.closeAll()"
+      @keydown.prevent="navInfoStore.closeAll()"
+    >
       <aside class="col-12 col-lg-3 gx-lg-5 max-sideBar max-heighScroll" v-if="sideBarStore.isOpen">
         <SideBar />
       </aside>
       <div class="col max-heighScroll" style="background-color: #f6f6f6">
-        <RouterView />
+        <router-view />
       </div>
     </div>
   </div>

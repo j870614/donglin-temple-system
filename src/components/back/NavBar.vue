@@ -1,30 +1,34 @@
 <template>
   <!-- 桌機 start -->
   <div class="d-none d-lg-flex">
-    <h1 class="col d-flex align-items-center gx-5 mb-0">
+    <h1
+      class="flex-grow-1 d-flex align-items-center gx-5 mb-0"
+      @click.prevent="navInfoStore.closeAll()"
+      @keydown.prevent="navInfoStore.closeAll()"
+    >
       <router-link to="/back" class="pe-4"
         ><img class="logo" src="@/assets/img/LOGO.png" alt="spar-cat-eye"
       /></router-link>
 
       <div class="h1 fw-semibold ps-4">寺務管理系統</div>
     </h1>
-    <div class="col-lg-3 d-flex align-items-center d-flex justify-content-end">
+    <div class="d-flex align-items-center d-flex justify-content-end">
       <!-- 通知 start -->
       <div class="position-relative">
         <div
           class="icon-radius cursor-point"
-          :class="{ 'bg-neutral-10': isNotifyOpen }"
+          :class="{ 'bg-neutral-10': navInfoStore.isMsgOpen }"
           style="margin-right: 1.125rem"
           @click.prevent="
             () => {
-              isNotifyOpen = !isNotifyOpen;
-              isUserSettingOpen = false;
+              navInfoStore.isMsgOpen = !navInfoStore.isMsgOpen;
+              navInfoStore.isUserOpen = false;
             }
           "
           @keydown.prevent="
             () => {
-              isNotifyOpen = !isNotifyOpen;
-              isUserSettingOpen = false;
+              navInfoStore.isMsgOpen = !navInfoStore.isMsgOpen;
+              navInfoStore.isUserOpen = false;
             }
           "
         >
@@ -39,7 +43,7 @@
           ></span>
         </div>
         <div
-          v-if="isNotifyOpen"
+          v-if="navInfoStore.isMsgOpen"
           class="position-absolute end-0 bg-white border rounded-4 p-3"
           style="width: 35vw; max-width: 350px"
         >
@@ -77,18 +81,18 @@
         class="d-flex align-items-center"
         @click.prevent="
           () => {
-            isUserSettingOpen = !isUserSettingOpen;
-            isNotifyOpen = false;
+            navInfoStore.isUserOpen = !navInfoStore.isUserOpen;
+            navInfoStore.isMsgOpen = false;
           }
         "
         @keydown.prevent="
           () => {
-            isUserSettingOpen = !isUserSettingOpen;
-            isNotifyOpen = false;
+            navInfoStore.isUserOpen = !navInfoStore.isUserOpen;
+            navInfoStore.isMsgOpen = false;
           }
         "
       >
-        <div class="icon-radius cursor-point" :class="{ 'bg-neutral-10': isUserSettingOpen }">
+        <div class="icon-radius cursor-point" :class="{ 'bg-neutral-10': navInfoStore.isUserOpen }">
           <span class="material-symbols-outlined text-primary svg icon-position">
             account_circle
           </span>
@@ -97,12 +101,12 @@
         <div class="pe-3 position-relative d-flex justify-content-around">
           <span
             class="material-symbols-outlined svg cursor-point"
-            :style="{ transform: isUserSettingOpen ? 'rotate(180deg)' : 'rotate(0)' }"
+            :style="{ transform: navInfoStore.isUserOpen ? 'rotate(180deg)' : 'rotate(0)' }"
           >
             expand_more
           </span>
           <ul
-            v-if="isUserSettingOpen"
+            v-if="navInfoStore.isUserOpen"
             class="d-flex flex-column mb-0 position-absolute end-50 list-inline bg-white border rounded-4 overflow-hidden"
             style="width: 15vw; top: 150%"
           >
@@ -124,7 +128,11 @@
   <!-- 桌機 end -->
   <!-- 手機 start -->
   <div class="d-flex d-lg-none">
-    <div class="col-8">
+    <div
+      class="flex-grow-1"
+      @click.prevent="navInfoStore.closeAll()"
+      @keydown.prevent="navInfoStore.closeAll()"
+    >
       <div class="d-flex align-items-center">
         <OpenSideBar page="nav">
           <template #icon-name> menu </template>
@@ -137,23 +145,23 @@
         </h1>
       </div>
     </div>
-    <div class="col-4 align-items-center d-flex justify-content-end">
+    <div class="align-items-center d-flex justify-content-end">
       <!-- 通知 start -->
       <div class="position-relative">
         <div
           class="icon-radius cursor-point"
-          :class="{ 'bg-neutral-10': isNotifyOpen }"
+          :class="{ 'bg-neutral-10': navInfoStore.isMsgOpen }"
           style="margin-right: 1.125rem"
           @click.prevent="
             () => {
-              isNotifyOpen = !isNotifyOpen;
-              isUserSettingOpen = false;
+              navInfoStore.isMsgOpen = !navInfoStore.isMsgOpen;
+              navInfoStore.isUserOpen = false;
             }
           "
           @keydown.prevent="
             () => {
-              isNotifyOpen = !isNotifyOpen;
-              isUserSettingOpen = false;
+              navInfoStore.isMsgOpen = !navInfoStore.isMsgOpen;
+              navInfoStore.isUserOpen = false;
             }
           "
         >
@@ -168,7 +176,7 @@
           ></span>
         </div>
         <div
-          v-if="isNotifyOpen"
+          v-if="navInfoStore.isMsgOpen"
           class="position-absolute bg-white border rounded-4 p-3"
           style="width: 100vw; right: -56px"
         >
@@ -205,17 +213,17 @@
       <div class="position-relative">
         <div
           class="icon-radius cursor-point"
-          :class="{ 'bg-neutral-10': isUserSettingOpen }"
+          :class="{ 'bg-neutral-10': navInfoStore.isUserOpen }"
           @click.prevent="
             () => {
-              isUserSettingOpen = !isUserSettingOpen;
-              isNotifyOpen = false;
+              navInfoStore.isUserOpen = !navInfoStore.isUserOpen;
+              navInfoStore.isMsgOpen = false;
             }
           "
           @keydown.prevent="
             () => {
-              isUserSettingOpen = !isUserSettingOpen;
-              isNotifyOpen = false;
+              navInfoStore.isUserOpen = !navInfoStore.isUserOpen;
+              navInfoStore.isMsgOpen = false;
             }
           "
         >
@@ -224,7 +232,7 @@
           </span>
         </div>
         <ul
-          v-if="isUserSettingOpen"
+          v-if="navInfoStore.isUserOpen"
           class="d-flex flex-column mb-0 position-absolute end-0 list-inline bg-white border rounded-4 overflow-hidden"
           style="width: 50vw; max-width: 250px"
         >
@@ -245,11 +253,10 @@
   <!-- 手機 end -->
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import NavInfoConfig from '@/stores/NavInfoConfig';
 import OpenSideBar from './OpenSideBar.vue';
 
-const isNotifyOpen = ref<Boolean>(false);
-const isUserSettingOpen = ref<Boolean>(false);
+const navInfoStore = NavInfoConfig();
 </script>
 <style scoped lang="scss">
 @import '@/assets/stylesheets/all.scss';
