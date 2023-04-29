@@ -62,14 +62,10 @@
           </div>
         </template>
         <template v-else>
-          <div
-            class="d-flex flex-column flex-lg-row align-items-center justify-content-center gap-5"
-          >
-            <section>
-              <h2 class="h3 fw-semibold">使用者註冊連結</h2>
-              <div class="bg-secondary" style="width: 200px; height: 200px">這裡放QR</div>
-            </section>
-            <section class="text-danger">
+          <div class="box-style d-flex flex-column align-items-center py-lg-5 py-3">
+            <h2 class="h3 fw-semibold">使用者註冊連結</h2>
+            <div class="bg-secondary" style="width: 200px; height: 200px">這裡放QR</div>
+            <section class="text-danger mt-3">
               <h3 class="h4 fw-semibold mb-3">注意事項</h3>
               <p class="fs-5 mb-5">此為一次性註冊連結 <br />二十分鐘後失效</p>
               <router-link
