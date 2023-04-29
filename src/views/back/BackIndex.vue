@@ -123,11 +123,18 @@
       </div>
     </div>
     <div
-      class="col-lg-3 bg-body"
+      class="col-lg-3 bg-body py-4"
       v-if="webWidth >= 992 || (webWidth < 992 && currentPage === '行程')"
     >
-      <div class="">
-        <!-- 行事曆 -->
+      <div class="btn-calendar mb-5">
+        <h2 class="h2 fw-semibold">行事曆</h2>
+        <DatePicker
+          borderless
+          expanded
+          color="orange"
+          title-position="right"
+          v-model="date"
+        ></DatePicker>
       </div>
       <CalendarSub />
     </div>
@@ -135,12 +142,14 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted, onBeforeMount } from 'vue';
-
+import { DatePicker } from 'v-calendar';
 import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import CalendarSub from '@/components/back/CalendarSub.vue';
 import AnnouncementInfo from '@/components/back/AnnouncementInfo.vue';
 import sideBarConfigStore from '@/stores/SideBarConfig';
 import type TagStyle from '@/interface/TagStyle';
+
+const date = new Date();
 
 const sideBarStore = sideBarConfigStore();
 const currentPage = ref<String>('公告');
