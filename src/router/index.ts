@@ -39,6 +39,29 @@ const router = createRouter({
           ],
         },
         {
+          path: 'permissions',
+          children: [
+            {
+              path: 'manage',
+              component: () => import('@/views/back/AuthorityManagement.vue'),
+            },
+            {
+              path: 'authorized',
+              children: [
+                {
+                  path: '',
+                  component: () => import('@/views/back/AdminAuthorization.vue'),
+                },
+                {
+                  path: 'new',
+                  name: 'addNewAuthorized',
+                  component: () => import('@/views/back/AddAuthorization.vue'),
+                },
+              ],
+            },
+          ],
+        },
+        {
           path: 'announcement',
           children: [
             {

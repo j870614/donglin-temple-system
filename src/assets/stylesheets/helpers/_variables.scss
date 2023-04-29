@@ -298,23 +298,24 @@ $cyans: (
 // fusv-enable
 
 // scss-docs-start theme-color-variables
-$primary:       #FF7640; //$blue !default;
-$primary-dark: #E33430;
-$primary-80: #FF9C75;
-$primary-60: #FFC1A8;
-$primary-tint: #FFE5DB;
-$secondary:     #40AFFF; //$gray-600 !default;
-$success:       #0CCFA1; //$green !default;
-$success-120:       #099F7C; //$green !default;
-$success-20:       #ADFAE8; //$green !default;
-$success-10:       #DDFDF6; //$green !default;
-$secondary-tint: #E5F4FF;
+$primary:       #FF5E1F; //$blue !default;
+$primary-dark: #EB4200;
+$primary-80: #FF8252;
+$primary-60: #FFA785;
+$primary-tint: #FFF4F0;
+$secondary:     #2298EE; //$gray-600 !default;
+$secondary-dark: #107CCC;
+$secondary-80: #50ADF2;
+$secondary-60: #7FC3F5;
+$secondary-tint: #F5FBFF;
+$success:       #0DA97E; //$green !default;
+$success-120:       #097B5C; //$green !default;
+$success-10:       #ECFEFA; //$green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
 $danger:        #EE4055; //$red !default;
 $danger-120:        #B71024; //$red !default;
-$danger-10:        #FACBD1; //$red !default;
-$danger-20:        #FDECEF; //$red !default;
+$danger-10:        #FDECEF; //$red !default;
 $light:         $gray-100 !default;
 $dark:          $gray-900 !default;
 $black: #000000;
@@ -333,16 +334,17 @@ $theme-colors: (
   "primary-60": $primary-60,
   "primary-tint": $primary-tint,
   "secondary":  $secondary,
+  "secondary-dark":  $secondary-dark,
+  "secondary-80":  $secondary-80,
+  "secondary-60":  $secondary-60,
   "secondary-tint":  $secondary-tint,
   "success":    $success,
   "success-120":    $success-120,
-  "success-20":    $success-20,
   "success-10":    $success-10,
   "info":       $info,
   "warning":    $warning,
   "danger":     $danger,
   "danger-120":     $danger-120,
-  "danger-20":     $danger-20,
   "danger-10":     $danger-10,
   "light":      $light,
   "dark":       $dark,

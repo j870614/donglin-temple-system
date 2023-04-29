@@ -1,25 +1,15 @@
 <template>
   <main class="row">
-    <div class="col-12 h-100 gx-lg-5 pt-lg-4 pb-lg-5 py-3 mb-lg-2">
-      <div
-        class="d-flex align-items-center justify-content-between mb-lg-4 mb-3 pb-2 position-relative"
-      >
-        <h1 class="h1 fw-semibold d-flex align-items-center mb-0">
-          <OpenSideBar /> <span class="ms-0 ms-lg-2-5">佛七預約報名表單</span>
-        </h1>
-        <img
-          src="@/assets/img/Logo2.png"
-          alt="淨土行門"
-          class="position-absolute end-0 img-fluid d-none d-lg-block"
-          style="max-height: 80px"
-        />
-      </div>
+    <div class="col h-100 gx-lg-5 pt-lg-4 pb-lg-5 py-3 mb-lg-2">
+      <BackTitle>
+        <template #title> 佛七預約報名表單 </template>
+      </BackTitle>
       <div class="d-flex flex-column flex-lg-row gap-lg-4 gap-2 mb-3 mb-lg-4">
         <div>
-          <label class="form-label fw-semibold" for="year">年份</label>
+          <label class="form-label fw-semibold fs-5" for="year">年份</label>
           <select
             id="year"
-            class="form-select form-select-lg fs-7"
+            class="form-select form-select-lg fs-5"
             aria-label=".form-select-lg example"
             v-model="currentYear"
             @change="filterUsers(currentYear, currentMonth, originData, users)"
@@ -35,10 +25,10 @@
           </select>
         </div>
         <div>
-          <label class="form-label fw-semibold" for="month">月份</label>
+          <label class="form-label fw-semibold fs-5" for="month">月份</label>
           <select
             id="month"
-            class="form-select form-select-lg fs-7"
+            class="form-select form-select-lg fs-5"
             aria-label=".form-select-lg example"
             v-model="currentMonth"
             @change="filterUsers(currentYear, currentMonth, originData, users)"
@@ -49,7 +39,7 @@
           </select>
         </div>
       </div>
-      <StickyTable style="max-height: 35rem">
+      <StickyTable>
         <template #thead>
           <tr>
             <th
@@ -65,11 +55,9 @@
           </tr>
         </template>
         <template #tbody>
-          <template v-if="!users.length">
-            <tr>
-              <td colspan="12">當前月份無報名資訊</td>
-            </tr>
-          </template>
+          <tr v-if="!users.length">
+            <td colspan="12">當前月份無報名資訊</td>
+          </tr>
           <template v-else>
             <tr
               v-for="(info, index) in users"
@@ -139,8 +127,8 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import OpenSideBar from '@/components/back/OpenSideBar.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
+import BackTitle from '@/components/back/BackTitle.vue';
 import type { ThInfo } from '@/components/back/StickyTable.vue';
 import Swal from '@/plug/SweetAlert';
 import type { SweetAlertResult } from 'sweetalert2';
@@ -251,7 +239,7 @@ const originData = ref<UserInfo[]>([
     id: 2,
     sex: '男',
     legalName: '普己',
-    originalName: '王二信',
+    originalName: '',
     tel: '0910111222',
     registrationDate: 1682579440377,
     leaveDate: 1683043200000,
@@ -306,7 +294,7 @@ const currentUser = ref<UserInfo>({
   editorId: 0,
   editorDate: 1682575205902,
 });
-async function cancelAppointment(current: UserInfo) {
+async function cancelAppointment(current: UserInfo): Promise<void> {
   const index: number = users.value.findIndex((user: UserInfo) => user.id === current.id);
   if (index === -1) {
     Swal.fire({
@@ -321,7 +309,7 @@ async function cancelAppointment(current: UserInfo) {
     const res: SweetAlertResult = await Swal.fire({
       html: `<p class="mb-0 fs-3">是否取消<b class="px-2 text-danger fw-semibold">${
         current.legalName ? `${current.legalName}-` : ''
-      }${current.originalName}-${current.sex}</b>的預約</p>`,
+      }${current.originalName ? `${current.originalName}-` : ''}${current.sex}</b>的預約</p>`,
       showCancelButton: true,
     });
 

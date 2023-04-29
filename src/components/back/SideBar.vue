@@ -87,11 +87,12 @@
                   <li
                     class="fs-5 style-sidebar"
                     :class="{
-                      'bg-primary text-white':
-                        $route.fullPath.split('/back').pop() === innerChild.path,
+                      'bg-primary text-white': $route.fullPath
+                        .split('/back')[1]
+                        .includes(innerChild.path),
                       'bg-neutral-10':
                         hoverNavName === innerChild.name &&
-                        $route.fullPath.split('/back').pop() !== innerChild.path,
+                        !$route.fullPath.split('/back')[1].includes(innerChild.path),
                     }"
                     @mouseenter.self="() => (hoverNavName = innerChild.name)"
                     @focus.prevent="() => (hoverNavName = innerChild.name)"
@@ -110,7 +111,7 @@
               v-else
               class="fs-5 style-sidebar"
               :class="{
-                'bg-primary text-white': $route.fullPath.split('/back').pop() === navChild.path,
+                'bg-primary text-white': $route.fullPath.split('/back')[1].includes(navChild.path),
                 'bg-neutral-10':
                   hoverNavName === navChild.name && !$route.fullPath.includes(navChild.path),
               }"
@@ -177,11 +178,11 @@ const nav = ref<NavItem[]>([
         isOpen: false,
         children: [
           {
-            path: '',
+            path: '/permissions/manage',
             name: '使用者權限管理',
           },
           {
-            path: '',
+            path: '/permissions/authorized',
             name: '使用者權限核發',
           },
         ],

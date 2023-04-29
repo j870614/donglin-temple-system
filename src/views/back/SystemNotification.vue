@@ -1,13 +1,12 @@
 <template>
-  <main>
-    <div class="d-flex align-items-center justify-content-between mb-lg-4 mb-3 pb-2">
-      <h1 class="h1 fw-semibold d-flex align-items-center mb-0">
-        <OpenSideBar /> <span class="ms-0 ms-lg-2-5">歷史公告查詢</span>
-      </h1>
-      <img src="@/assets/img/Logo2.png" alt="淨土行門" class="img-fluid" style="max-height: 48px" />
+  <main class="row">
+    <div class="col h-100 gx-lg-5 pt-lg-4 pb-lg-5 py-3 mb-lg-2">
+      <BackTitle>
+        <template #title> 歷史公告查詢 </template>
+      </BackTitle>
     </div>
   </main>
 </template>
 <script setup lang="ts">
-import OpenSideBar from '@/components/back/OpenSideBar.vue';
+import BackTitle from '@/components/back/BackTitle.vue';
 </script>
