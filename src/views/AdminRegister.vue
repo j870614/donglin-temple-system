@@ -9,11 +9,11 @@
         <div class="loginArea col-12 col-md-6">
           <p class="title text-primary">寺務管理系統</p>
           <p class="title2 fw-bold">立即建立你的帳戶</p>
-          <a href="#" class="btn w-100 fw-bold mb-3 loginBtn py-2"
+          <a href="#" class="btn btn-login w-100 fw-bold mb-3 loginBtn py-2"
             ><img class="login-icons" src="../assets/img/login-icons/LINE_APP_Logo.png" alt="" />
             使用 Line 帳號註冊</a
           >
-          <a href="#" class="btn w-100 fw-bold mb-3 loginBtn py-2"
+          <a href="#" class="btn btn-login w-100 fw-bold mb-3 loginBtn py-2"
             ><img class="login-icons" src="../assets/img/login-icons/google.png" alt="googleLogo" />
             使用 Google 帳號註冊</a
           >
@@ -46,7 +46,11 @@
             />
           </div>
           <a href="#" class="registerBtn btn btn-primary w-100 fw-bold mt-3 text-white">立即註冊</a>
-          <p>已經有帳號了嗎？<a href="#" class="text-primary fw-bold">立即登入</a></p>
+          <p>
+            已經有帳號了嗎？<router-link to="/admin" class="text-primary fw-bold"
+              >立即登入</router-link
+            >
+          </p>
         </div>
       </div>
     </div>
