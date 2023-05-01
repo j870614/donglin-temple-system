@@ -77,6 +77,11 @@ const router = createRouter({
       name: 'admin',
       component: () => import('@/views/AdminLogin.vue'),
     },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('@/views/AdminRegister.vue'),
+    },
   ],
   scrollBehavior() {
     return { top: 0 };

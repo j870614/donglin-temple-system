@@ -8,7 +8,7 @@
         <img class="donglinLogo" src="https://i.postimg.cc/mrRH47Ct/LOGO-02.png" alt="logo" />
         <div class="loginArea">
           <p class="title text-primary">寺務管理系統</p>
-          <p class="title2 fw-bold">歡迎使用</p>
+          <p class="title2 fw-bold">立即建立你的帳戶</p>
           <a href="#" class="btn w-100 fw-bold mb-3 loginBtn"
             ><img class="login-icons" src="../assets/img/login-icons/google.png" alt="googleLogo" />
             使用 Google 帳號登入</a
@@ -26,15 +26,17 @@
           <input type="email" class="form-control mb-2" placeholder="hello@example.com" />
           <label for="password" class="form-label">密碼</label>
           <input type="password" class="form-control mb-2" placeholder="請輸入密碼" />
-          <div class="form-check mb-3">
-            <div>
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-              <label class="form-check-label" for="flexCheckDefault">記住帳號</label>
-            </div>
-            <a href="#" class="text-primary">忘記密碼 ?</a>
+          <label for="password" class="form-label">確認密碼</label>
+          <div class="checkPassword position-relative">
+            <input type="password" class="form-control mb-2" placeholder="請輸入密碼" />
+            <img
+              class="checkPasswordIcon position-absolute top-50 end-0 translate-middle-y"
+              src="../assets/img/login-icons/close-eyes.png"
+              alt="close-eyes"
+            />
           </div>
-          <a href="#" class="registerBtn btn btn-primary w-100 fw-bold mt-3 text-white">立即登入</a>
-          <p>還沒有帳戶嗎？<a href="#" class="text-primary fw-bold">前往註冊</a></p>
+          <a href="#" class="registerBtn btn btn-primary w-100 fw-bold mt-3 text-white">立即註冊</a>
+          <p>已經有帳號了嗎？<a href="#" class="text-primary fw-bold">立即登入</a></p>
         </div>
       </div>
     </div>
@@ -118,11 +120,6 @@
 .checkPasswordIcon {
   width: 20px;
   margin-right: 15px;
-}
-.form-check {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
 }
 @media screen and (max-width: 768px) {
   .row {
