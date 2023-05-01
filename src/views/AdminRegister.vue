@@ -5,30 +5,40 @@
         <div class="loginImg" />
       </div>
       <div class="col-12 col-md-6 adminLogin">
-        <img class="donglinLogo" src="https://i.postimg.cc/mrRH47Ct/LOGO-02.png" alt="logo" />
-        <div class="loginArea">
+        <img class="donglinLogo" src="../assets/img/LOGO.png" alt="logo" />
+        <div class="loginArea col-12 col-md-6">
           <p class="title text-primary">寺務管理系統</p>
           <p class="title2 fw-bold">立即建立你的帳戶</p>
           <a href="#" class="btn w-100 fw-bold mb-3 loginBtn"
             ><img class="login-icons" src="../assets/img/login-icons/google.png" alt="googleLogo" />
-            使用 Google 帳號登入</a
+            使用 Google 帳號註冊</a
           >
           <a href="#" class="btn w-100 fw-bold mb-3 loginBtn"
             ><img class="login-icons" src="../assets/img/login-icons/LINE_APP_Logo.png" alt="" />
-            使用 Line 帳號登入</a
+            使用 Line 帳號註冊</a
           >
           <a href="#" class="btn w-100 fw-bold mb-3 loginBtn"
             ><img class="login-icons" src="../assets/img/login-icons/facebook.png" alt="" /> 使用
-            Facebook 帳號登入</a
+            Facebook 帳號註冊</a
           >
-          <p class="text-with-lines emailLogin">或使用電子信箱登入</p>
-          <label for="email" class="form-label">電子信箱</label>
-          <input type="email" class="form-control mb-2" placeholder="hello@example.com" />
-          <label for="password" class="form-label">密碼</label>
-          <input type="password" class="form-control mb-2" placeholder="請輸入密碼" />
-          <label for="password" class="form-label">確認密碼</label>
+          <p class="text-with-lines emailLogin">或使用電子信箱註冊</p>
+          <label for="email" class="form-label fw-bold">電子信箱</label>
+          <input
+            type="email"
+            class="form-control mb-2"
+            id="email"
+            placeholder="hello@example.com"
+          />
+          <label for="password" class="form-label fw-bold">密碼</label>
+          <input type="password" class="form-control mb-2" id="password" placeholder="請輸入密碼" />
+          <label for="confirmPassword" class="form-label fw-bold">確認密碼</label>
           <div class="checkPassword position-relative">
-            <input type="password" class="form-control mb-2" placeholder="請輸入密碼" />
+            <input
+              type="password"
+              class="form-control mb-2"
+              id="confirmPassword"
+              placeholder="請輸入密碼"
+            />
             <img
               class="checkPasswordIcon position-absolute top-50 end-0 translate-middle-y"
               src="../assets/img/login-icons/close-eyes.png"
