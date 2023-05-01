@@ -9,15 +9,15 @@
         <div class="loginArea col-12 col-md-6">
           <p class="title text-primary">寺務管理系統</p>
           <p class="title2 fw-bold">立即建立你的帳戶</p>
-          <a href="#" class="btn w-100 fw-bold mb-3 loginBtn"
+          <a href="#" class="btn w-100 fw-bold mb-3 loginBtn py-2"
             ><img class="login-icons" src="../assets/img/login-icons/google.png" alt="googleLogo" />
             使用 Google 帳號註冊</a
           >
-          <a href="#" class="btn w-100 fw-bold mb-3 loginBtn"
+          <a href="#" class="btn w-100 fw-bold mb-3 loginBtn py-2"
             ><img class="login-icons" src="../assets/img/login-icons/LINE_APP_Logo.png" alt="" />
             使用 Line 帳號註冊</a
           >
-          <a href="#" class="btn w-100 fw-bold mb-3 loginBtn"
+          <a href="#" class="btn w-100 fw-bold mb-3 loginBtn py-2"
             ><img class="login-icons" src="../assets/img/login-icons/facebook.png" alt="" /> 使用
             Facebook 帳號註冊</a
           >
