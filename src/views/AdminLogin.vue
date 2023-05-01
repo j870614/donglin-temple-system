@@ -5,8 +5,8 @@
         <div class="loginImg" />
       </div>
       <div class="col-12 col-md-6 adminLogin">
-        <img class="donglinLogo" src="https://i.postimg.cc/mrRH47Ct/LOGO-02.png" alt="logo" />
-        <div class="loginArea">
+        <img class="donglinLogo" src="../assets/img/LOGO.png" alt="logo" />
+        <div class="loginArea col-12 col-md-6">
           <p class="title text-primary">寺務管理系統</p>
           <p class="title2 fw-bold">歡迎使用</p>
           <a href="#" class="btn w-100 fw-bold mb-3 loginBtn"
@@ -23,9 +23,14 @@
           >
           <p class="text-with-lines emailLogin">或使用電子信箱登入</p>
           <label for="email" class="form-label">電子信箱</label>
-          <input type="email" class="form-control mb-2" placeholder="hello@example.com" />
+          <input
+            type="email"
+            class="form-control mb-2"
+            id="email"
+            placeholder="hello@example.com"
+          />
           <label for="password" class="form-label">密碼</label>
-          <input type="password" class="form-control mb-2" placeholder="請輸入密碼" />
+          <input type="password" class="form-control mb-2" id="password" placeholder="請輸入密碼" />
           <div class="form-check mb-3">
             <div>
               <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
@@ -34,7 +39,7 @@
             <a href="#" class="text-primary">忘記密碼 ?</a>
           </div>
           <a href="#" class="registerBtn btn btn-primary w-100 fw-bold mt-3 text-white">立即登入</a>
-          <p>還沒有帳戶嗎？<a href="#" class="text-primary fw-bold">前往註冊</a></p>
+          <!-- <p>還沒有帳戶嗎？<a href="#" class="text-primary fw-bold">前往註冊</a></p> -->
         </div>
       </div>
     </div>
