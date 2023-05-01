@@ -2,7 +2,7 @@
   <div class="loginContainer">
     <div class="row">
       <div class="d-none d-md-block col-md-6">
-        <img class="loginImg" src="../assets/img/Buddha-loginImg.png" alt="admin" />
+        <div class="loginImg" />
       </div>
       <div class="col-12 col-md-6 adminLogin">
         <img class="donglinLogo" src="https://i.postimg.cc/mrRH47Ct/LOGO-02.png" alt="logo" />
@@ -54,6 +54,7 @@
   height: 100%;
   width: 100%;
   object-fit: cover;
+  background: url('../assets/img/Buddha-loginImg.png') scroll no-repeat right top/auto 100%;
   background-color: #f9f9f9;
 }
 .adminLogin {
