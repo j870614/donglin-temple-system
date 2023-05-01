@@ -22,14 +22,14 @@
             Facebook 帳號登入</a
           >
           <p class="text-with-lines emailLogin">或使用電子信箱登入</p>
-          <label for="email" class="form-label">電子信箱</label>
+          <label for="email" class="form-label fw-bold">電子信箱</label>
           <input
             type="email"
             class="form-control mb-2"
             id="email"
             placeholder="hello@example.com"
           />
-          <label for="password" class="form-label">密碼</label>
+          <label for="password" class="form-label fw-bold">密碼</label>
           <input type="password" class="form-control mb-2" id="password" placeholder="請輸入密碼" />
           <div class="form-check mb-3">
             <div>
