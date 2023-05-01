@@ -53,7 +53,6 @@
 //@import "./utilities/utilities";
 @import './base/global';
 
-
 .btn-primary {
   color: $white;
   &:hover {
@@ -84,5 +83,12 @@
   &:hover {
     color: $danger;
     background-color: $danger-10;
+  }
+}
+
+.btn-login {
+  &:hover {
+    border-color: $neutral-40;
+    background: $neutral-10;
   }
 }
