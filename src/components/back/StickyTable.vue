@@ -4,7 +4,7 @@
       <thead class="sticky-top">
         <slot name="thead">
           <tr>
-            <th class="cursor-point">
+            <th class="cursor-point fs-3">
               範例1<span class="material-symbols-outlined fs-6"> arrow_drop_up </span>
             </th>
             <th>修改</th>
