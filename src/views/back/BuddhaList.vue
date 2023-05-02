@@ -277,7 +277,7 @@ const originData = ref<UserInfo[]>([
 ]);
 const users = ref<UserInfo[]>([]);
 onMounted(() => {
-  filterUsers(currentYear, currentMonth, originData.value, users.value);
+  filterUsers(currentYear.value, currentMonth.value, originData.value, users.value);
 });
 
 // 取消預約
