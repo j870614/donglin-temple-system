@@ -18,7 +18,7 @@
     git init
     git checkout -B main
     git add -A
-    git commit -m 'init'
+    git commit -m '修改 BuddhaList 篩選 bug'
 
     # if you are deploying to https://j870614.github.io
     # git push -f git@github.com:j870614/j870614.github.io.git main

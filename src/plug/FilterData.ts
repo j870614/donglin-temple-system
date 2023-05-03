@@ -12,11 +12,13 @@ export default function filterUsers<T extends { registrationDate: number }>(
   filterArray: T[],
 ) {
   filterArray.splice(0, filterArray.length);
+
   const filter = originArray.filter((item) => {
     return (
       new Date(item.registrationDate).getFullYear() === year &&
       new Date(item.registrationDate).getMonth() + 1 === month
     );
   });
+
   filterArray.push(...filter);
 }

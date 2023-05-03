@@ -136,8 +136,8 @@ import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
 import filterUsers from '@/plug/FilterData';
 import type TagStyle from '@/interface/TagStyle';
 
-const currentYear: number = new Date().getFullYear();
-const currentMonth: number = new Date().getMonth() + 1;
+const currentYear = ref<number>(new Date().getFullYear());
+const currentMonth = ref(<number>new Date().getMonth() + 1);
 
 const tagStyle = ref<TagStyle>({
   已報到: {
@@ -277,7 +277,7 @@ const originData = ref<UserInfo[]>([
 ]);
 const users = ref<UserInfo[]>([]);
 onMounted(() => {
-  filterUsers(currentYear, currentMonth, originData.value, users.value);
+  filterUsers(currentYear.value, currentMonth.value, originData.value, users.value);
 });
 
 // 取消預約
