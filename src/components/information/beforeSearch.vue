@@ -7,9 +7,17 @@
           class="form-check d-flex justify-content-center gap-2"
           v-for="(item, index) in ['法師', '居士']"
           :key="item + index"
+          @click.prevent="identity = item"
+          @keydown.prevent="identity = item"
         >
-          <input class="form-check-input" type="radio" name="身分別" :id="item" />
-          <label class="form-check-label" :for="item"> {{ item }} </label>
+          <input
+            :checked="identity === item"
+            class="form-check-input"
+            type="radio"
+            name="身分別"
+            :id="item + index"
+          />
+          <label class="form-check-label" :for="item + index"> {{ item }} </label>
         </div>
       </div>
       <div class="col-xl-3 col-10 gx-0 box-style fs-5 overflow-hidden text-center">
@@ -18,8 +26,16 @@
           class="form-check d-flex justify-content-center gap-2"
           v-for="(item, index) in ['男眾', '女眾']"
           :key="item + index"
+          @click.prevent="sex = item"
+          @keydown.prevent="sex = item"
         >
-          <input class="form-check-input" type="radio" name="性別" :id="item" />
+          <input
+            :checked="sex === item"
+            class="form-check-input"
+            type="radio"
+            name="性別"
+            :id="item"
+          />
           <label class="form-check-label" :for="item"> {{ item }} </label>
         </div>
       </div>
@@ -31,7 +47,7 @@
       </div>
       <button
         type="button"
-        class="btn btn-primary"
+        class="btn btn-primary px-4"
         data-bs-toggle="modal"
         data-bs-target="#staticBackdrop"
       >
@@ -105,3 +121,9 @@
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const identity = ref('法師');
+const sex = ref('男眾');
+</script>

@@ -68,7 +68,7 @@
                   <p class="mb-0 d-flex flex-column" style="white-space: pre-wrap">
                     <span> 法眷<b>普乙</b>已預約報名佛七。 </span>
                   </p>
-                  <p class="mb-0 btn btn-neutral-40 fw-light rounded-4">15:00</p>
+                  <p class="mb-0 btn btn-neutral-40 fs-6 fw-light rounded-4">15:00</p>
                 </div>
               </div>
             </li>
@@ -201,7 +201,7 @@
                   <p class="mb-0 d-flex flex-column" style="white-space: pre-wrap">
                     <span> 法眷<b>普乙</b>已預約報名佛七。 </span>
                   </p>
-                  <p class="mb-0 btn btn-neutral-40 fw-light rounded-4">15:00</p>
+                  <p class="mb-0 btn btn-neutral-40 fs-6 fw-light rounded-4">15:00</p>
                 </div>
               </div>
             </li>

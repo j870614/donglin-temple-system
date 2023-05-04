@@ -1,7 +1,7 @@
 <template>
   <div class="table-responsive" style="max-height: 35rem">
     <table class="table table-sticky table-hover align-middle text-center box-style text-nowrap">
-      <thead class="sticky-top">
+      <thead class="sticky-top fs-5">
         <slot name="thead">
           <tr>
             <th class="cursor-point fs-3">
@@ -11,7 +11,7 @@
           </tr>
         </slot>
       </thead>
-      <tbody>
+      <tbody class="fs-5">
         <slot name="tbody">
           <tr>
             <td>1</td>

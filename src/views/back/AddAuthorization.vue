@@ -70,7 +70,7 @@
               <p class="fs-5 mb-5">此為一次性註冊連結 <br />二十分鐘後失效</p>
               <router-link
                 to="/back/permissions/authorized"
-                class="btn btn-xl btn-primary text-white"
+                class="btn btn-xl w-100 btn-primary text-white"
                 >回權限核發頁</router-link
               >
             </section>

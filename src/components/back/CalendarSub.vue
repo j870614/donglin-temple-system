@@ -48,7 +48,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
               <div class="card-body d-flex justify-content-between">
                 <p class="card-text d-inline align-middle m-2 fs-5">{{ schedule.title }}</p>
                 <div class="d-inline-block mt-1" v-for="tag in schedule.tags" :key="tag">
-                  <button type="button" class="btn btn-neutral-40 fw-light rounded-4 me-2">
+                  <button type="button" class="btn btn-neutral-40 fs-6 fw-light rounded-4 me-2">
                     {{ tag }}
                   </button>
                 </div>
@@ -116,7 +116,7 @@ const todoList: Ref<Todo[]> = ref<Todo[]>([
             "
           >
             <div class="d-flex align-items-center justify-content-center lh-1">
-              <p class="fs-6 mb-0 pe-1">新增待辦事項</p>
+              <p class="fs-5 mb-0 pe-1">新增待辦事項</p>
               <span class="material-symbols-outlined d-inline-block"> add_circle </span>
             </div>
           </button>
