@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row d-flex justify-content-center gap-5">
-      <div class="col-lg-3 col-10 gx-0 box-style fs-5 overflow-hidden text-center">
+      <div class="col-xl-3 col-10 gx-0 box-style fs-5 overflow-hidden text-center">
         <p class="mb-0 py-1 px-3 bg-primary-80 text-white fw-semibold">身分別</p>
         <div
           class="form-check d-flex justify-content-center gap-2"
@@ -12,7 +12,7 @@
           <label class="form-check-label" :for="item"> {{ item }} </label>
         </div>
       </div>
-      <div class="col-lg-3 col-10 gx-0 box-style fs-5 overflow-hidden text-center">
+      <div class="col-xl-3 col-10 gx-0 box-style fs-5 overflow-hidden text-center">
         <p class="mb-0 py-1 px-3 bg-primary-80 text-white fw-semibold">性別</p>
         <div
           class="form-check d-flex justify-content-center gap-2"
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="d-flex flex-column flex-lg-row justify-content-center gap-lg-5 gap-3 mt-5">
+    <div class="d-flex flex-column flex-xl-row justify-content-center gap-xl-5 gap-3 mt-5">
       <div class="form-floating" style="min-width: 50%">
         <input type="text" class="form-control p-2" id="floatingInput" placeholder="0911111111" />
         <label for="floatingInput">請輸入電話、法名或俗名</label>

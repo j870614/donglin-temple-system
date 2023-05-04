@@ -1,10 +1,10 @@
 <template>
   <main class="row">
-    <div class="col h-100 gx-lg-5 pt-lg-4 pb-lg-5 py-3 mb-lg-2">
+    <div class="col h-100 gx-xl-5 pt-xl-4 pb-xl-5 py-3 mb-xl-2">
       <BackTitle>
         <template #title> 佛七預約報名表單 </template>
       </BackTitle>
-      <div class="d-flex flex-column flex-lg-row gap-lg-4 gap-2 mb-3 mb-lg-4">
+      <div class="d-flex flex-column flex-xl-row gap-xl-4 gap-2 mb-3 mb-xl-4">
         <div>
           <label class="form-label fw-semibold fs-5" for="year">年份</label>
           <select
@@ -101,7 +101,7 @@
               >
                 <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
                   <span class="material-symbols-outlined"> edit </span
-                  ><span class="d-none d-lg-block">修改</span>
+                  ><span class="d-none d-xl-block">修改</span>
                 </p>
               </td>
             </tr>

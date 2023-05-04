@@ -1,6 +1,6 @@
 <template>
   <main class="row">
-    <div class="col h-100 gx-lg-5 pt-lg-4 pb-lg-5 py-3 mb-lg-2">
+    <div class="col h-100 gx-xl-5 pt-xl-4 pb-xl-5 py-3 mb-xl-2">
       <BackTitle>
         <template #title> 使用者權限管理 </template>
       </BackTitle>
@@ -58,7 +58,7 @@
               >
                 <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
                   <span class="material-symbols-outlined"> edit </span
-                  ><span class="d-none d-lg-block">修改</span>
+                  ><span class="d-none d-xl-block">修改</span>
                 </p>
               </td>
             </tr>

@@ -1,6 +1,6 @@
 <template>
   <!-- 桌機 start -->
-  <div class="d-none d-lg-flex">
+  <div class="d-none d-xl-flex">
     <h1
       class="flex-grow-1 d-flex align-items-center gx-5 mb-0"
       @click.prevent="navInfoStore.closeAll()"
@@ -47,14 +47,14 @@
           class="position-absolute end-0 bg-white border rounded-4 p-3"
           style="width: 35vw; max-width: 350px"
         >
-          <div class="d-flex gap-2 align-items-center justify-content-between mb-2 mb-lg-3">
+          <div class="d-flex gap-2 align-items-center justify-content-between mb-2 mb-xl-3">
             <p class="mb-0 fs-4 fw-semibold">新通知</p>
             <div class="d-flex gap-1">
               <button type="button" class="btn btn-primary text-white">顯示更多</button>
               <button type="button" class="btn btn-outline-danger">清除通知</button>
             </div>
           </div>
-          <ul class="list-inline d-flex flex-column gap-2 gap-lg-3 mb-0">
+          <ul class="list-inline d-flex flex-column gap-2 gap-xl-3 mb-0">
             <li class="d-flex gap-3 p-2 box-style box-hover border border-neutral-40">
               <img
                 src="https://picsum.photos/500/500"
@@ -127,7 +127,7 @@
   </div>
   <!-- 桌機 end -->
   <!-- 手機 start -->
-  <div class="d-flex d-lg-none">
+  <div class="d-flex d-xl-none">
     <div
       class="flex-grow-1"
       @click.prevent="navInfoStore.closeAll()"
@@ -180,14 +180,14 @@
           class="position-absolute bg-white border rounded-4 p-3"
           style="width: 100vw; right: -56px"
         >
-          <div class="d-flex gap-2 align-items-center justify-content-between mb-2 mb-lg-3">
+          <div class="d-flex gap-2 align-items-center justify-content-between mb-2 mb-xl-3">
             <p class="mb-0 fs-5 fw-semibold">新通知</p>
             <div class="d-flex gap-1">
               <button type="button" class="btn btn-primary text-white fs-7">顯示更多</button>
               <button type="button" class="btn btn-outline-danger fs-7">清除通知</button>
             </div>
           </div>
-          <ul class="list-inline d-flex flex-column gap-2 gap-lg-3 mb-0">
+          <ul class="list-inline d-flex flex-column gap-2 gap-xl-3 mb-0">
             <li class="d-flex gap-3 p-2 box-style box-hover border border-neutral-40">
               <img
                 src="https://picsum.photos/500/500"

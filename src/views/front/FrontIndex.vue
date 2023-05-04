@@ -6,12 +6,12 @@
       class="img-fluid rounded-5 mb-index"
     />
     <div class="container mb-index">
-      <h2 class="mb-lg-5 mb-5">最新消息</h2>
-      <ol class="list-inline mt-lg-2" style="max-height: 23rem; overflow-y: scroll">
+      <h2 class="mb-xl-5 mb-5">最新消息</h2>
+      <ol class="list-inline mt-xl-2" style="max-height: 23rem; overflow-y: scroll">
         <li
           v-for="i in 4"
           :key="i"
-          class="d-flex align-items-center gap-3 p-lg-4 py-3 px-2-5 border-bottom border-neutral-40 box-hover"
+          class="d-flex align-items-center gap-3 p-xl-4 py-3 px-2-5 border-bottom border-neutral-40 box-hover"
         >
           <span class="d-inline-block bg-primary-tint text-primary py-2 px-3 rounded-4">活動</span>
           <div>
@@ -25,7 +25,7 @@
   <div class="bg-neutral-10 pt-5 px-2-5 mb-index-sm">
     <div class="container mx-auto py-2">
       <div class="row justify-content-between">
-        <div class="col-lg-4 bg-white rounded-5 gx-0 p-5">
+        <div class="col-xl-4 bg-white rounded-5 gx-0 p-5">
           <h3 class="h4 mb-4 fw-semibold">彌陀之家，常年佛七</h3>
           <div class="ps-5 border-start border-4 border-neutral-40">
             <p class="ms-2 mb-2 text-neutral-80">已圓滿</p>
@@ -34,8 +34,8 @@
             </p>
           </div>
         </div>
-        <div class="col-lg-7 d-flex align-items-center justify-content-end">
-          <div class="buddha-point position-relative ms-5 ms-lg-0">
+        <div class="col-xl-7 d-flex align-items-center justify-content-end">
+          <div class="buddha-point position-relative ms-5 ms-xl-0">
             <p class="position-absolute fs-3 fw-semibold buddha-title">起香</p>
             <p
               class="position-absolute mb-0 text-neutral-80 d-flex flex-column align-items-center buddha-timer"
@@ -44,7 +44,7 @@
             </p>
           </div>
           <div class="flex-grow-1 border-neutral-60 buddha-line" style="border: 2px solid"></div>
-          <div class="d-flex flex-column align-items-center me-5 me-lg-0">
+          <div class="d-flex flex-column align-items-center me-5 me-xl-0">
             <div class="buddha-point">
               <p class="position-absolute fs-3 fw-semibold buddha-title">至今</p>
               <p
@@ -59,9 +59,9 @@
     </div>
   </div>
   <div class="container">
-    <div class="row gap-3 gap-lg-0 mb-index">
-      <div class="col-12 col-lg mb-4 mb-lg-0 d-flex flex-column justify-content-between">
-        <h2 class="h3 mb-lg-3 mb-0 fw-semibold">佛七介紹</h2>
+    <div class="row gap-3 gap-xl-0 mb-index">
+      <div class="col-12 col-xl mb-4 mb-xl-0 d-flex flex-column justify-content-between">
+        <h2 class="h3 mb-xl-3 mb-0 fw-semibold">佛七介紹</h2>
         <p class="fs-7 py-4 mb-0">
           每逢國曆的一日至七日等，七天念佛；
           <br />
@@ -78,13 +78,13 @@
         <div>
           <router-link
             to="/buddha"
-            class="float-start btn btn-outline-primary rounded-4 border border-2 border-primary text-primary d-flex align-items-center fw-semibold py-3 px-5 py-lg-3 px-lg-2-5"
+            class="float-start btn btn-outline-primary rounded-4 border border-2 border-primary text-primary d-flex align-items-center fw-semibold py-3 px-5 py-xl-3 px-xl-2-5"
           >
             更多關於佛七<span class="material-symbols-outlined"> arrow_forward </span>
           </router-link>
         </div>
       </div>
-      <div class="col-12 col-lg" v-for="(item, index) in buddha" :key="item.title + index">
+      <div class="col-12 col-xl" v-for="(item, index) in buddha" :key="item.title + index">
         <section
           class="border border-2 d-flex flex-column align-items-center justify-content-center p-5 h-100"
           :class="`border-${item.color}`"
@@ -92,7 +92,7 @@
         >
           <h3 class="mb-3">{{ item.title }}</h3>
           <div
-            class="d-flex gap-2 flex-column flex-lg-row align-items-center mb-3"
+            class="d-flex gap-2 flex-column flex-xl-row align-items-center mb-3"
             :class="`text-${item.textColor}`"
           >
             <p
@@ -109,11 +109,11 @@
       </div>
     </div>
     <h2 class="h3 mb-5" id="transportation">交通資訊</h2>
-    <div class="row gx-lg-5 gap-lg-5">
-      <div class="col-12 col-lg indexMap mb-5 mb-lg-0">
+    <div class="row gx-xl-5 gap-xl-5">
+      <div class="col-12 col-xl indexMap mb-5 mb-xl-0">
         <div ref="indexMap" class="h-100 w-100 rounded-4"></div>
       </div>
-      <div class="col-12 col-lg mt-2 mt-lg-0 ms-lg-3">
+      <div class="col-12 col-xl mt-2 mt-xl-0 ms-xl-3">
         <h3 class="h5">彌陀之家東林寺</h3>
         <p class="fs-4 text-neutral-80 mb-4">宜蘭縣冬山鄉太和村寶和路638號</p>
         <div
@@ -216,19 +216,19 @@ onMounted(() => {
 @import '@/assets/stylesheets/all.scss';
 .wrap {
   margin: 0 12px;
-  @media (min-width: 992px) {
+  @media (min-width: 1200px) {
     margin: 0 67px;
   }
 }
 .mb-index {
   margin-bottom: 5rem;
-  @media (min-width: 992px) {
+  @media (min-width: 1200px) {
     margin-bottom: 10rem;
   }
   &-sm {
     padding-bottom: 6.5rem;
     margin-bottom: 2.5rem;
-    @media (min-width: 992px) {
+    @media (min-width: 1200px) {
       padding-bottom: 2.5rem;
       margin-bottom: 5rem;
     }
@@ -243,7 +243,7 @@ onMounted(() => {
     box-shadow: 0px 0px 0px 8px rgba(255, 118, 64, 0.1);
     border: 4px solid $primary;
     margin-top: 84px;
-    @media (min-width: 992px) {
+    @media (min-width: 1200px) {
       margin-top: 0;
       width: 32px;
       height: 32px;
@@ -251,7 +251,7 @@ onMounted(() => {
   }
   &-line {
     margin-top: 85px;
-    @media (min-width: 992px) {
+    @media (min-width: 1200px) {
       margin-top: 0;
     }
   }
@@ -270,7 +270,7 @@ onMounted(() => {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 .indexMap {
-  @media (max-width: 992px) {
+  @media (max-width: 1200px) {
     height: calc(100vw - 24px);
     max-height: 500px;
   }

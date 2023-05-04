@@ -1,7 +1,7 @@
 <template>
   <div class="container align-items-center justify-content-between py-3">
     <div class="row">
-      <div class="col col-lg-3 d-flex align-items-center justify-content-between">
+      <div class="col col-xl-3 d-flex align-items-center justify-content-between">
         <h1 class="mb-0">
           <span class="d-none">彌陀之家東林寺</span>
           <router-link to="/" class="d-inline-block" style="width: 186px; height: 48px">
@@ -9,14 +9,14 @@
           </router-link>
         </h1>
         <span
-          class="material-symbols-outlined d-lg-none cursor-point"
+          class="material-symbols-outlined d-xl-none cursor-point"
           @click.prevent="() => (isMenuOpen = !isMenuOpen)"
           @keydown.prevent="() => (isMenuOpen = !isMenuOpen)"
         >
           {{ isMenuOpen ? 'close' : 'menu' }}
         </span>
       </div>
-      <div class="col d-none d-lg-flex align-items-center justify-content-end">
+      <div class="col d-none d-xl-flex align-items-center justify-content-end">
         <ul
           class="list-inline d-flex text-neutral-80 border-end border-neutral-80 pe-4 me-4 mb-0"
           style="gap: 24px"

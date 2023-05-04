@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100 d-flex flex-column justify-content-between py-2 my-1 my-lg-3 pt-lg-0">
+  <div class="h-100 d-flex flex-column justify-content-between py-2 my-1 my-xl-3 pt-xl-0">
     <ul class="list-inline">
       <template v-for="nav in sideNav" :key="nav.name + nav.icon">
         <!-- 第一層級 -->
@@ -147,6 +147,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import sideBarConfigStore from '@/stores/SideBarConfig';
 
 interface NavItem {
   icon?: string;
@@ -379,9 +380,16 @@ function changeCurrent(name: string, path: string): void {
   currentNavName.value = name + path;
 }
 
+const webWidth = ref<number>(0);
+const sideBarStore = sideBarConfigStore();
+
 function changePath(name: string, path: string): void {
+  webWidth.value = window.innerWidth;
   changeCurrent(name, path);
   router.push(`/back${path}`);
+  if (webWidth.value < 1200) {
+    sideBarStore.isOpen = false;
+  }
 }
 
 function changeOpen(firstNav: NavItem, secondNav: NavItem | null): void {
