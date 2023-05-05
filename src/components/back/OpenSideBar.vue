@@ -1,7 +1,7 @@
 <template>
   <span
     class="material-symbols-outlined fs-1"
-    :class="{ 'd-none d-lg-inline-block': props.page !== 'nav' }"
+    :class="{ 'd-none d-xl-inline-block': props.page !== 'nav' }"
     style="cursor: pointer"
     :style="{ transform: sideBarStore.isOpen ? 'rotate(180deg)' : '' }"
     @click="() => (sideBarStore.isOpen = !sideBarStore.isOpen)"

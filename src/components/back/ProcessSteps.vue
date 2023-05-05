@@ -1,6 +1,6 @@
 <template>
   <div
-    class="d-flex align-items-center justify-content-center w-lg-50 w-75 mx-auto mb-lg-5 mb-3 pb-5"
+    class="d-flex align-items-center justify-content-center w-xl-50 w-75 mx-auto mb-xl-5 mb-3 pb-5"
   >
     <template v-for="(step, index) in props.steps" :key="step.title">
       <div class="position-relative">

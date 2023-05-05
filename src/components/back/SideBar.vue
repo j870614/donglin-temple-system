@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100 d-flex flex-column justify-content-between py-2 my-1 my-lg-3 pt-lg-0">
+  <div class="h-100 d-flex flex-column justify-content-between py-2 my-1 my-xl-3 pt-xl-0">
     <ul class="list-inline">
       <template v-for="nav in sideNav" :key="nav.name + nav.icon">
         <!-- 第一層級 -->
@@ -147,6 +147,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import sideBarConfigStore from '@/stores/SideBarConfig';
+
+const router = useRouter();
 
 interface NavItem {
   icon?: string;
@@ -155,17 +158,11 @@ interface NavItem {
   isOpen?: boolean;
   children?: NavItem[];
 }
-
-const router = useRouter();
-
-const nav = ref<NavItem[]>([
-  {
-    icon: 'house',
-    path: '',
-    name: '回首頁',
-    isOpen: false,
-  },
-  {
+interface Permissions {
+  [key: string]: NavItem;
+}
+const permissions: Permissions = {
+  系統管理: {
     icon: 'build',
     path: '',
     name: '系統管理',
@@ -221,7 +218,7 @@ const nav = ref<NavItem[]>([
       },
     ],
   },
-  {
+  知客: {
     icon: 'group',
     path: '',
     name: '知客',
@@ -285,7 +282,7 @@ const nav = ref<NavItem[]>([
       },
     ],
   },
-  {
+  寮房: {
     icon: 'house_siding',
     path: '',
     name: '寮房',
@@ -349,7 +346,7 @@ const nav = ref<NavItem[]>([
       },
     ],
   },
-  {
+  四眾個人資料: {
     icon: 'draft',
     path: '',
     name: '四眾個人資料',
@@ -364,13 +361,42 @@ const nav = ref<NavItem[]>([
       },
     ],
   },
-  {
+  查詢用齋人數: {
     icon: 'restaurant_menu',
     path: '',
     name: '查詢用齋人數',
     isOpen: false,
   },
+};
+
+const nav = ref<NavItem[]>([
+  {
+    icon: 'house',
+    path: '',
+    name: '回首頁',
+    isOpen: false,
+  },
 ]);
+const user = ref<string>('管理員'); // 這邊是使用者的身分, 跟下方的控制 sidebar 選項
+switch (user.value) {
+  case '管理員':
+    nav.value.push(
+      permissions['系統管理'],
+      permissions['知客'],
+      permissions['寮房'],
+      permissions['四眾個人資料'],
+      permissions['查詢用齋人數'],
+    );
+    break;
+  case '知客':
+    nav.value.push(permissions['知客'], permissions['四眾個人資料'], permissions['查詢用齋人數']);
+    break;
+  case '寮房':
+    nav.value.push(permissions['寮房'], permissions['四眾個人資料'], permissions['查詢用齋人數']);
+    break;
+  default:
+}
+
 const sideNav = ref(nav);
 const hoverNavName = ref('');
 const currentNavName = ref('');
@@ -379,9 +405,16 @@ function changeCurrent(name: string, path: string): void {
   currentNavName.value = name + path;
 }
 
+const webWidth = ref<number>(0);
+const sideBarStore = sideBarConfigStore();
+
 function changePath(name: string, path: string): void {
+  webWidth.value = window.innerWidth;
   changeCurrent(name, path);
   router.push(`/back${path}`);
+  if (webWidth.value < 1200) {
+    sideBarStore.isOpen = false;
+  }
 }
 
 function changeOpen(firstNav: NavItem, secondNav: NavItem | null): void {

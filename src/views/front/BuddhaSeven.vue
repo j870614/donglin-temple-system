@@ -43,7 +43,7 @@
           >
           <ol class="list-inline border-start border-2 border-primary-tint ms-5 mb-0 ps-5 py-2">
             <li
-              class="d-flex flex-column flex-lg-row justify-content-between mb-3 mb-lg-0 gap-lg-5 fs-5"
+              class="d-flex flex-column flex-xl-row justify-content-between mb-3 mb-xl-0 gap-xl-5 fs-5"
               v-for="doing in item.step"
               :key="doing.timer"
             >
@@ -181,19 +181,19 @@ const process: Process[] = [
 <style scoped lang="scss">
 .wrap {
   margin: 0 12px;
-  @media (min-width: 992px) {
+  @media (min-width: 1200px) {
     margin: 0 67px;
   }
 }
 .mb-index {
   margin-bottom: 5rem;
-  @media (min-width: 992px) {
+  @media (min-width: 1200px) {
     margin-bottom: 10rem;
   }
   &-sm {
     padding-bottom: 6.5rem;
     margin-bottom: 2.5rem;
-    @media (min-width: 992px) {
+    @media (min-width: 1200px) {
       padding-bottom: 2.5rem;
       margin-bottom: 5rem;
     }

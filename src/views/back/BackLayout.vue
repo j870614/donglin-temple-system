@@ -19,7 +19,7 @@ const navInfoStore = NavInfoConfig();
       @click.prevent="navInfoStore.closeAll()"
       @keydown.prevent="navInfoStore.closeAll()"
     >
-      <aside class="col-12 col-lg-3 gx-lg-5 max-sideBar max-heighScroll" v-if="sideBarStore.isOpen">
+      <aside class="col-12 col-xl-3 gx-xl-5 max-sideBar max-heighScroll" v-if="sideBarStore.isOpen">
         <SideBar />
       </aside>
       <div class="col max-heighScroll" style="background-color: #f6f6f6">
@@ -30,14 +30,14 @@ const navInfoStore = NavInfoConfig();
 </template>
 <style scoped lang="scss">
 .max-sideBar {
-  @media (min-width: 992px) {
+  @media (min-width: 1200px) {
     max-width: 360px;
   }
 }
 .max-heighScroll {
   overflow-y: scroll;
   height: calc(100vh - 64px);
-  @media (min-width: 992px) {
+  @media (min-width: 1200px) {
     height: calc(100vh - 116px);
   }
 }

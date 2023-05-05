@@ -1,11 +1,11 @@
 <template>
-  <div class="row py-4 py-lg-0" :class="{ 'bg-white': webWidth < 992 && currentPage === '行程' }">
-    <div class="col gx-lg-5 py-lg-4 py-0">
-      <h1 class="h1 fw-semibold d-flex align-items-center mb-3 pb-2 mb-lg-4">
-        <OpenSideBar /> <span class="ms-0 ms-lg-2-5">彌陀之家東林寺常年佛七第422期</span>
+  <div class="row py-4 py-xl-0" :class="{ 'bg-white': webWidth < 992 && currentPage === '行程' }">
+    <div class="col gx-xl-5 py-xl-4 py-0">
+      <h1 class="h1 fw-semibold d-flex align-items-center mb-3 pb-2 mb-xl-4">
+        <OpenSideBar /> <span class="ms-0 ms-xl-2-5">彌陀之家東林寺常年佛七第422期</span>
       </h1>
       <div
-        class="d-flex bg-neutral-40 rounded-switch p-1 d-lg-none"
+        class="d-flex bg-neutral-40 rounded-switch p-1 d-xl-none"
         style="margin-bottom: 24px"
         ref="indexSwitch"
       >
@@ -24,13 +24,13 @@
         </p>
       </div>
       <div
-        class="row gy-3 gy-lg-0"
+        class="row gy-3 gy-xl-0"
         v-if="webWidth >= 992 || (webWidth < 992 && currentPage === '公告')"
       >
-        <div class="col-lg-5">
+        <div class="col-xl-5">
           <div
             class="box-style"
-            :class="{ 'mt-lg-4 mt-3': index !== 0 }"
+            :class="{ 'mt-xl-4 mt-3': index !== 0 }"
             v-for="(item, index) in [
               { title: '彌陀之家東林寺公告', data: announcement, url: '' },
               { title: '系統公告', data: systemNotification, url: '' },
@@ -123,7 +123,7 @@
       </div>
     </div>
     <div
-      class="col-lg-3 bg-body py-4"
+      class="col-xl-3 bg-body py-4"
       v-if="webWidth >= 992 || (webWidth < 992 && currentPage === '行程')"
     >
       <div class="btn-calendar mb-5">
@@ -158,7 +158,7 @@ const indexSwitch = ref(null);
 
 const webWidth = ref<number>(0);
 function currentWidth(webSize: number): void {
-  if (webSize < 992) {
+  if (webSize < 1200) {
     sideBarStore.isOpen = false;
   } else {
     sideBarStore.isOpen = true;
