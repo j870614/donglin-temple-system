@@ -149,6 +149,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import sideBarConfigStore from '@/stores/SideBarConfig';
 
+const router = useRouter();
+
 interface NavItem {
   icon?: string;
   path: string;
@@ -156,17 +158,11 @@ interface NavItem {
   isOpen?: boolean;
   children?: NavItem[];
 }
-
-const router = useRouter();
-
-const nav = ref<NavItem[]>([
-  {
-    icon: 'house',
-    path: '',
-    name: '回首頁',
-    isOpen: false,
-  },
-  {
+interface Permissions {
+  [key: string]: NavItem;
+}
+const permissions: Permissions = {
+  系統管理: {
     icon: 'build',
     path: '',
     name: '系統管理',
@@ -222,7 +218,7 @@ const nav = ref<NavItem[]>([
       },
     ],
   },
-  {
+  知客: {
     icon: 'group',
     path: '',
     name: '知客',
@@ -286,7 +282,7 @@ const nav = ref<NavItem[]>([
       },
     ],
   },
-  {
+  寮房: {
     icon: 'house_siding',
     path: '',
     name: '寮房',
@@ -350,7 +346,7 @@ const nav = ref<NavItem[]>([
       },
     ],
   },
-  {
+  四眾個人資料: {
     icon: 'draft',
     path: '',
     name: '四眾個人資料',
@@ -365,13 +361,42 @@ const nav = ref<NavItem[]>([
       },
     ],
   },
-  {
+  查詢用齋人數: {
     icon: 'restaurant_menu',
     path: '',
     name: '查詢用齋人數',
     isOpen: false,
   },
+};
+
+const nav = ref<NavItem[]>([
+  {
+    icon: 'house',
+    path: '',
+    name: '回首頁',
+    isOpen: false,
+  },
 ]);
+const user = ref<string>('管理員'); // 這邊是使用者的身分, 跟下方的控制 sidebar 選項
+switch (user.value) {
+  case '管理員':
+    nav.value.push(
+      permissions['系統管理'],
+      permissions['知客'],
+      permissions['寮房'],
+      permissions['四眾個人資料'],
+      permissions['查詢用齋人數'],
+    );
+    break;
+  case '知客':
+    nav.value.push(permissions['知客'], permissions['四眾個人資料'], permissions['查詢用齋人數']);
+    break;
+  case '寮房':
+    nav.value.push(permissions['寮房'], permissions['四眾個人資料'], permissions['查詢用齋人數']);
+    break;
+  default:
+}
+
 const sideNav = ref(nav);
 const hoverNavName = ref('');
 const currentNavName = ref('');
