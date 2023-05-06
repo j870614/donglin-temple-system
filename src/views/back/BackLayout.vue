@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import NavInfoConfig from '@/stores/NavInfoConfig';
 import sideBarConfigStore from '@/stores/SideBarConfig';
-import { RouterView } from 'vue-router';
 import SideBar from '@/components/back/SideBar.vue';
 import NavBar from '@/components/back/NavBar.vue';
 
@@ -16,8 +15,8 @@ const navInfoStore = NavInfoConfig();
     </nav>
     <div
       class="row flex-grow-1"
-      @click.prevent="navInfoStore.closeAll()"
-      @keydown.prevent="navInfoStore.closeAll()"
+      @click="navInfoStore.closeAll()"
+      @keydown="navInfoStore.closeAll()"
     >
       <aside class="col-12 col-xl-3 gx-xl-5 max-sideBar max-heighScroll" v-if="sideBarStore.isOpen">
         <SideBar />

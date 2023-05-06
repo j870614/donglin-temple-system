@@ -235,7 +235,7 @@ const permissions: Permissions = {
             name: '佛七報名預約名單',
           },
           {
-            path: '',
+            path: '/buddha/signUp?step=1',
             name: '佛七報名',
           },
           {
@@ -412,6 +412,8 @@ function changePath(name: string, path: string): void {
   webWidth.value = window.innerWidth;
   changeCurrent(name, path);
   router.push(`/back${path}`);
+  console.log(path);
+
   if (webWidth.value < 1200) {
     sideBarStore.isOpen = false;
   }

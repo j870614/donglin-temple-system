@@ -7,8 +7,8 @@
           class="form-check d-flex justify-content-center gap-2"
           v-for="(item, index) in ['法師', '居士']"
           :key="item + index"
-          @click.prevent="identity = item"
-          @keydown.prevent="identity = item"
+          @click="identity = item"
+          @keydown="identity = item"
         >
           <input
             :checked="identity === item"
@@ -26,8 +26,8 @@
           class="form-check d-flex justify-content-center gap-2"
           v-for="(item, index) in ['男眾', '女眾']"
           :key="item + index"
-          @click.prevent="sex = item"
-          @keydown.prevent="sex = item"
+          @click="sex = item"
+          @keydown="sex = item"
         >
           <input
             :checked="sex === item"
