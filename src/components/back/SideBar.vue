@@ -412,8 +412,6 @@ function changePath(name: string, path: string): void {
   webWidth.value = window.innerWidth;
   changeCurrent(name, path);
   router.push(`/back${path}`);
-  console.log(path);
-
   if (webWidth.value < 1200) {
     sideBarStore.isOpen = false;
   }

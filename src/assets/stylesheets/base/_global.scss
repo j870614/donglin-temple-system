@@ -78,22 +78,7 @@ a {
   }
 }
 
-.step-circle {
-  width: 44px;
-  height: 44px;
-  text-align: center;
-  border-radius: 50%;
-  span {
-    line-height: 44px;
-  }
-  @media (max-width: 1200px) {
-    width: 24px;
-    height: 24px;
-    span {
-      line-height: 24px;
-    }
-  }
-}
+
 .btn-calendar {
   button {
     background-color: transparent;
