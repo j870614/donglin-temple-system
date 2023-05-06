@@ -39,6 +39,10 @@ const router = createRouter({
           ],
         },
         {
+          path: 'rooms',
+          component: () => import('@/views/back/RoomsArrange.vue'),
+        },
+        {
           path: 'permissions',
           children: [
             {

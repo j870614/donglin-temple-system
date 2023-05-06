@@ -7,6 +7,7 @@ import router from './router';
 
 import './assets/stylesheets/all.scss';
 import 'bootstrap';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'v-calendar/dist/style.css';
 
 const app = createApp(App);
