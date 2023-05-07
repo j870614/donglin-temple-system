@@ -7,7 +7,7 @@
         <div class="d-flex gap-4 fw-semibold">
           <div class="form-check" v-for="(item, index) in ['男眾', '女眾']" :key="item + index">
             <input class="form-check-input" type="radio" name="sex" :id="item + index" />
-            <label class="form-check-label" :for="item + index"> {{ item }} </label>
+            <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
       </section>
@@ -45,7 +45,7 @@
         </div>
       </section>
       <!-- 通訊地址 -->
-      <section class="pt-2 pt-xl-0">
+      <section class="mb-5 pt-2 pt-xl-0">
         <h3 class="h3 mb-4 fw-semibold">通訊地址</h3>
         <div class="d-flex gap-4 fw-semibold mb-3">
           <div class="form-check" v-for="(item, index) in ['國內', '海外']" :key="item + index">
@@ -58,7 +58,7 @@
               :checked="address.point === item"
               :value="item"
             />
-            <label class="form-check-label" :for="item + index"> {{ item }} </label>
+            <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
         <!-- 國內 -->
@@ -74,7 +74,7 @@
               />
             </div>
             <div class="col-xl">
-              <label for="county" class="fw-semibold mb-2">縣市</label>
+              <label for="county" class="form-label fw-semibold mb-2">縣市</label>
               <select class="form-select form-select-lg rounded-4" id="county">
                 <option selected>請選擇縣市</option>
                 <option value="1">One</option>
@@ -83,7 +83,7 @@
               </select>
             </div>
             <div class="col-xl">
-              <label for="township" class="fw-semibold mb-2">鄉鎮市區</label>
+              <label for="township" class="form-label fw-semibold mb-2">鄉鎮市區</label>
               <select class="form-select form-select-lg rounded-4" id="township">
                 <option selected>請選擇鄉鎮市區</option>
                 <option value="1">One</option>
@@ -106,7 +106,7 @@
         <template v-else>
           <div class="row mb-3 gap-4 gap-xl-0">
             <div class="col-xl">
-              <label for="state" class="fw-semibold mb-2">州別</label>
+              <label for="state" class="form-label fw-semibold mb-2">州別</label>
               <select class="form-select form-select-lg rounded-4" id="state">
                 <option selected>請選擇州別</option>
                 <option value="1">One</option>
@@ -115,7 +115,7 @@
               </select>
             </div>
             <div class="col-xl">
-              <label for="county" class="fw-semibold mb-2">國家</label>
+              <label for="county" class="form-label fw-semibold mb-2">國家</label>
               <select class="form-select form-select-lg rounded-4" id="county">
                 <option selected>請選擇國家</option>
                 <option value="1">One</option>
@@ -135,8 +135,38 @@
           </div>
         </template>
       </section>
+      <section class="pt-2 pt-xl-0">
+        <h3 class="h3 mb-4 fw-semibold">緊急聯絡人</h3>
+        <div class="row mb-3 gap-4 gap-xl-0">
+          <div class="col-xl">
+            <label for="urgentName" class="form-label fw-semibold">姓名</label>
+            <input
+              type="text"
+              class="form-control rounded-4"
+              id="urgentName"
+              placeholder="請輸入緊急聯絡人姓名"
+            />
+          </div>
+          <div class="col-xl">
+            <label for="urgentPhone" class="form-label fw-semibold">電話號碼</label>
+            <input
+              type="tel"
+              class="form-control rounded-4"
+              id="urgentPhone"
+              placeholder="請輸入緊急聯絡人電話號碼"
+            />
+          </div>
+        </div>
+        <label for="relation" class="form-label fw-semibold">關係</label>
+        <select class="form-select form-select-lg mb-3" id="relation">
+          <option selected>請選擇</option>
+          <option value="1">父母</option>
+          <option value="2">子女</option>
+          <option value="3">其他</option>
+        </select>
+      </section>
       <section class="mt-5">
-        <label for="msg" class="form-check-label h3 mb-4 fw-semibold">備註</label>
+        <label for="msg" class="h3 mb-4 fw-semibold">備註</label>
         <textarea class="form-control rounded-4" id="msg"></textarea>
       </section>
     </div>
@@ -154,7 +184,7 @@
               :checked="identity === item"
               :value="item"
             />
-            <label class="form-check-label" :for="item + index"> {{ item }} </label>
+            <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
       </section>
@@ -163,7 +193,7 @@
         <div class="d-flex gap-4 fw-semibold">
           <div class="form-check" v-for="(item, index) in ['專念', '海清']" :key="item + index">
             <input class="form-check-input" type="radio" name="clothing" :id="item + index" />
-            <label class="form-check-label" :for="item + index"> {{ item }} </label>
+            <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
       </section>

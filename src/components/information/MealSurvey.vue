@@ -17,7 +17,7 @@
             :id="item + index"
             v-model="meal"
           />
-          <label class="form-check-label fw-semibold" :for="item + index"> {{ item }} </label>
+          <label class="form-check-label fs-5 fw-semibold" :for="item + index"> {{ item }} </label>
         </div>
       </div>
       <h3 class="h3 fw-semibold mb-4 mt-5">報到日用齋：</h3>
@@ -37,7 +37,7 @@
           :id="name"
           :checked="meal.includes(name)"
         />
-        <label class="form-check-label" :for="name">
+        <label class="form-check-label fs-5" :for="name">
           <span class="fw-semibold me-2">{{ name }}</span
           >{{ content }}
         </label>
