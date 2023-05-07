@@ -47,7 +47,7 @@
           <div class="d-flex justify-content-end gap-3 mt-5">
             <router-link
               to="/back/permissions/authorized/new?step=1"
-              class="btn btn-outline-primary text-danger py-3 flex-grow-1"
+              class="btn btn-outline-primary py-3 flex-grow-1"
               style="max-width: 184px"
             >
               上一步
