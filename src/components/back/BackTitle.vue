@@ -1,10 +1,12 @@
 <template>
+  <teleport to="title"><slot name="title"></slot></teleport>
+
   <div
     class="d-flex align-items-center justify-content-between mb-xl-4 mb-3 pb-2 position-relative"
   >
     <h2 class="h1 fw-semibold d-flex align-items-center mb-0">
       <OpenSideBar />
-      <span class="ms-0 ms-xl-2-5">
+      <span class="ms-0 ms-xl-2-5 titleText">
         <slot name="title">標題</slot>
       </span>
     </h2>
