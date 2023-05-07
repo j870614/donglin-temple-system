@@ -64,9 +64,10 @@
     background-color: $neutral-40;
   }
 }
-.btn-outline-primary {
+a.btn-outline-primary {
   color: $primary;
   background-color: $white;
+  --bs-btn-active-color: #fff;
   &:hover {
     color: $primary;
     background-color: $primary-tint;

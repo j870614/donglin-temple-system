@@ -1,6 +1,6 @@
 <template>
   <div class="row justify-content-center gap-4 mx-0">
-    <div class="col-xl-5 box-style gx-xl-0 p-xl-5 p-3" style="height: max-content">
+    <div class="col-xl-5 box-style gx-xl-0 p-xl-5 p-3 h-max">
       <!-- 個人資訊 -->
       <section class="mb-5">
         <h3 class="h3 mb-4 fw-semibold">請填寫您的個人資訊</h3>
@@ -140,7 +140,7 @@
         <textarea class="form-control rounded-4" id="msg"></textarea>
       </section>
     </div>
-    <div class="col-xl-5 box-style gx-xl-0 p-xl-5 p-3" style="height: max-content">
+    <div class="col-xl-5 box-style gx-xl-0 p-xl-5 p-3 h-max">
       <section class="mb-5">
         <h3 class="h3 mb-4 fw-semibold">請填寫您的身份別</h3>
         <div class="d-flex gap-4 fw-semibold">
@@ -208,7 +208,7 @@
         </div>
         <div class="col-xl">
           <label for="ordainedDate" class="form-label fw-semibold">受戒日期</label>
-          <DatePicker v-model="date" color="orange">
+          <DatePicker v-model="date" trim-weeks color="orange">
             <template #default="{ inputValue, inputEvents }">
               <input
                 class="form-control rounded-4"

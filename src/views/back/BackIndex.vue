@@ -131,6 +131,7 @@
         <DatePicker
           borderless
           expanded
+          trim-weeks
           color="orange"
           title-position="right"
           v-model="date"

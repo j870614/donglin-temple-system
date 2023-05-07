@@ -2,7 +2,6 @@ a.router-link-exact-active,
 a.router-link-active,
 a {
   text-decoration: none;
-  color: inherit;
 }
 #app {
   font-family: 'Noto Sans TC', sans-serif;
@@ -78,9 +77,18 @@ a {
   }
 }
 
-
-.btn-calendar, .vc-popover-content-wrapper {
+.btn-calendar,
+.vc-popover-content-wrapper,
+.vc-header  {
   button {
     background-color: transparent;
   }
+}
+.vc-black {
+  --vc-accent-200: #f9f9f9;
+  --vc-accent-600: #000;
+}
+
+.h-max {
+  height: max-content;
 }

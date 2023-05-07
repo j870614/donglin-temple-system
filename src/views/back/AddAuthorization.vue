@@ -83,7 +83,7 @@
 <script setup lang="ts">
 import BackTitle from '@/components/back/BackTitle.vue';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
-import beforeSearch from '@/components/information/beforeSearch.vue';
+import beforeSearch from '@/components/information/BeforeSearch.vue';
 
 import { ref } from 'vue';
 import type { Ref } from 'vue';

@@ -5,8 +5,9 @@
         <template #title> 佛七報名 </template>
       </BackTitle>
       <ProcessSteps :steps="steps"></ProcessSteps>
-      <beforeSearch v-if="Number($route.query.step) === 1"></beforeSearch>
-      <FormList class="" v-if="Number($route.query.step) === 2"></FormList>
+      <beforeSearch v-if="$route.query.step === '1'"></beforeSearch>
+      <FormList v-if="$route.query.step === '2'"></FormList>
+      <BuddhaDate v-if="$route.query.step === '3'"></BuddhaDate>
     </div>
   </main>
 </template>
@@ -16,6 +17,7 @@ import BackTitle from '@/components/back/BackTitle.vue';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
 import beforeSearch from '@/components/information/BeforeSearch.vue';
 import FormList from '@/components/information/FormList.vue';
+import BuddhaDate from '@/components/information/BuddhaDate.vue';
 
 const steps = ref([
   '資料查詢',
