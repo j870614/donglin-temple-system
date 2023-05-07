@@ -6,6 +6,7 @@
       </BackTitle>
       <ProcessSteps :steps="steps"></ProcessSteps>
       <beforeSearch v-if="Number($route.query.step) === 1"></beforeSearch>
+      <FormList class="" v-if="Number($route.query.step) === 2"></FormList>
     </div>
   </main>
 </template>
@@ -13,7 +14,8 @@
 import { ref } from 'vue';
 import BackTitle from '@/components/back/BackTitle.vue';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
-import beforeSearch from '@/components/information/beforeSearch.vue';
+import beforeSearch from '@/components/information/BeforeSearch.vue';
+import FormList from '@/components/information/FormList.vue';
 
 const steps = ref([
   '資料查詢',

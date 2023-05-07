@@ -16,8 +16,8 @@
                 <select
                   name="堂口名稱"
                   id="hall"
-                  class="form-select form-select-xl"
-                  aria-label=".form-select-xl example"
+                  class="form-select form-select-lg"
+                  aria-label=".form-select-lg example"
                   v-model="currentHall"
                 >
                   <option :value="index" v-for="(item, index) in auth" :key="index">

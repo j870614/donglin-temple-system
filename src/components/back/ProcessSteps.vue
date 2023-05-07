@@ -43,7 +43,7 @@ const props = defineProps({
 });
 </script>
 <style scoped lang="scss">
-span {
+span.flex-grow-1 {
   min-width: 5rem;
 }
 

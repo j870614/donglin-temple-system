@@ -1,13 +1,3 @@
-<script setup lang="ts">
-import NavInfoConfig from '@/stores/NavInfoConfig';
-import sideBarConfigStore from '@/stores/SideBarConfig';
-import SideBar from '@/components/back/SideBar.vue';
-import NavBar from '@/components/back/NavBar.vue';
-
-const sideBarStore = sideBarConfigStore();
-const navInfoStore = NavInfoConfig();
-</script>
-
 <template>
   <div class="container-fluid overflow-hidden" style="max-height: 100vh">
     <nav class="bg-white sticky-top border-bottom border-neutral-40">
@@ -27,6 +17,19 @@ const navInfoStore = NavInfoConfig();
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import NavInfoConfig from '@/stores/NavInfoConfig';
+import sideBarConfigStore from '@/stores/SideBarConfig';
+import SideBar from '@/components/back/SideBar.vue';
+import NavBar from '@/components/back/NavBar.vue';
+import { onMounted } from 'vue';
+
+const sideBarStore = sideBarConfigStore();
+const navInfoStore = NavInfoConfig();
+onMounted(() => {
+  if (window.innerWidth < 1200) sideBarStore.isOpen = false;
+});
+</script>
 <style scoped lang="scss">
 .max-sideBar {
   @media (min-width: 1200px) {
