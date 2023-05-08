@@ -4,16 +4,49 @@
       <!-- 個人資訊 -->
       <section class="mb-5">
         <h3 class="h3 mb-4 fw-semibold">請填寫您的個人資訊</h3>
-        <div class="d-flex gap-4 fw-semibold">
+        <div class="d-flex gap-4 fw-semibold mb-3">
           <div class="form-check" v-for="(item, index) in ['男眾', '女眾']" :key="item + index">
-            <input class="form-check-input" type="radio" name="sex" :id="item + index" />
+            <input
+              v-model="user.sex"
+              class="form-check-input"
+              type="radio"
+              name="sex"
+              :id="item + index"
+              :value="item"
+            />
             <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
+          </div>
+        </div>
+        <div class="row mb-3 gap-4 gap-xl-0">
+          <div class="col-xl">
+            <label for="id" class="form-label fw-semibold">身分證字號</label>
+            <input
+              type="text"
+              class="form-control rounded-4"
+              id="id"
+              placeholder="請輸入身分證字號"
+            />
+          </div>
+          <div class="col-xl">
+            <label for="birthday" class="form-label fw-semibold"
+              ><span class="text-danger">*</span>出生年月日</label
+            >
+            <DatePicker v-model="user.birthday" trim-weeks color="orange">
+              <template #default="{ inputValue, inputEvents }">
+                <input
+                  class="form-control rounded-4"
+                  id="birthday"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                />
+              </template>
+            </DatePicker>
           </div>
         </div>
       </section>
       <!-- 通訊方式 -->
       <section class="mb-5 pt-2 pt-xl-0">
-        <h3 class="h3 mb-4 fw-semibold">通訊方式</h3>
+        <h3 class="h3 mb-4 fw-semibold">通訊方式 <span class="text-danger fs-5">(擇一)</span></h3>
         <div class="row mb-3 gap-4 gap-xl-0">
           <div class="col-xl">
             <label for="phone" class="form-label fw-semibold">手機號碼</label>
@@ -26,12 +59,7 @@
           </div>
           <div class="col-xl">
             <label for="tel" class="form-label fw-semibold">市話號碼</label>
-            <input
-              type="tel"
-              class="form-control rounded-4"
-              id="tel"
-              placeholder="請輸入市話號碼"
-            />
+            <input type="tel" class="form-control rounded-4" id="tel" placeholder="03-12345678" />
           </div>
         </div>
         <div>
@@ -52,17 +80,16 @@
             <input
               class="form-check-input rounded-4"
               type="radio"
-              name="sex"
+              name="point"
               :id="item + index"
-              v-model="address.point"
-              :checked="address.point === item"
+              v-model="user.address.point"
               :value="item"
             />
             <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
         <!-- 國內 -->
-        <template v-if="address.point === '國內'">
+        <template v-if="user.address.point === '國內'">
           <div class="row mb-3 gap-4 gap-xl-0">
             <div class="col-xl">
               <label for="postal" class="form-label fw-semibold">郵遞區號</label>
@@ -71,24 +98,45 @@
                 class="form-control rounded-4"
                 id="postal"
                 placeholder="請輸入郵遞區號"
+                disabled
+                :value="user.address.township.zip"
               />
             </div>
             <div class="col-xl">
               <label for="county" class="form-label fw-semibold mb-2">縣市</label>
-              <select class="form-select form-select-lg rounded-4" id="county">
-                <option selected>請選擇縣市</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+              <select
+                class="form-select form-select-lg rounded-4"
+                id="county"
+                v-model="user.address.county"
+                @change="(user.address.township = { zip: '', name: '' }), (countyIndex = -1)"
+              >
+                <option value="" selected>請選擇縣市</option>
+                <option
+                  :value="area.name"
+                  v-for="(area, index) in taiwanArea"
+                  :key="area.name + index"
+                >
+                  {{ area.name }}
+                </option>
               </select>
             </div>
             <div class="col-xl">
               <label for="township" class="form-label fw-semibold mb-2">鄉鎮市區</label>
-              <select class="form-select form-select-lg rounded-4" id="township">
-                <option selected>請選擇鄉鎮市區</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+              <select
+                class="form-select form-select-lg rounded-4"
+                id="township"
+                v-model="user.address.township"
+              >
+                <option :value="{ zip: '', name: '' }" selected>請選擇鄉鎮市區</option>
+                <template v-if="countyIndex !== -1">
+                  <option
+                    :value="district"
+                    v-for="district in taiwanArea[countyIndex].districts"
+                    :key="district.name"
+                  >
+                    {{ district.name }}
+                  </option>
+                </template>
               </select>
             </div>
           </div>
@@ -160,14 +208,13 @@
         <label for="relation" class="form-label fw-semibold">關係</label>
         <select class="form-select form-select-lg mb-3" id="relation">
           <option selected>請選擇</option>
-          <option value="1">父母</option>
-          <option value="2">子女</option>
-          <option value="3">其他</option>
+          <option value="親屬">親屬</option>
+          <option value="親友">親友</option>
         </select>
       </section>
       <section class="mt-5">
         <label for="msg" class="h3 mb-4 fw-semibold">備註</label>
-        <textarea class="form-control rounded-4" id="msg"></textarea>
+        <textarea class="form-control rounded-4" id="msg" style="min-height: 10rem"></textarea>
       </section>
     </div>
     <div class="col-xl-5 box-style gx-xl-0 p-xl-5 p-3 h-max">
@@ -180,42 +227,86 @@
               type="radio"
               name="identity"
               :id="item + index"
-              v-model="identity"
-              :checked="identity === item"
+              v-model="user.identity"
               :value="item"
             />
             <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
       </section>
-      <section class="mb-5" v-if="identity === '居士'">
-        <h3 class="h3 mb-4 fw-semibold">上殿服裝</h3>
-        <div class="d-flex gap-4 fw-semibold">
-          <div class="form-check" v-for="(item, index) in ['專念', '海清']" :key="item + index">
-            <input class="form-check-input" type="radio" name="clothing" :id="item + index" />
-            <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
+      <!-- 上殿服裝 -->
+      <div class="mb-5" v-if="user.identity === '居士'">
+        <div class="d-flex gap-4">
+          <section>
+            <h3 class="h3 mb-4 fw-semibold">上殿服裝</h3>
+            <div class="d-flex gap-4 fw-semibold">
+              <div class="form-check" v-for="(item, index) in ['海清', '專念']" :key="item + index">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="clothing"
+                  v-model="user.clothingType"
+                  :value="item"
+                  :id="item + index"
+                />
+                <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
+              </div>
+            </div>
+          </section>
+          <div class="col-xl" v-if="user.clothingType === '專念'">
+            <label for="clothingSize" class="form-label fw-semibold">尺寸</label>
+            <input
+              type="text"
+              class="form-control rounded-4"
+              id="clothingSize"
+              placeholder="專念服尺寸"
+              disabled
+            />
           </div>
         </div>
-      </section>
+        <div class="row mt-4" v-if="user.clothingType === '專念'">
+          <div class="col-xl">
+            <label for="cm" class="form-label fw-semibold">身高</label>
+            <input type="text" class="form-control rounded-4" id="cm" placeholder="cm" />
+          </div>
+          <div class="col-xl">
+            <label for="kg" class="form-label fw-semibold">體重</label>
+            <input type="text" class="form-control rounded-4" id="kg" placeholder="kg" />
+          </div>
+        </div>
+      </div>
       <div class="row mb-5 pt-2 gap-4 gap-xl-0">
-        <div class="col-xl">
-          <label for="outerName" class="form-label fw-semibold">外號</label>
-          <input
-            type="text"
-            class="form-control rounded-4"
-            id="outerName"
-            placeholder="請輸入外號"
-          />
-        </div>
-        <div class="col-xl">
-          <label for="innerName" class="form-label fw-semibold">內號</label>
-          <input
-            type="text"
-            class="form-control rounded-4"
-            id="innerName"
-            placeholder="請輸入內號"
-          />
-        </div>
+        <template v-if="user.identity === '法師'">
+          <div class="col-xl">
+            <label for="outerName" class="form-label fw-semibold">外號</label>
+            <input
+              type="text"
+              class="form-control rounded-4"
+              id="outerName"
+              placeholder="請輸入外號"
+            />
+          </div>
+          <div class="col-xl">
+            <label for="innerName" class="form-label fw-semibold">內號</label>
+            <input
+              type="text"
+              class="form-control rounded-4"
+              id="innerName"
+              placeholder="請輸入內號"
+            />
+          </div>
+        </template>
+        <template v-else>
+          <div class="col-xl">
+            <label for="legalName" class="form-label fw-semibold">法名</label>
+            <input
+              type="text"
+              class="form-control rounded-4"
+              id="legalName"
+              placeholder="請輸入法名"
+            />
+          </div>
+        </template>
         <div class="col-xl">
           <label for="originName" class="form-label fw-semibold">俗名</label>
           <input
@@ -226,53 +317,80 @@
           />
         </div>
       </div>
-      <div class="row mb-5 pt-2 gap-4 gap-xl-0">
-        <div class="col-xl">
-          <label for="ordainedDojo" class="form-label fw-semibold">受戒道場</label>
-          <input
-            type="text"
-            class="form-control rounded-4"
-            id="ordainedDojo"
-            placeholder="請輸入受戒道場"
-          />
+      <template v-if="user.identity === '法師'">
+        <div class="row mb-5 pt-2 gap-4 gap-xl-0">
+          <div class="col-xl">
+            <label for="ordainedDojo" class="form-label fw-semibold">受戒道場</label>
+            <input
+              type="text"
+              class="form-control rounded-4"
+              id="ordainedDojo"
+              placeholder="請輸入受戒道場"
+            />
+          </div>
+          <div class="col-xl">
+            <label for="ordainedDate" class="form-label fw-semibold">受戒日期</label>
+            <DatePicker v-model="user.ordainedDate" trim-weeks color="orange">
+              <template #default="{ inputValue, inputEvents }">
+                <input
+                  class="form-control rounded-4"
+                  id="ordainedDate"
+                  :value="inputValue"
+                  v-on="inputEvents"
+                />
+              </template>
+            </DatePicker>
+          </div>
+          <div class="col-xl">
+            <label for="altar" class="form-label fw-semibold">壇別</label>
+            <input
+              type="number"
+              class="form-control rounded-4"
+              id="altar"
+              placeholder="請輸入壇別"
+            />
+          </div>
         </div>
-        <div class="col-xl">
-          <label for="ordainedDate" class="form-label fw-semibold">受戒日期</label>
-          <DatePicker v-model="date" trim-weeks color="orange">
-            <template #default="{ inputValue, inputEvents }">
-              <input
-                class="form-control rounded-4"
-                id="ordainedDate"
-                :value="inputValue"
-                v-on="inputEvents"
-              />
-            </template>
-          </DatePicker>
+        <div class="row mb-3 pt-2 gap-4 gap-xl-0">
+          <div class="col-xl">
+            <label for="teacherName" class="form-label fw-semibold">剃度師長德號</label>
+            <input
+              type="text"
+              class="form-control rounded-4"
+              id="teacherName"
+              placeholder="請輸入剃度師長德號"
+            />
+          </div>
+          <div class="col-xl">
+            <label for="roomName" class="form-label fw-semibold">寶剎</label>
+            <input
+              type="text"
+              class="form-control rounded-4"
+              id="roomName"
+              placeholder="請輸入現住道場名稱"
+            />
+          </div>
         </div>
+      </template>
+      <div class="row mb-3 pt-2 gap-4 gap-xl-0" v-else>
         <div class="col-xl">
-          <label for="altar" class="form-label fw-semibold">壇別</label>
-          <input type="text" class="form-control rounded-4" id="altar" placeholder="請輸入壇別" />
+          <label for="area" class="form-label fw-semibold mb-2">所屬地區</label>
+          <select class="form-select form-select-lg rounded-4" id="area">
+            <option selected>請選擇所屬地區</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+          </select>
         </div>
       </div>
-      <div class="row pt-2 gap-4 gap-xl-0">
-        <div class="col-xl">
-          <label for="teacherName" class="form-label fw-semibold">剃度師長德號</label>
-          <input
-            type="text"
-            class="form-control rounded-4"
-            id="teacherName"
-            placeholder="請輸入剃度師長德號"
-          />
-        </div>
-        <div class="col-xl">
-          <label for="roomName" class="form-label fw-semibold">寶剎</label>
-          <input
-            type="text"
-            class="form-control rounded-4"
-            id="roomName"
-            placeholder="請輸入現住道場名稱"
-          />
-        </div>
+      <div>
+        <label for="introducer" class="form-label fw-semibold">介紹人</label>
+        <input
+          type="text"
+          class="form-control rounded-4"
+          id="introducer"
+          placeholder="請輸入介紹人"
+        />
       </div>
     </div>
   </div>
@@ -294,13 +412,30 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import type { ComputedRef } from 'vue';
 import { DatePicker } from 'v-calendar';
+import taiwan_districts from '@/assets/lib/taiwan_districts.json';
 
-const date = ref(new Date());
-const address = ref({
-  point: '國內',
+interface TaiwanArea {
+  districts: { zip: string; name: string }[];
+  name: string;
+}
+const taiwanArea: TaiwanArea[] = taiwan_districts;
+console.log(taiwanArea);
+
+const user = ref({
+  sex: '男眾',
+  identity: '法師',
+  ordainedDate: new Date(),
+  birthday: new Date(),
+  clothingType: '海清',
+  address: { point: '國內', county: '', township: { zip: '', name: '' } },
 });
-const identity = ref('法師');
+const countyIndex: ComputedRef<number> = computed(() =>
+  user.value.address.point === '國內'
+    ? taiwanArea.findIndex((item) => item.name === user.value.address.county)
+    : -1,
+);
 </script>
 <style scoped lang="scss"></style>
