@@ -2,7 +2,7 @@
   <div class="row justify-content-center gap-4 mx-0">
     <section class="col-10 mb-2">
       <p class="h3 mb-0">南無阿彌陀佛</p>
-      <h3 class="h3 mb-5">請確認以下資料是否正確</h3>
+      <h3 class="h3 mb-5">以下是本次預約名單</h3>
     </section>
   </div>
   <div class="row justify-content-center gap-4 mx-0">
