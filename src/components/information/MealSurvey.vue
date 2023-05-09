@@ -3,13 +3,7 @@
     <section class="col-xl-10 box-style gx-xl-0 p-xl-5 p-3 h-max">
       <h3 class="h3 fw-semibold mb-4">用齋習慣：</h3>
       <div class="d-flex flex-column flex-xl-row gap-3 gap-xl-5">
-        <div
-          class="form-check"
-          v-for="(item, index) in ['早齋', '午齋', '藥石']"
-          :key="index"
-          @click="onlyMeal(item)"
-          @keydown="onlyMeal(item)"
-        >
+        <div class="form-check" v-for="(item, index) in ['早齋', '午齋', '藥石']" :key="index">
           <input
             class="form-check-input"
             type="checkbox"
@@ -30,13 +24,7 @@
         }"
         :key="name + content"
       >
-        <input
-          class="form-check-input"
-          type="checkbox"
-          :value="name"
-          :id="name"
-          :checked="meal.includes(name)"
-        />
+        <input class="form-check-input" type="checkbox" :value="name" :id="name" />
         <label class="form-check-label fs-5" :for="name">
           <span class="fw-semibold me-2">{{ name }}</span
           >{{ content }}
@@ -64,9 +52,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const meal = ref<string[]>([]);
-function onlyMeal(str: string) {
-  meal.value.splice(0);
-  meal.value.push(str);
-}
+const meal = ref<string[]>(['早齋', '午齋', '藥石']);
 </script>
