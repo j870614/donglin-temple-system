@@ -1,8 +1,11 @@
 <template>
+  <teleport to="title">彌陀之家東林寺</teleport>
+
   <div class="row py-4 py-xl-0" :class="{ 'bg-white': webWidth < 992 && currentPage === '行程' }">
     <div class="col gx-xl-5 py-xl-4 py-0">
       <h1 class="h1 fw-semibold d-flex align-items-center mb-3 pb-2 mb-xl-4">
-        <OpenSideBar /> <span class="ms-0 ms-xl-2-5">彌陀之家東林寺常年佛七第422期</span>
+        <OpenSideBar />
+        <span class="ms-0 ms-xl-2-5">彌陀之家東林寺<br class="d-xl-none" />常年佛七第422期</span>
       </h1>
       <div
         class="d-flex bg-neutral-40 rounded-switch p-1 d-xl-none"
@@ -131,6 +134,7 @@
         <DatePicker
           borderless
           expanded
+          trim-weeks
           color="orange"
           title-position="right"
           v-model="date"

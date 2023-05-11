@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <teleport to="title">彌陀之家東林寺</teleport>>
     <img
       src="@/assets/img/index-banner-img.png"
       alt="banner"

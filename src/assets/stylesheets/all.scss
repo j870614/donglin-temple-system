@@ -67,6 +67,7 @@
 .btn-outline-primary {
   color: $primary;
   background-color: $white;
+  --bs-btn-active-color: #fff;
   &:hover {
     color: $primary;
     background-color: $primary-tint;

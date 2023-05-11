@@ -1,14 +1,3 @@
-<script setup lang="ts">
-import NavInfoConfig from '@/stores/NavInfoConfig';
-import sideBarConfigStore from '@/stores/SideBarConfig';
-import { RouterView } from 'vue-router';
-import SideBar from '@/components/back/SideBar.vue';
-import NavBar from '@/components/back/NavBar.vue';
-
-const sideBarStore = sideBarConfigStore();
-const navInfoStore = NavInfoConfig();
-</script>
-
 <template>
   <div class="container-fluid overflow-hidden" style="max-height: 100vh">
     <nav class="bg-white sticky-top border-bottom border-neutral-40">
@@ -16,8 +5,8 @@ const navInfoStore = NavInfoConfig();
     </nav>
     <div
       class="row flex-grow-1"
-      @click.prevent="navInfoStore.closeAll()"
-      @keydown.prevent="navInfoStore.closeAll()"
+      @click="navInfoStore.closeAll()"
+      @keydown="navInfoStore.closeAll()"
     >
       <aside class="col-12 col-xl-3 gx-xl-5 max-sideBar max-heighScroll" v-if="sideBarStore.isOpen">
         <SideBar />
@@ -28,6 +17,19 @@ const navInfoStore = NavInfoConfig();
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import NavInfoConfig from '@/stores/NavInfoConfig';
+import sideBarConfigStore from '@/stores/SideBarConfig';
+import SideBar from '@/components/back/SideBar.vue';
+import NavBar from '@/components/back/NavBar.vue';
+import { onMounted } from 'vue';
+
+const sideBarStore = sideBarConfigStore();
+const navInfoStore = NavInfoConfig();
+onMounted(() => {
+  if (window.innerWidth < 1200) sideBarStore.isOpen = false;
+});
+</script>
 <style scoped lang="scss">
 .max-sideBar {
   @media (min-width: 1200px) {

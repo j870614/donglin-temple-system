@@ -1,9 +1,7 @@
 <template>
-  <div
-    class="d-flex align-items-center justify-content-center w-xl-50 w-75 mx-auto mb-xl-5 mb-3 pb-5"
-  >
+  <div class="d-flex align-items-center px-5 mx-auto mb-xl-5 mb-3 pb-5 step-over">
     <template v-for="(step, index) in props.steps" :key="step.title">
-      <div class="position-relative">
+      <div class="position-relative flex-shrink-0">
         <p
           class="mb-0 step-circle"
           :class="{
@@ -44,3 +42,33 @@ const props = defineProps({
   },
 });
 </script>
+<style scoped lang="scss">
+span.flex-grow-1 {
+  min-width: 5rem;
+}
+
+.step-circle {
+  width: 44px;
+  height: 44px;
+  text-align: center;
+  border-radius: 50%;
+  span {
+    line-height: 44px;
+  }
+  @media (max-width: 1200px) {
+    width: 24px;
+    height: 24px;
+    span {
+      line-height: 24px;
+    }
+  }
+}
+
+.step-over {
+  width: 75%;
+  @media (max-width: 1200px) {
+    width: 100%;
+    overflow-x: scroll;
+  }
+}
+</style>

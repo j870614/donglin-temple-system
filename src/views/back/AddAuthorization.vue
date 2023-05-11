@@ -2,7 +2,7 @@
   <main class="row">
     <div class="col h-100 gx-xl-5 pt-xl-4 pb-xl-5 py-3 mb-xl-2">
       <BackTitle>
-        <template #title> 使用者權限核發 </template>
+        <template #title> {{ steps[Number($route.query.step) - 1] }} </template>
       </BackTitle>
       <ProcessSteps :steps="steps"></ProcessSteps>
       <div>
@@ -16,8 +16,8 @@
                 <select
                   name="堂口名稱"
                   id="hall"
-                  class="form-select form-select-xl"
-                  aria-label=".form-select-xl example"
+                  class="form-select form-select-lg"
+                  aria-label=".form-select-lg example"
                   v-model="currentHall"
                 >
                   <option :value="index" v-for="(item, index) in auth" :key="index">
@@ -47,7 +47,7 @@
           <div class="d-flex justify-content-end gap-3 mt-5">
             <router-link
               to="/back/permissions/authorized/new?step=1"
-              class="btn btn-outline-primary text-danger py-3 flex-grow-1"
+              class="btn btn-outline-primary py-3 flex-grow-1"
               style="max-width: 184px"
             >
               上一步
@@ -83,7 +83,7 @@
 <script setup lang="ts">
 import BackTitle from '@/components/back/BackTitle.vue';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
-import beforeSearch from '@/components/information/beforeSearch.vue';
+import beforeSearch from '@/components/information/BeforeSearch.vue';
 
 import { ref } from 'vue';
 import type { Ref } from 'vue';

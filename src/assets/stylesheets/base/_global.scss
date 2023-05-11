@@ -2,7 +2,6 @@ a.router-link-exact-active,
 a.router-link-active,
 a {
   text-decoration: none;
-  color: inherit;
 }
 #app {
   font-family: 'Noto Sans TC', sans-serif;
@@ -78,24 +77,18 @@ a {
   }
 }
 
-.step-circle {
-  width: 44px;
-  height: 44px;
-  text-align: center;
-  border-radius: 50%;
-  span {
-    line-height: 44px;
-  }
-  @media (max-width: 1200px) {
-    width: 24px;
-    height: 24px;
-    span {
-      line-height: 24px;
-    }
-  }
-}
-.btn-calendar {
+.btn-calendar,
+.vc-popover-content-wrapper,
+.vc-header  {
   button {
     background-color: transparent;
   }
+}
+.vc-black {
+  --vc-accent-200: #f9f9f9;
+  --vc-accent-600: #000;
+}
+
+.h-max {
+  height: max-content;
 }

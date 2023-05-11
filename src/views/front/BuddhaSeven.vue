@@ -1,4 +1,5 @@
 <template>
+  <teleport to="title">彌陀之家東林寺-佛七介紹</teleport>
   <div class="wrap">
     <img
       src="@/assets/img/buddha_seven_bg.png"

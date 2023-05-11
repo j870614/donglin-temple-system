@@ -235,7 +235,7 @@ const permissions: Permissions = {
             name: '佛七報名預約名單',
           },
           {
-            path: '',
+            path: '/buddha/signUp?step=1',
             name: '佛七報名',
           },
           {

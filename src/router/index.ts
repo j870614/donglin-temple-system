@@ -36,6 +36,10 @@ const router = createRouter({
               path: 'list',
               component: () => import('@/views/back/BuddhaList.vue'),
             },
+            {
+              path: 'signUp',
+              component: () => import('@/views/back/BuddhaSignUp.vue'),
+            },
           ],
         },
         {
