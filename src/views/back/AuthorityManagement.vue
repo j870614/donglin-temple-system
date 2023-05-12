@@ -4,19 +4,21 @@
       <BackTitle>
         <template #title> 使用者權限管理 </template>
       </BackTitle>
-      <label class="form-label fw-semibold fs-5" for="search">查詢權限名單</label>
-      <select
-        id="search"
-        class="form-select form-select-lg fs-5 mb-4"
-        style="max-width: 400px"
-        aria-label=".form-select-lg example"
-        v-model="search"
-        @change="filterUserHall"
-      >
-        <option disabled>選擇堂口名稱</option>
-        <option value="知客" selected>知客</option>
-        <option value="寮房">寮房</option>
-      </select>
+      <div class="fs-5 mb-4">
+        <label class="form-label fw-semibold" for="search">查詢權限名單</label>
+        <select
+          id="search"
+          class="form-select form-select-lg"
+          style="max-width: 400px"
+          aria-label=".form-select-lg example"
+          v-model="search"
+          @change="filterUserHall"
+        >
+          <option disabled>選擇堂口名稱</option>
+          <option value="知客" selected>知客</option>
+          <option value="寮房">寮房</option>
+        </select>
+      </div>
       <p class="fs-3">{{ search }}</p>
       <StickyTable>
         <template #thead>

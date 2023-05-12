@@ -190,7 +190,7 @@ const permissions: Permissions = {
         isOpen: false,
         children: [
           {
-            path: '',
+            path: '/permissions/buddha',
             name: '佛七期數設定',
           },
           {

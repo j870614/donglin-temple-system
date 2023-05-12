@@ -63,6 +63,10 @@ const router = createRouter({
                 },
               ],
             },
+            {
+              path: 'buddha',
+              component: () => import('@/views/back/SetBuddha.vue'),
+            },
           ],
         },
         {
