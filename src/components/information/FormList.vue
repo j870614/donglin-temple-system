@@ -17,7 +17,7 @@
             <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
-        <div class="row mb-3 gap-4 gap-xl-0">
+        <div class="row mb-3 gap-4 gap-xl-0" v-if="!$route.fullPath.includes('/buddha/signUp')">
           <div class="col-xl">
             <label for="birthday" class="form-label fw-semibold"
               ><span class="text-danger">*</span>出生年月日</label
@@ -62,7 +62,7 @@
             <input type="tel" class="form-control rounded-4" id="tel" placeholder="03-12345678" />
           </div>
         </div>
-        <div>
+        <div v-if="!$route.fullPath.includes('/buddha/signUp')">
           <label for="line" class="form-label fw-semibold">LINE 帳號</label>
           <input
             type="text"
@@ -73,7 +73,7 @@
         </div>
       </section>
       <!-- 通訊地址 -->
-      <section class="mb-5 pt-2 pt-xl-0">
+      <section class="mb-5 pt-2 pt-xl-0" v-if="!$route.fullPath.includes('/buddha/signUp')">
         <h3 class="h3 mb-4 fw-semibold">通訊地址</h3>
         <div class="d-flex gap-4 fw-semibold mb-3">
           <div class="form-check" v-for="(item, index) in ['國內', '海外']" :key="item + index">
@@ -193,7 +193,8 @@
           </div>
         </template>
       </section>
-      <section class="pt-2 pt-xl-0">
+      <!-- 緊急聯絡人 -->
+      <section class="pt-2 pt-xl-0" v-if="!$route.fullPath.includes('/buddha/signUp')">
         <h3 class="h3 mb-4 fw-semibold">緊急聯絡人</h3>
         <div class="row mb-3 gap-4 gap-xl-0">
           <div class="col-xl">
@@ -378,7 +379,10 @@
           </div>
         </div>
       </template>
-      <div class="row mb-3 pt-2 gap-4 gap-xl-0" v-else>
+      <div
+        class="row mb-3 pt-2 gap-4 gap-xl-0"
+        v-else-if="!$route.fullPath.includes('/buddha/signUp')"
+      >
         <div class="col-xl">
           <label for="area" class="form-label fw-semibold mb-2">所屬地區</label>
           <select class="form-select form-select-lg rounded-4" id="area" v-model="user.area">
@@ -401,7 +405,7 @@
           </select>
         </div>
       </div>
-      <div class="mb-5">
+      <div class="mb-5" v-if="!$route.fullPath.includes('/buddha/signUp')">
         <label for="introducer" class="form-label fw-semibold">介紹人</label>
         <input
           type="text"
@@ -411,7 +415,7 @@
         />
       </div>
       <!-- 上殿服裝 -->
-      <div v-if="user.identity === '居士'">
+      <div v-if="user.identity === '居士' && !$route.fullPath.includes('/buddha/signUp')">
         <div class="row gap-4">
           <section class="col-xl">
             <h3 class="h3 mb-4 fw-semibold">上殿服裝</h3>
