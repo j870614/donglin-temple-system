@@ -81,14 +81,23 @@
               </div>
               <div class="mb-4">
                 <label for="buddhaDate" class="form-label fw-semibold">佛七日期設定</label>
-                <DatePicker v-model="buddhaDate" trim-weeks color="orange">
+                <DatePicker v-model="buddhaDate" trim-weeks is-range color="orange">
                   <template #default="{ inputValue, inputEvents }">
-                    <input
-                      class="form-control rounded-4"
-                      id="buddhaDate"
-                      :value="inputValue"
-                      v-on="inputEvents"
-                    />
+                    <div class="d-flex gap-4 align-items-center">
+                      <input
+                        class="form-control rounded-4"
+                        id="buddhaDate"
+                        :value="inputValue.start"
+                        v-on="inputEvents.start"
+                      />
+                      <span class="fs-3">~</span>
+                      <input
+                        class="form-control rounded-4"
+                        aria-label="end"
+                        :value="inputValue.end"
+                        v-on="inputEvents.end"
+                      />
+                    </div>
                   </template>
                 </DatePicker>
               </div>
@@ -156,7 +165,10 @@ import { DatePicker } from 'v-calendar';
 import { ref } from 'vue';
 
 const currentYear = ref(new Date().getFullYear());
-const buddhaDate = ref(new Date());
+const buddhaDate = ref({
+  start: new Date(),
+  end: new Date(),
+});
 </script>
 <style scoped lang="scss">
 .material-symbols-outlined {
