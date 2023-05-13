@@ -87,12 +87,9 @@
                   <li
                     class="fs-5 style-sidebar"
                     :class="{
-                      'bg-primary text-white': $route.fullPath
-                        .split('/back')[1]
-                        .includes(innerChild.path),
+                      'bg-primary text-white': currentPath(innerChild.path),
                       'bg-neutral-10':
-                        hoverNavName === innerChild.name &&
-                        !$route.fullPath.split('/back')[1].includes(innerChild.path),
+                        hoverNavName === innerChild.name && !currentPath(innerChild.path),
                     }"
                     @mouseenter.self="() => (hoverNavName = innerChild.name)"
                     @focus.prevent="() => (hoverNavName = innerChild.name)"
@@ -101,7 +98,9 @@
                     @click.prevent="() => changePath(innerChild.name, innerChild.path)"
                     @keydown.prevent="() => changePath(innerChild.name, innerChild.path)"
                   >
-                    <div class="fw-semibold">{{ innerChild.name }}</div>
+                    <div class="fw-semibold">
+                      {{ innerChild.name }}
+                    </div>
                   </li>
                 </ul>
               </template>
@@ -111,9 +110,8 @@
               v-else
               class="fs-5 style-sidebar"
               :class="{
-                'bg-primary text-white': $route.fullPath.split('/back')[1].includes(navChild.path),
-                'bg-neutral-10':
-                  hoverNavName === navChild.name && !$route.fullPath.includes(navChild.path),
+                'bg-primary text-white': currentPath(navChild.path),
+                'bg-neutral-10': hoverNavName === navChild.name && !currentPath(navChild.path),
               }"
               @mouseenter.self="() => (hoverNavName = navChild.name)"
               @focus.prevent="() => (hoverNavName = navChild.name)"
@@ -146,10 +144,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import sideBarConfigStore from '@/stores/SideBarConfig';
 
 const router = useRouter();
+const route = useRoute();
 
 interface NavItem {
   icon?: string;
@@ -191,7 +190,7 @@ const permissions: Permissions = {
         isOpen: false,
         children: [
           {
-            path: '',
+            path: '/permissions/buddha',
             name: '佛七期數設定',
           },
           {
@@ -403,6 +402,13 @@ const currentNavName = ref('');
 
 function changeCurrent(name: string, path: string): void {
   currentNavName.value = name + path;
+}
+function currentPath(path: string): boolean {
+  if (path.includes('?')) {
+    const url = route.fullPath.split('/back')[1].replace(/\?\D*\W*\S*/, '');
+    return path.startsWith(url);
+  }
+  return route.fullPath.includes(path);
 }
 
 const webWidth = ref<number>(0);
