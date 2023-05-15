@@ -466,14 +466,14 @@
   </div>
   <div class="d-flex justify-content-end gap-3 mt-3 mt-xl-4">
     <router-link
-      to="/back/buddha/signUp?step=1"
+      :to="props.pre"
       class="btn btn-outline-primary py-3 flex-grow-1"
       style="max-width: 184px"
     >
       上一步
     </router-link>
     <router-link
-      to="/back/buddha/signUp?step=3"
+      :to="props.next"
       class="btn btn-primary text-white py-3 flex-grow-1"
       style="max-width: 184px"
     >
@@ -482,11 +482,22 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, defineProps } from 'vue';
 import type { ComputedRef } from 'vue';
 import { DatePicker } from 'v-calendar';
 import taiwan_districts from '@/assets/lib/taiwan_districts.json';
 import overseas_districts from '@/assets/lib/overseas_districts.json';
+
+const props = defineProps({
+  next: {
+    type: String,
+    required: true,
+  },
+  pre: {
+    type: String,
+    required: true,
+  },
+});
 
 interface TaiwanArea {
   districts: { zip: string; name: string }[];

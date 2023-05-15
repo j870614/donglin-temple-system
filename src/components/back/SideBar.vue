@@ -238,7 +238,7 @@ const permissions: Permissions = {
             name: '佛七報名',
           },
           {
-            path: '',
+            path: '/buddha/checkIn?step=1',
             name: '佛七報到',
           },
         ],
@@ -404,11 +404,11 @@ function changeCurrent(name: string, path: string): void {
   currentNavName.value = name + path;
 }
 function currentPath(path: string): boolean {
-  if (path.includes('?')) {
-    const url = route.fullPath.split('/back')[1].replace(/\?\D*\W*\S*/, '');
+  const url = route.fullPath.split('/back')[1].replace(/\?\D*\W*\S*/, '');
+  if (path.includes('?') && url) {
     return path.startsWith(url);
   }
-  return route.fullPath.includes(path);
+  return route.fullPath.split('/back')[1] === path;
 }
 
 const webWidth = ref<number>(0);

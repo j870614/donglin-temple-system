@@ -1,5 +1,8 @@
 <template>
-  <div class="d-flex align-items-center px-5 mx-auto mb-xl-5 mb-3 pb-5 step-over">
+  <div
+    class="d-flex align-items-center px-5 mx-auto mb-xl-5 mb-3 step-over"
+    style="padding-bottom: 40px"
+  >
     <template v-for="(step, index) in props.steps" :key="step.title">
       <div class="position-relative flex-shrink-0">
         <p
@@ -15,8 +18,9 @@
           <span v-else> {{ index + 1 }} </span>
         </p>
         <h2
-          class="position-absolute start-50 translate-middle-x fs-6 fw-semibold mb-0 text-nowrap"
-          style="bottom: -1.5rem"
+          class="position-absolute start-50 translate-middle-x fs-6 fw-semibold mb-0"
+          style="top: 100%; width: 6rem"
+          :class="{ 'text-nowrap text-center': step.length <= 6 }"
         >
           {{ step }}
         </h2>
@@ -68,7 +72,7 @@ span.flex-grow-1 {
   width: 75%;
   @media (max-width: 1200px) {
     width: 100%;
-    overflow-x: scroll;
+    overflow: scroll;
   }
 }
 </style>

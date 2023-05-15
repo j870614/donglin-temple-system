@@ -2,6 +2,7 @@ a.router-link-exact-active,
 a.router-link-active,
 a {
   text-decoration: none;
+  --bs-link-color: #000;
 }
 #app {
   font-family: 'Noto Sans TC', sans-serif;

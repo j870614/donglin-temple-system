@@ -40,6 +40,10 @@ const router = createRouter({
               path: 'signUp',
               component: () => import('@/views/back/BuddhaSignUp.vue'),
             },
+            {
+              path: 'checkIn',
+              component: () => import('@/views/back/BuddhaCheckIn.vue'),
+            },
           ],
         },
         {
