@@ -47,7 +47,7 @@
       @keydown="() => (isMenuOpen = false)"
     >
       <li class="box-hover cursor-point py-2-5">
-        <router-link to="/buddha">佛七介紹</router-link>
+        <router-link to="/buddha" class="text-black">佛七介紹</router-link>
       </li>
       <li class="box-hover cursor-point py-2-5" v-scroll-to="'#transportation'">
         <router-link to="/">交通資訊</router-link>

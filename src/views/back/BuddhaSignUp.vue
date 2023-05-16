@@ -6,9 +6,17 @@
       </BackTitle>
       <ProcessSteps :steps="steps"></ProcessSteps>
       <beforeSearch v-if="$route.query.step === '1'"></beforeSearch>
-      <FormList v-if="$route.query.step === '2'"></FormList>
+      <FormList
+        pre="/back/buddha/signUp?step=1"
+        next="/back/buddha/signUp?step=3"
+        v-if="$route.query.step === '2'"
+      ></FormList>
       <BuddhaDate v-if="$route.query.step === '3'"></BuddhaDate>
-      <MealSurvey v-if="$route.query.step === '4'"></MealSurvey>
+      <MealSurvey
+        pre="/back/buddha/signUp?step=3"
+        next="/back/buddha/signUp?step=5"
+        v-if="$route.query.step === '4'"
+      ></MealSurvey>
       <CheckInfo v-if="$route.query.step === '5'"></CheckInfo>
       <BuddhaNotice v-if="$route.query.step === '6'"></BuddhaNotice>
       <BuddhaFinish v-if="$route.query.step === '7'"></BuddhaFinish>
