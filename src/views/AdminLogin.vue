@@ -22,11 +22,10 @@
             Facebook 帳號登入</a
           > -->
           <p class="text-with-lines emailLogin">或使用電子信箱登入</p>
-          <form>
+          <form @submit.prevent="submit">
             <label for="email" class="form-label fw-bold">電子信箱</label>
             <input
               type="email"
-              name="email"
               class="form-control mb-2"
               :class="{ 'is-invalid': VEmail.errorMessage.value }"
               id="email"
@@ -38,10 +37,10 @@
             <label for="password" class="form-label fw-bold">密碼</label>
             <input
               type="password"
+              autocomplete="on"
               class="form-control mb-2"
               :class="{ 'is-invalid': errorPassWordMsg }"
               id="password"
-              name="password"
               placeholder="請輸入密碼"
               v-model="VPassWord"
             />
@@ -59,11 +58,7 @@
               </div>
               <a href="javascript:;" class="text-primary">忘記密碼 ?</a>
             </div>
-            <button
-              type="submit"
-              class="registerBtn btn btn-primary w-100 fw-bold mt-3 text-white"
-              @click.prevent="submit"
-            >
+            <button type="submit" class="registerBtn btn btn-primary w-100 fw-bold mt-3 text-white">
               立即登入
             </button>
           </form>
@@ -77,14 +72,14 @@
 import { ref, onMounted } from 'vue';
 import userStore from '@/stores/UserStore';
 import { useField, useForm } from 'vee-validate';
-import * as yup from 'yup';
+import { string } from 'yup';
 
 // 定義表單字段
 const { handleSubmit } = useForm();
-const VEmail = useField('email', yup.string().email('信箱 格式錯誤').required('信箱 必填'));
+const VEmail = useField('email', string().email('信箱 格式錯誤').required('信箱 必填'));
 const { value: VPassWord, errorMessage: errorPassWordMsg } = useField(
   'password',
-  yup.string().min(8, '密碼 至少 8 碼').required('密碼 必填'),
+  string().min(8, '密碼 至少 8 碼').required('密碼 必填'),
 );
 
 const User = userStore();

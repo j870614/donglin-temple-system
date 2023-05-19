@@ -63,6 +63,35 @@ export default defineStore('sideBarConfigStore', {
         console.error(err.response.data);
       }
     },
+    async register(Email: string, Password: string, ConfirmPassword: string, UserId: number) {
+      const url: string = `${VITE_BASEURL}/managers/signup`;
+      // const url: string = `${VITE_BASEURL}/managers/generate`; // 不會被userId驗證
+      const data: { Email: string; Password: string; ConfirmPassword: string; UserId: number } = {
+        Email,
+        Password,
+        ConfirmPassword,
+        UserId,
+      };
+      try {
+        const res: { data: any } = await axios.post(url, data);
+        if (res.data.status) {
+          const swal = await Swal.fire('註冊成功');
+          this.isLogin = false;
+          localStorage.setItem('isLogin', 'false');
+          document.cookie = `token=;expires=${new Date()}`;
+          console.log('user register');
+          console.log(res.data);
+          console.log('----------');
+          if (swal.isConfirmed || swal.isDismissed) window.location.href = '/';
+        }
+      } catch (err: any) {
+        Swal.fire({
+          icon: 'error',
+          title: err.response.data.message,
+        });
+        console.error(err.response.data);
+      }
+    },
     getToken(): string {
       const token = document.cookie
         .split('; ')
