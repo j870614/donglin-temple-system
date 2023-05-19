@@ -26,13 +26,13 @@
             <router-link to="/">交通資訊</router-link>
           </li>
         </ul>
-        <p class="d-flex align-items-center text-neutral-80 me-2 mb-0">
+        <p class="d-flex align-items-center text-neutral-80 me-2 mb-0" v-if="user.isLogin">
           <span class="material-symbols-outlined me-2"> account_circle </span>
           知客 普某菩薩
         </p>
-        <button type="button" class="btn btn-primary py-3 px-5 text-white fw-semibold">
-          進入管理系統
-        </button>
+        <router-link :to="btnConfig.path" class="btn btn-primary py-3 px-5 text-white fw-semibold">
+          {{ btnConfig.content }}
+        </router-link>
       </div>
     </div>
   </div>
@@ -53,13 +53,28 @@
         <router-link to="/">交通資訊</router-link>
       </li>
     </ul>
-    <button type="button" class="btn btn-primary text-white fw-semibold py-3 text-center w-100">
-      登入 / 註冊
-    </button>
+    <router-link
+      :to="btnConfig.path"
+      class="btn btn-primary text-white fw-semibold py-3 text-center w-100"
+    >
+      {{ btnConfig.content }}
+    </router-link>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import userStore from '@/stores/UserStore';
 
+const user = userStore();
 const isMenuOpen = ref<Boolean>(false);
+
+const btnConfig = ref<{ path: string; content: string }>({
+  path: '/admin',
+  content: '登入 / 註冊',
+});
+onMounted(() => {
+  user.checkLogin(user.getToken());
+  btnConfig.value.path = user.isLogin ? '/back' : '/admin';
+  btnConfig.value.content = user.isLogin ? '進入管理系統' : '登入 / 註冊';
+});
 </script>
