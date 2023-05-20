@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import Swal from '@/plug/SweetAlert';
+import { useRouter } from 'vue-router';
 
 const { VITE_BASEURL } = import.meta.env;
-export default defineStore('sideBarConfigStore', {
+
+export default defineStore('userStore', {
   state: () => ({
     isLogin: false,
   }),
@@ -14,6 +16,12 @@ export default defineStore('sideBarConfigStore', {
       if (!token) {
         this.isLogin = false;
         localStorage.setItem('isLogin', 'false');
+        const router = useRouter();
+
+        if (router.currentRoute.value.fullPath !== '/') {
+          const swal = await Swal.fire('請重新登入');
+          if (swal.isConfirmed || swal.isDismissed) router.push('/admin');
+        }
         return;
       }
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -44,6 +52,8 @@ export default defineStore('sideBarConfigStore', {
           }
           const swal = await Swal.fire('登入成功');
           localStorage.setItem('isLogin', 'true');
+          // const router = useRouter();
+
           if (swal.isConfirmed || swal.isDismissed) {
             document.cookie = `token=${res.data.token}; expires=${new Date(
               res.data.expired * 1000,
@@ -56,11 +66,12 @@ export default defineStore('sideBarConfigStore', {
           }
         }
       } catch (err: any) {
+        console.error(err);
+
         Swal.fire({
           icon: 'error',
           title: err.response.data.message,
         });
-        console.error(err.response.data);
       }
     },
     async register(Email: string, Password: string, ConfirmPassword: string, UserId: number) {
@@ -76,9 +87,7 @@ export default defineStore('sideBarConfigStore', {
         const res: { data: any } = await axios.post(url, data);
         if (res.data.status) {
           const swal = await Swal.fire('註冊成功');
-          this.isLogin = false;
-          localStorage.setItem('isLogin', 'false');
-          document.cookie = `token=;expires=${new Date()}`;
+          this.clearCookie();
           console.log('user register');
           console.log(res.data);
           console.log('----------');
@@ -92,7 +101,18 @@ export default defineStore('sideBarConfigStore', {
         console.error(err.response.data);
       }
     },
+    async signOut() {
+      this.clearCookie();
+      const swal = await Swal.fire('登出成功');
+      if (swal.isConfirmed || swal.isDismissed) window.location.href = '/';
+    },
+    clearCookie(): void {
+      this.isLogin = false;
+      localStorage.setItem('isLogin', 'false');
+      document.cookie = `token=;expires=${new Date()}`;
+    },
     getToken(): string {
+      if (!document.cookie.includes('token')) return '';
       const token = document.cookie
         .split('; ')
         .find((row) => row.startsWith('token='))
