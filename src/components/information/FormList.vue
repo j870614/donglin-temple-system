@@ -541,7 +541,7 @@ onMounted(() => {
   tempUser.value = sessionStorage.tempUser && JSON.parse(sessionStorage.tempUser);
   const { IsMale, IsMonk, OrdinationDate, BirthDate, Mobile } = tempUser.value;
   userInput.value = tempUser.value;
-  userInput.value.Mobile = Mobile && Mobile.length < 10 ? `0${Mobile}` : Mobile;
+  userInput.value.Mobile = Mobile;
   userInput.value.sex = IsMale === undefined || IsMale ? '男眾' : '女眾';
   userInput.value.identity = IsMonk === undefined || IsMonk ? '法師' : '居士';
   userInput.value.BirthDate = BirthDate ? new Date(BirthDate) : new Date();

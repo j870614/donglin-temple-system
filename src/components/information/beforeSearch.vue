@@ -109,7 +109,7 @@
                   <td>{{ user.IsMale ? '男' : '女' }}</td>
                   <td>{{ user.DharmaName }}</td>
                   <td>{{ user.Name }}</td>
-                  <td>{{ user.Mobile ? `+${user.MobilePrefix} - ${user.Mobile}` : '' }}</td>
+                  <td>{{ user.Mobile || user.Phone }}</td>
                   <!-- 46/8/7 -->
                   <td>
                     {{ getCurrentYear(user.BirthDate) - 1911 }}/{{
@@ -142,6 +142,7 @@
                 class="btn btn-primary"
                 @click="saveTemp"
                 :data-bs-dismiss="tempUser.Id !== 0 ? 'modal' : ''"
+                v-if="searchData.length"
               >
                 選擇
               </button>
