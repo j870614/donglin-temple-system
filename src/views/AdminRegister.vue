@@ -21,31 +21,52 @@
             ><img class="login-icons" src="../assets/img/login-icons/facebook.png" alt="" /> 使用
             Facebook 帳號註冊</a
           > -->
-          <p class="text-with-lines emailLogin">或使用電子信箱註冊</p>
-          <label for="email" class="form-label fw-bold">電子信箱</label>
-          <input
-            type="email"
-            class="form-control mb-2"
-            id="email"
-            placeholder="hello@example.com"
-          />
-          <label for="password" class="form-label fw-bold">密碼</label>
-          <input type="password" class="form-control mb-2" id="password" placeholder="請輸入密碼" />
-          <label for="confirmPassword" class="form-label fw-bold">確認密碼</label>
-          <div class="checkPassword position-relative">
+          <form @submit.prevent="submit">
+            <p class="text-with-lines emailLogin">或使用電子信箱註冊</p>
+            <label for="email" class="form-label fw-bold">電子信箱</label>
+            <input
+              type="email"
+              class="form-control mb-2"
+              :class="{ 'is-invalid': errorEmailMsg }"
+              id="email"
+              placeholder="hello@example.com"
+              v-model="VEmail"
+            />
+            <p class="invalid-feedback">{{ errorEmailMsg }}</p>
+            <label for="password" class="form-label fw-bold">密碼</label>
             <input
               type="password"
+              autocomplete="off"
               class="form-control mb-2"
-              id="confirmPassword"
+              :class="{ 'is-invalid': errorPassWordMsg }"
+              id="password"
               placeholder="請輸入密碼"
+              v-model="VPassWord"
             />
-            <img
-              class="checkPasswordIcon position-absolute top-50 end-0 translate-middle-y"
-              src="../assets/img/login-icons/close-eyes.png"
-              alt="close-eyes"
-            />
-          </div>
-          <a href="#" class="registerBtn btn btn-primary w-100 fw-bold mt-3 text-white">立即註冊</a>
+            <p class="invalid-feedback">{{ errorPassWordMsg }}</p>
+
+            <label for="confirmPassword" class="form-label fw-bold">確認密碼</label>
+            <div class="checkPassword position-relative">
+              <input
+                type="password"
+                autocomplete="off"
+                class="form-control mb-2"
+                :class="{ 'is-invalid': errorCheckPwMsg }"
+                id="confirmPassword"
+                placeholder="請輸入密碼"
+                v-model="VCheckPw"
+              />
+              <p class="invalid-feedback">{{ errorCheckPwMsg }}</p>
+              <img
+                class="checkPasswordIcon position-absolute top-50 end-0 translate-middle-y"
+                src="../assets/img/login-icons/close-eyes.png"
+                alt="close-eyes"
+              />
+            </div>
+            <button type="submit" class="registerBtn btn btn-primary w-100 fw-bold mt-3 text-white">
+              立即註冊
+            </button>
+          </form>
           <p>
             已經有帳號了嗎？<router-link to="/admin" class="text-primary fw-bold"
               >立即登入</router-link
@@ -56,6 +77,52 @@
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import { useField, useForm } from 'vee-validate';
+import { string } from 'yup';
+import userStore from '@/stores/UserStore';
+
+// 定義表單字段
+const { handleSubmit } = useForm();
+const { value: VEmail, errorMessage: errorEmailMsg } = useField(
+  'email',
+  string().email('信箱 格式錯誤').required('信箱 必填'),
+);
+const { value: VPassWord, errorMessage: errorPassWordMsg } = useField(
+  'password',
+  string().min(8, '密碼 至少 8 碼').required('密碼 必填'),
+);
+const { value: VCheckPw, errorMessage: errorCheckPwMsg } = useField(
+  'confirmPassword',
+  string()
+    .required('確認密碼 必填')
+    .test('password-match', '兩次密碼不一致', (value) => {
+      return value === VPassWord.value;
+    }),
+);
+
+interface UserInput {
+  email: string;
+  password: string;
+  checkPw: string;
+  userId: number;
+}
+// 提交表單時驗證
+const submit: () => void = handleSubmit(() => {
+  const User = userStore();
+  const userInput: UserInput = {
+    email: '',
+    password: '',
+    checkPw: '',
+    userId: 17,
+  };
+  userInput.email = VEmail.value as string;
+  userInput.password = VPassWord.value as string;
+  userInput.checkPw = VCheckPw.value as string;
+  User.register(userInput.email, userInput.password, userInput.checkPw, userInput.userId);
+});
+</script>
+
 <style>
 .loginContainer {
   height: 100vh;
@@ -141,4 +208,3 @@
   }
 }
 </style>
-<script setup lang="ts"></script>

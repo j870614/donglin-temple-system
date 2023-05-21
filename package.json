@@ -20,9 +20,12 @@
     "pinia": "^2.0.33",
     "sweetalert2": "^11.7.3",
     "v-calendar": "^3.0.3",
+    "vee-validate": "^4.9.3",
     "vue": "^3.2.47",
+    "vue-axios": "^3.5.2",
     "vue-router": "^4.1.6",
-    "vue-scrollto": "^2.20.0"
+    "vue-scrollto": "^2.20.0",
+    "yup": "^1.1.1"
   },
   "devDependencies": {
     "@popperjs/core": "^2.11.7",

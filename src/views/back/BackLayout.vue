@@ -20,15 +20,27 @@
 <script setup lang="ts">
 import NavInfoConfig from '@/stores/NavInfoConfig';
 import sideBarConfigStore from '@/stores/SideBarConfig';
+import UserStore from '@/stores/UserStore';
 import SideBar from '@/components/back/SideBar.vue';
 import NavBar from '@/components/back/NavBar.vue';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 const sideBarStore = sideBarConfigStore();
+const userStore = UserStore();
 const navInfoStore = NavInfoConfig();
+const route = useRoute();
 onMounted(() => {
   if (window.innerWidth < 1200) sideBarStore.isOpen = false;
+  userStore.checkLogin(userStore.getToken());
 });
+
+watch(
+  () => route.path,
+  () => {
+    userStore.checkLogin(userStore.getToken());
+  },
+);
 </script>
 <style scoped lang="scss">
 .max-sideBar {

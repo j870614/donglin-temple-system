@@ -129,26 +129,31 @@
         </template>
       </template>
     </ul>
-    <router-link
-      to=""
-      class="fs-5 fw-semibold style-sidebar d-flex align-items-center gap-3"
+    <button
+      type="button"
+      class="btn fs-5 fw-semibold style-sidebar d-flex align-items-center gap-3"
       :class="{ 'bg-neutral-10': hoverNavName === '登出' }"
       @mouseenter.self="() => (hoverNavName = '登出')"
-      @focus.prevent="() => (hoverNavName = '登出')"
+      @focus="() => (hoverNavName = '登出')"
       @mouseleave.self="() => (hoverNavName = '')"
-      @blur.prevent="() => (hoverNavName = '')"
-      ><span class="material-symbols-outlined"> logout </span>登出</router-link
+      @blur="() => (hoverNavName = '')"
+      @click="user.signOut"
     >
+      <span class="material-symbols-outlined"> logout </span>登出
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import sideBarConfigStore from '@/stores/SideBarConfig';
+import SideBarConfigStore from '@/stores/SideBarConfig';
+import userStore from '@/stores/UserStore';
+// import Swal from '@/plug/SweetAlert';
 
 const router = useRouter();
 const route = useRoute();
+const user = userStore();
 
 interface NavItem {
   icon?: string;
@@ -376,8 +381,8 @@ const nav = ref<NavItem[]>([
     isOpen: false,
   },
 ]);
-const user = ref<string>('管理員'); // 這邊是使用者的身分, 跟下方的控制 sidebar 選項
-switch (user.value) {
+const identity = ref<string>('管理員'); // 這邊是使用者的身分, 跟下方的控制 sidebar 選項
+switch (identity.value) {
   case '管理員':
     nav.value.push(
       permissions['系統管理'],
@@ -412,7 +417,7 @@ function currentPath(path: string): boolean {
 }
 
 const webWidth = ref<number>(0);
-const sideBarStore = sideBarConfigStore();
+const sideBarStore = SideBarConfigStore();
 
 function changePath(name: string, path: string): void {
   webWidth.value = window.innerWidth;
