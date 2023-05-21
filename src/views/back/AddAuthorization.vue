@@ -96,6 +96,7 @@ interface Auth {
 const auth = ref<Auth>({
   知客: ['總知客', '副總知客', '知客志工'],
   寮房: ['寮房師', '副寮房師', '寮房志工'],
+  系統管理員: ['系統管理員'],
 });
 const currentHall: Ref<string> = ref('知客');
 </script>

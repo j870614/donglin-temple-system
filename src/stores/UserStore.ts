@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import Swal from '@/plug/SweetAlert';
-import { useRouter } from 'vue-router';
+import Swal from '@/plug/sweetAlert';
 
 const { VITE_BASEURL } = import.meta.env;
 
@@ -14,14 +13,7 @@ export default defineStore('userStore', {
       this.isLogin = !!localStorage.isLogin;
 
       if (!token) {
-        this.isLogin = false;
-        localStorage.setItem('isLogin', 'false');
-        const router = useRouter();
-
-        if (router.currentRoute.value.fullPath !== '/') {
-          const swal = await Swal.fire('請重新登入');
-          if (swal.isConfirmed || swal.isDismissed) router.push('/admin');
-        }
+        this.overLogin();
         return;
       }
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -31,9 +23,9 @@ export default defineStore('userStore', {
         console.log('user checkLogin');
         console.log(res.data);
         console.log('----------');
-      } catch (err) {
-        this.isLogin = false;
-        localStorage.setItem('isLogin', 'false');
+      } catch (err: any) {
+        console.error(err);
+        this.overLogin();
       }
     },
     async login(Email: string, Password: string, Remember: boolean = false) {
@@ -50,13 +42,13 @@ export default defineStore('userStore', {
           } else {
             localStorage.removeItem('userAccount');
           }
-          const swal = await Swal.fire('登入成功');
+          const swal = await Swal.fire(res.data.message);
           localStorage.setItem('isLogin', 'true');
           // const router = useRouter();
 
           if (swal.isConfirmed || swal.isDismissed) {
-            document.cookie = `token=${res.data.token}; expires=${new Date(
-              res.data.expired * 1000,
+            document.cookie = `token=${res.data.data.token}; expires=${new Date(
+              res.data.data.expired * 1000,
             )}`;
             window.location.href = '/';
             // this.checkLogin(res.data.token);
@@ -105,6 +97,14 @@ export default defineStore('userStore', {
       this.clearCookie();
       const swal = await Swal.fire('登出成功');
       if (swal.isConfirmed || swal.isDismissed) window.location.href = '/';
+    },
+    async overLogin() {
+      this.clearCookie();
+      if (window.location.hash !== '#/') {
+        const swal = await Swal.fire('請重新登入');
+        if (swal.isConfirmed || swal.isDismissed)
+          window.location.href = `${window.location.origin}/#/admin`;
+      }
     },
     clearCookie(): void {
       this.isLogin = false;

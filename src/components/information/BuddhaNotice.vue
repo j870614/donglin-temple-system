@@ -13,7 +13,13 @@
         class="form-check"
         :class="{ 'mb-4': index !== notion.length - 1 }"
       >
-        <input class="form-check-input" type="checkbox" value="" :id="item + index" />
+        <input
+          class="form-check-input"
+          type="checkbox"
+          :value="item"
+          :id="item + index"
+          v-model="checkNum"
+        />
         <label class="form-check-label" :for="item + index" v-html="item"> </label>
       </li>
     </ol>
@@ -26,17 +32,20 @@
     >
       上一步
     </router-link>
-    <router-link
-      to="/back/buddha/signUp?step=7"
+    <button
+      type="button"
       class="btn btn-primary text-white py-3 flex-grow-1"
       style="max-width: 184px"
+      @click="tempTotal"
     >
       下一步
-    </router-link>
+    </button>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
 const identity = ref<string>('法師');
 const notion = ref<string[]>([]);
@@ -56,10 +65,28 @@ const jushi: string[] = [
   '5. 山林早晚較涼，逢秋、冬二季，請攜帶足夠的衣物。',
 ];
 onMounted(() => {
+  if (!sessionStorage.tempUser) return;
+  identity.value = JSON.parse(sessionStorage.tempUser).IsMonk ? '法師' : '居士';
   if (identity.value === '法師') {
     notion.value.push(...fashi);
   } else {
     notion.value.push(...jushi);
   }
 });
+
+const checkNum = ref<any[]>([]);
+const router = useRouter();
+function tempTotal() {
+  if (checkNum.value.length >= notion.value.length) {
+    const totalTemp = sessionStorage.totalTemp ? JSON.parse(sessionStorage.totalTemp) : [];
+    totalTemp.push(JSON.parse(sessionStorage.tempUser));
+    sessionStorage.setItem('totalTemp', JSON.stringify(totalTemp));
+    router.push('/back/buddha/signUp?step=7');
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: '請詳閱掛單注意事項',
+    });
+  }
+}
 </script>
