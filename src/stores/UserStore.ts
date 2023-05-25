@@ -1,28 +1,42 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import Swal from '@/plug/sweetAlert';
+import Swal from '@/plug/SweetAlert';
 
 const { VITE_BASEURL } = import.meta.env;
 
 export default defineStore('userStore', {
   state: () => ({
     isLogin: false,
+    user: {
+      MageNickname: '',
+      DharmaName: '',
+      Name: '',
+    },
   }),
   actions: {
     async checkLogin(token: string): Promise<void | boolean> {
       this.isLogin = !!localStorage.isLogin;
-
       if (!token) {
         this.overLogin();
         return;
       }
+      this.user = sessionStorage.user && JSON.parse(sessionStorage.user);
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       const url: string = `${VITE_BASEURL}/managers/check`;
       try {
-        const res: { data: any } = await axios.post(url);
-        console.log('user checkLogin');
-        console.log(res.data);
-        console.log('----------');
+        const check: { data: any } = await axios.post(url);
+        if (check.data.status && !this.isLogin) {
+          this.isLogin = true;
+          localStorage.setItem('isLogin', 'true');
+        }
+
+        if (this.user) return;
+        const profile: { data: any } = await axios.post(`${VITE_BASEURL}/managers/profile`);
+        const { userId } = profile.data.data;
+        const userData: { data: any } = await axios.get(`${VITE_BASEURL}/users/${userId}`);
+        const { user } = userData.data.data;
+        this.user = user;
+        sessionStorage.setItem('user', JSON.stringify(user));
       } catch (err: any) {
         console.error(err);
         this.overLogin();

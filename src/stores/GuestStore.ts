@@ -10,9 +10,9 @@ export default defineStore('guestStore', {
   actions: {
     async getTotal() {
       try {
-        const res: { data: any } = await axios.get(`${VITE_BASEURL}/guests?order=asc`);
+        const res: { data: any } = await axios.get(`${VITE_BASEURL}/users?order=asc`);
         if (res.data.status) {
-          this.guestsData = [...res.data.allUsers];
+          this.guestsData = [...res.data.data.users];
         }
         // console.log(res.data);
       } catch (err: any) {
