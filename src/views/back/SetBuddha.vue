@@ -12,14 +12,15 @@
           style="max-width: 400px"
           aria-label=".form-select-lg example"
           v-model="currentYear"
+          @change="buddhaYY"
         >
           <option
-            :value="currentYear + 1 - i"
+            :value="new Date().getFullYear() + 1 - i"
             v-for="i in new Date().getFullYear() - 2009"
             :key="i"
-            :selected="i + 2010 === currentYear - 2009"
+            :selected="i + 2010 === new Date().getFullYear() - 2009"
           >
-            {{ currentYear + 1 - i }}
+            {{ new Date().getFullYear() + 1 - i }}
           </option>
         </select>
       </div>
@@ -34,28 +35,38 @@
           </tr>
         </template>
         <template #tbody>
-          <tr v-for="(buddha, index) in (buddhaStore.totalBuddha as any[])" :key="index">
-            <td>{{ buddha.Id }}</td>
-            <td>
-              {{ formatDate(new Date(buddha.StartSevenDate).valueOf()) }}
-            </td>
-            <td>
-              {{ formatDate(new Date(buddha.CompleteDate).valueOf()) }}
-            </td>
-            <td>{{ buddha.Remarks }}</td>
-            <td
-              class="cursor-point"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              @click="currentTemp('editor', buddha)"
-              @keydown="currentTemp('editor', buddha)"
-            >
-              <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
-                <span class="material-symbols-outlined"> edit </span
-                ><span class="d-none d-xl-block">修改</span>
-              </p>
-            </td>
+          <tr v-if="!buddhaStore.totalBuddha.length">
+            <td colspan="5">該年度無佛七資料</td>
           </tr>
+          <template v-else>
+            <tr
+              v-for="(buddha, index) in (buddhaStore.totalBuddha as any[])"
+              :key="index"
+              :class="{ 'bg-primary-tint': tempBuddha.Id === buddha.Id }"
+              @click="tempBuddha.Id = buddha.Id"
+            >
+              <td>{{ buddha.Id }}</td>
+              <td>
+                {{ formatDate(new Date(buddha.StartSevenDate).valueOf()) }}
+              </td>
+              <td>
+                {{ formatDate(new Date(buddha.CompleteDate).valueOf()) }}
+              </td>
+              <td>{{ buddha.Remarks }}</td>
+              <td
+                class="cursor-point"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+                @click="currentTemp('editor', buddha)"
+                @keydown="currentTemp('editor', buddha)"
+              >
+                <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
+                  <span class="material-symbols-outlined"> edit </span
+                  ><span class="d-none d-xl-block">修改</span>
+                </p>
+              </td>
+            </tr>
+          </template>
         </template>
       </StickyTable>
       <!-- Modal -->
@@ -82,7 +93,7 @@
               ></button>
             </div>
             <div class="modal-body">
-              <div class="mb-4">
+              <div class="mb-4" v-if="tempBuddha.Id">
                 <label for="buddhaId" class="form-label">佛七期數</label>
                 <input
                   type="number"
@@ -92,28 +103,26 @@
                   v-model="tempBuddha.Id"
                 />
               </div>
+              {{ tempBuddha }}
               <div class="mb-4">
                 <label for="buddhaDate" class="form-label fw-semibold">佛七日期設定</label>
-                {{ buddhaDate }}
-                <DatePicker v-model="buddhaDate" trim-weeks is-range color="orange">
-                  <template #default="{ inputEvents }">
-                    <div class="d-flex gap-4 align-items-center">
-                      <input
-                        class="form-control rounded-4"
-                        id="buddhaDate"
-                        v-model="buddhaDate.start"
-                        v-on="inputEvents.start"
-                      />
-                      <span class="fs-3">~</span>
-                      <input
-                        class="form-control rounded-4"
-                        aria-label="end"
-                        v-model="buddhaDate.end"
-                        v-on="inputEvents.end"
-                      />
-                    </div>
-                  </template>
-                </DatePicker>
+                <div class="d-flex gap-4 align-items-center">
+                  <input
+                    type="date"
+                    class="form-control rounded-4"
+                    id="buddhaDate"
+                    :max="tempBuddha.CompleteDate"
+                    v-model="tempBuddha.StartSevenDate"
+                  />
+                  <span class="fs-3">~</span>
+                  <input
+                    type="date"
+                    class="form-control rounded-4"
+                    aria-label="end"
+                    :min="tempBuddha.StartSevenDate"
+                    v-model="tempBuddha.CompleteDate"
+                  />
+                </div>
               </div>
               <div>
                 <label for="notion" class="form-label">備註</label>
@@ -126,10 +135,17 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary me-5" data-bs-dismiss="modal">
+              <button
+                type="button"
+                class="btn btn-outline-primary me-5"
+                data-bs-dismiss="modal"
+                ref="modalClose"
+              >
                 取消
               </button>
-              <button type="button" class="btn btn-primary">新增佛七</button>
+              <button type="button" class="btn btn-primary" @click="addBuddha(tempBuddha)">
+                新增佛七
+              </button>
             </div>
           </div>
         </div>
@@ -152,7 +168,7 @@
           data-bs-target="#exampleModal"
           @click="currentTemp('new')"
         >
-          新增佛七
+          {{ tempBuddha.Id ? '修改佛七' : '新增佛七' }}
         </button>
       </div>
 
@@ -182,55 +198,74 @@
 import BackTitle from '@/components/back/BackTitle.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
 import BuddhaStore from '@/stores/BuddhaStore';
-import { DatePicker } from 'v-calendar';
 import { formatDate } from '@/plug/Timer';
 
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const currentYear = ref(new Date().getFullYear());
-const buddhaDate = ref({
-  start: formatDate(new Date().valueOf()),
-  end: formatDate(new Date().valueOf()),
-});
 
 const buddhaStore = BuddhaStore();
+const modalClose = ref(null);
+
 const tempBuddha = ref({
-  Id: null,
+  Id: 0,
   Remarks: '',
-  start: new Date(),
-  end: new Date(),
+  StartSevenDate: '',
+  CompleteDate: '',
 });
+// watch(tempBuddha.value, () => {
+//   tempBuddha.value.StartSevenDate = formatDate(
+//     new Date(tempBuddha.value.StartSevenDate).valueOf(),
+//     true,
+//     '-',
+//   );
+// });
+
 onMounted(() => {
   buddhaStore.getTotal(new Date().getFullYear());
 });
+function buddhaYY() {
+  buddhaStore.getTotal(currentYear.value);
+}
+function resetTemp() {
+  tempBuddha.value = {
+    Id: 0,
+    Remarks: '',
+    StartSevenDate: '',
+    CompleteDate: '',
+  };
+}
+
 function currentTemp(config: string, data: any = '') {
   if (config === 'editor') {
     tempBuddha.value.Id = data.Id;
     tempBuddha.value.Remarks = data.Remarks;
-    buddhaDate.value.start = formatDate(new Date(data.StartSevenDate).valueOf());
-    buddhaDate.value.end = formatDate(new Date(data.CompleteDate).valueOf());
+    tempBuddha.value.StartSevenDate = formatDate(
+      new Date(data.StartSevenDate).valueOf(),
+      true,
+      '-',
+    );
+
+    tempBuddha.value.CompleteDate = formatDate(new Date(data.CompleteDate).valueOf(), true, '-');
   } else {
-    tempBuddha.value = {
-      Id: null,
-      Remarks: '',
-      start: new Date(),
-      end: new Date(),
-    };
-    buddhaDate.value = {
-      start: formatDate(new Date().valueOf()),
-      end: formatDate(new Date().valueOf()),
-    };
+    resetTemp();
   }
 }
 
-watch(buddhaDate, () => {
-  buddhaDate.value.start = formatDate(new Date(buddhaDate.value.start).valueOf());
-  buddhaDate.value.end = formatDate(new Date(buddhaDate.value.end).valueOf());
-});
-watch(buddhaDate, (newValue) => {
-  buddhaDate.value.start = new Date(newValue.start);
-  buddhaDate.value.end = new Date(newValue.end);
-});
+async function addBuddha(data: any) {
+  let status;
+  if (data.Id) {
+    status = await buddhaStore.editorBuddha(data);
+  } else {
+    status = await buddhaStore.addBuddha(data);
+  }
+  if (status) {
+    modalClose.value.click();
+    tempBuddha.value.Id = 0;
+    buddhaStore.getTotal(currentYear.value);
+  }
+  resetTemp();
+}
 </script>
 <style scoped lang="scss">
 .material-symbols-outlined {
