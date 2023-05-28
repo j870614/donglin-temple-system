@@ -13,16 +13,7 @@
         v-model="date"
       ></DatePicker>
     </div>
-    <BookingInfo>
-      <template #start>
-        {{ getCurrentMonth(new Date(date.start).getTime()) }} 月
-        {{ getCurrentDay(new Date(date.start).getTime()) }} 日
-      </template>
-      <template #end>
-        {{ getCurrentMonth(new Date(date.end).getTime()) }} 月
-        {{ getCurrentDay(new Date(date.end).getTime()) }} 日
-      </template>
-    </BookingInfo>
+    <BookingInfo :date="date" />
   </div>
   <div class="d-flex justify-content-end gap-3 mt-3 mt-xl-4">
     <router-link
@@ -44,7 +35,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { DatePicker } from 'v-calendar';
-import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
 import BookingInfo from './BookingInfo.vue';
 
 const rows = ref(1);
