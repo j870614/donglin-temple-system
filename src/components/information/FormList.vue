@@ -22,7 +22,7 @@
             <label for="birthday" class="form-label fw-semibold"
               ><span class="text-danger">*</span>出生年月日</label
             >
-            <DatePicker v-model="userInput.BirthDate" trim-weeks color="orange">
+            <DatePicker v-model="date.BirthDate" trim-weeks color="orange">
               <template #default="{ inputValue, inputEvents }">
                 <input
                   class="form-control rounded-4"
@@ -292,6 +292,7 @@
               class="form-control rounded-4"
               id="outerName"
               placeholder="請輸入外號"
+              v-model.trim="userInput.DharmaName"
             />
           </div>
           <div class="col-xl">
@@ -313,6 +314,7 @@
               class="form-control rounded-4"
               id="legalName"
               placeholder="請輸入法名"
+              v-model.trim="userInput.DharmaName"
             />
           </div>
         </template>
@@ -347,7 +349,7 @@
             <label for="ordainedDate" class="form-label fw-semibold"
               ><span class="text-danger">*</span>受戒日期</label
             >
-            <DatePicker v-model="userInput.OrdinationDate" trim-weeks color="orange">
+            <DatePicker v-model="date.OrdinationDate" trim-weeks color="orange">
               <template #default="{ inputValue, inputEvents }">
                 <input
                   class="form-control rounded-4"
@@ -506,7 +508,7 @@ import { DatePicker } from 'v-calendar';
 import taiwan_districts from '@/assets/lib/taiwan_districts.json';
 import overseas_districts from '@/assets/lib/overseas_districts.json';
 
-// 缺外號欄位, address area 需另外做判斷
+// address area 需另外做判斷
 const userInput = ref({
   sex: '男眾',
   identity: '法師',
@@ -515,6 +517,7 @@ const userInput = ref({
   Phone: '', // 市話號碼
   Remarks: '', // 備註
   MageNickname: '', // 內號
+  DharmaName: '', // 法名 外號
   Name: '', // 俗名
   OrdinationTemple: '', // 受戒道場
   OrdinationDate: new Date(), // 受戒日期
@@ -534,6 +537,10 @@ const userInput = ref({
   Relationship: '',
   area: '',
 });
+const date = ref({
+  BirthDate: new Date(),
+  OrdinationDate: new Date(),
+});
 
 const tempUser = ref();
 onMounted(() => {
@@ -544,8 +551,8 @@ onMounted(() => {
   userInput.value.Mobile = Mobile;
   userInput.value.sex = IsMale === undefined || IsMale ? '男眾' : '女眾';
   userInput.value.identity = IsMonk === undefined || IsMonk ? '法師' : '居士';
-  userInput.value.BirthDate = BirthDate ? new Date(BirthDate) : new Date();
-  userInput.value.OrdinationDate = OrdinationDate ? new Date(OrdinationDate) : new Date();
+  date.value.BirthDate = BirthDate ? new Date(BirthDate) : new Date(0);
+  date.value.OrdinationDate = OrdinationDate ? new Date(OrdinationDate) : new Date(0);
 });
 
 const props = defineProps({
@@ -560,6 +567,12 @@ const props = defineProps({
 });
 
 function saveTemp() {
+  if (userInput.value.identity === '法師')
+    userInput.value.OrdinationDate = date.value.OrdinationDate;
+  // @ts-ignore
+  if (new Date(date.value.OrdinationDate).getTime() === 0) userInput.value.OrdinationDate = null;
+  // @ts-ignore
+  if (new Date(date.value.BirthDate) === 0) userInput.value.BirthDate = null;
   sessionStorage.setItem('tempUser', JSON.stringify(userInput.value));
 }
 
