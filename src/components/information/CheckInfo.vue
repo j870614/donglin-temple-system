@@ -26,7 +26,7 @@
         >{{ userInfo.Mobile && userInfo.Mobile.replace(/(\d{4})(\d{3})(\d+)/, '$1-$2-$3') }}
       </p>
     </section>
-    <BookingInfo></BookingInfo>
+    <BookingInfo :date="date"></BookingInfo>
   </div>
   <div class="d-flex justify-content-end gap-3 mt-3 mt-xl-4">
     <router-link
@@ -55,6 +55,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import BookingInfo from './BookingInfo.vue';
+
+const tempUser = ref(JSON.parse(sessionStorage.tempUser));
+
+const date = ref({
+  start: tempUser.value.date[0],
+  end: tempUser.value.date[1],
+});
 
 const userInfo = ref({
   DharmaName: '',

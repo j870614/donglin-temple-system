@@ -40,8 +40,8 @@
           </tr>
           <template v-else>
             <tr
-              v-for="(buddha, index) in (buddhaStore.totalBuddha as any[])"
-              :key="index"
+              v-for="buddha in (buddhaStore.totalBuddha as any[])"
+              :key="buddha.Id"
               :class="{ 'bg-primary-tint': tempBuddha.Id === buddha.Id }"
               @click="tempBuddha.Id = buddha.Id"
             >
@@ -101,9 +101,9 @@
                   id="buddhaId"
                   placeholder="請輸入佛七期數"
                   v-model="tempBuddha.Id"
+                  readonly
                 />
               </div>
-              {{ tempBuddha }}
               <div class="mb-4">
                 <label for="buddhaDate" class="form-label fw-semibold">佛七日期設定</label>
                 <div class="d-flex gap-4 align-items-center">
@@ -144,7 +144,7 @@
                 取消
               </button>
               <button type="button" class="btn btn-primary" @click="addBuddha(tempBuddha)">
-                新增佛七
+                {{ tempBuddha.Id ? '修改佛七' : '新增佛七' }}
               </button>
             </div>
           </div>
@@ -168,7 +168,7 @@
           data-bs-target="#exampleModal"
           @click="currentTemp('new')"
         >
-          {{ tempBuddha.Id ? '修改佛七' : '新增佛七' }}
+          新增佛七
         </button>
       </div>
 
@@ -183,12 +183,18 @@
           </tr>
         </template>
         <template #tbody>
-          <tr>
-            <td>442</td>
-            <td>2022/9/1</td>
-            <td>2022/9/7</td>
-            <td></td>
-          </tr>
+          <template v-for="buddha in (buddhaStore.totalBuddha as any[])" :key="buddha.Id">
+            <tr v-if="new Date(buddha.CompleteDate) <= new Date()">
+              <td>{{ buddha.Id }}</td>
+              <td>
+                {{ formatDate(new Date(buddha.StartSevenDate).valueOf()) }}
+              </td>
+              <td>
+                {{ formatDate(new Date(buddha.CompleteDate).valueOf()) }}
+              </td>
+              <td>{{ buddha.Remarks }}</td>
+            </tr>
+          </template>
         </template>
       </StickyTable>
     </div>
