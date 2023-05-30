@@ -25,7 +25,7 @@
 </template>
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
 import BackTitle from '@/components/back/BackTitle.vue';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
 import beforeSearch from '@/components/information/BeforeSearch.vue';
@@ -45,6 +45,12 @@ const steps = ref([
   '掛單注意事項',
   '預約清單',
 ]);
+
+onBeforeRouteLeave((to, from, next) => {
+  sessionStorage.removeItem('totalTemp');
+  sessionStorage.removeItem('tempUser');
+  next();
+});
 
 const route = useRoute();
 const router = useRouter();

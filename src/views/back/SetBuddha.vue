@@ -39,33 +39,34 @@
             <td colspan="5">該年度無佛七資料</td>
           </tr>
           <template v-else>
-            <tr
-              v-for="buddha in (buddhaStore.totalBuddha as any[])"
-              :key="buddha.Id"
-              :class="{ 'bg-primary-tint': tempBuddha.Id === buddha.Id }"
-              @click="tempBuddha.Id = buddha.Id"
-            >
-              <td>{{ buddha.Id }}</td>
-              <td>
-                {{ formatDate(new Date(buddha.StartSevenDate).valueOf()) }}
-              </td>
-              <td>
-                {{ formatDate(new Date(buddha.CompleteDate).valueOf()) }}
-              </td>
-              <td>{{ buddha.Remarks }}</td>
-              <td
-                class="cursor-point"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
-                @click="currentTemp('editor', buddha)"
-                @keydown="currentTemp('editor', buddha)"
+            <template v-for="buddha in (buddhaStore.totalBuddha as any[])" :key="buddha.Id">
+              <tr
+                v-if="new Date(buddha.CompleteDate) >= new Date()"
+                :class="{ 'bg-primary-tint': tempBuddha.Id === buddha.Id }"
+                @click="tempBuddha.Id = buddha.Id"
               >
-                <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
-                  <span class="material-symbols-outlined"> edit </span
-                  ><span class="d-none d-xl-block">修改</span>
-                </p>
-              </td>
-            </tr>
+                <td>{{ buddha.Id }}</td>
+                <td>
+                  {{ formatDate(new Date(buddha.StartSevenDate).valueOf()) }}
+                </td>
+                <td>
+                  {{ formatDate(new Date(buddha.CompleteDate).valueOf()) }}
+                </td>
+                <td>{{ buddha.Remarks }}</td>
+                <td
+                  class="cursor-point"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  @click="currentTemp('editor', buddha)"
+                  @keydown="currentTemp('editor', buddha)"
+                >
+                  <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
+                    <span class="material-symbols-outlined"> edit </span
+                    ><span class="d-none d-xl-block">修改</span>
+                  </p>
+                </td>
+              </tr>
+            </template>
           </template>
         </template>
       </StickyTable>
@@ -152,14 +153,14 @@
       </div>
 
       <div class="d-flex justify-content-end gap-3 mt-5">
-        <button
+        <!-- <button
           type="button"
           class="btn btn-outline-primary py-3 flex-grow-1"
           style="max-width: 184px"
           @click.prevent=""
         >
           移除佛七
-        </button>
+        </button> -->
         <button
           type="button"
           class="btn btn-primary py-3 flex-grow-1"
@@ -183,17 +184,22 @@
           </tr>
         </template>
         <template #tbody>
-          <template v-for="buddha in (buddhaStore.totalBuddha as any[])" :key="buddha.Id">
-            <tr v-if="new Date(buddha.CompleteDate) <= new Date()">
-              <td>{{ buddha.Id }}</td>
-              <td>
-                {{ formatDate(new Date(buddha.StartSevenDate).valueOf()) }}
-              </td>
-              <td>
-                {{ formatDate(new Date(buddha.CompleteDate).valueOf()) }}
-              </td>
-              <td>{{ buddha.Remarks }}</td>
-            </tr>
+          <tr v-if="!buddhaStore.totalBuddha.length">
+            <td colspan="5">該年度無佛七資料</td>
+          </tr>
+          <template v-else>
+            <template v-for="buddha in (buddhaStore.totalBuddha as any[])" :key="buddha.Id">
+              <tr v-if="new Date(buddha.CompleteDate) < new Date()">
+                <td>{{ buddha.Id }}</td>
+                <td>
+                  {{ formatDate(new Date(buddha.StartSevenDate).valueOf()) }}
+                </td>
+                <td>
+                  {{ formatDate(new Date(buddha.CompleteDate).valueOf()) }}
+                </td>
+                <td>{{ buddha.Remarks }}</td>
+              </tr>
+            </template>
           </template>
         </template>
       </StickyTable>
