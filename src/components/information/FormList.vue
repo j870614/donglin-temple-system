@@ -60,7 +60,13 @@
           </div>
           <div class="col-xl">
             <label for="tel" class="form-label fw-semibold">市話號碼</label>
-            <input type="tel" class="form-control rounded-4" id="tel" placeholder="03-12345678" />
+            <input
+              type="tel"
+              class="form-control rounded-4"
+              id="tel"
+              placeholder="03-12345678"
+              v-model.trim="userInput.Phone"
+            />
           </div>
         </div>
         <div v-if="!$route.fullPath.includes('/buddha/signUp')">
@@ -491,14 +497,14 @@
     >
       上一步
     </router-link>
-    <router-link
-      :to="props.next"
+    <button
+      type="button"
       class="btn btn-primary text-white py-3 flex-grow-1"
       style="max-width: 184px"
       @click="saveTemp"
     >
       下一步
-    </router-link>
+    </button>
   </div>
 </template>
 <script setup lang="ts">
@@ -507,12 +513,18 @@ import type { ComputedRef } from 'vue';
 import { DatePicker } from 'v-calendar';
 import taiwan_districts from '@/assets/lib/taiwan_districts.json';
 import overseas_districts from '@/assets/lib/overseas_districts.json';
+import { useRouter, useRoute } from 'vue-router';
+import Swal from '@/plug/SweetAlert';
+import GuestStore from '@/stores/GuestStore';
 
 // address area 需另外做判斷
 const userInput = ref({
+  Id: null,
   sex: '男眾',
   identity: '法師',
   BirthDate: new Date(), // 出生年月日
+  IsMonk: true,
+  IsMale: true,
   Mobile: '', // 手機號碼
   Phone: '', // 市話號碼
   Remarks: '', // 備註
@@ -566,14 +578,62 @@ const props = defineProps({
   },
 });
 
-function saveTemp() {
+const route = useRoute();
+const router = useRouter();
+const guestStore = GuestStore();
+async function saveTemp() {
+  // 驗證
+  if (userInput.value.identity === '法師') {
+    if (
+      route.meta.name === '佛七報名' &&
+      (!userInput.value.DharmaName ||
+        !userInput.value.OrdinationTemple ||
+        new Date(date.value.OrdinationDate).getTime() === 0 ||
+        !userInput.value.ShavedMaster)
+    ) {
+      Swal.fire({
+        icon: 'error',
+        title: '表單欄位填寫錯誤',
+      });
+      return;
+    }
+  } else if (userInput.value.identity === '居士') {
+    if (route.meta.name === '佛七報名' && !userInput.value.Name) {
+      Swal.fire({
+        icon: 'error',
+        title: '表單欄位填寫錯誤',
+      });
+      return;
+    }
+  }
+
+  // 驗證通過
   if (userInput.value.identity === '法師')
     userInput.value.OrdinationDate = date.value.OrdinationDate;
   // @ts-ignore
   if (new Date(date.value.OrdinationDate).getTime() === 0) userInput.value.OrdinationDate = null;
   // @ts-ignore
   if (new Date(date.value.BirthDate) === 0) userInput.value.BirthDate = null;
-  sessionStorage.setItem('tempUser', JSON.stringify(userInput.value));
+
+  userInput.value.IsMonk = userInput.value.identity === '法師';
+  userInput.value.IsMale = userInput.value.sex === '男眾';
+
+  if (!userInput.value.Id) {
+    const res = await guestStore.addUser(userInput.value);
+    if (res.status) {
+      userInput.value.Id = res.data.Id;
+      sessionStorage.setItem('tempUser', JSON.stringify(userInput.value));
+      router.push(props.next);
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: res.message === '驗證失敗' ? '新增個資失敗' : res.message,
+      });
+    }
+  } else {
+    sessionStorage.setItem('tempUser', JSON.stringify(userInput.value));
+    router.push(props.next);
+  }
 }
 
 // 地址配置

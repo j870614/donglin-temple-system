@@ -55,12 +55,10 @@ onBeforeRouteLeave((to, from, next) => {
 const route = useRoute();
 const router = useRouter();
 const currentPath = route.path;
-
 watch(
   () => route.fullPath,
   (to) => {
     const { tempUser } = sessionStorage;
-
     if (to.startsWith('/back/buddha/signUp') && to.split('step=')[1] !== '1') {
       if (!tempUser) router.push('/back/buddha/signUp?step=1');
     }

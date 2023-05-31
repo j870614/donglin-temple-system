@@ -38,6 +38,9 @@ const router = createRouter({
             },
             {
               path: 'signUp',
+              meta: {
+                name: '佛七報名',
+              },
               component: () => import('@/views/back/BuddhaSignUp.vue'),
             },
             {

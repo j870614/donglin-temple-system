@@ -40,6 +40,7 @@
       to="/back/buddha/signUp?step=1"
       class="btn btn-outline-primary py-3 flex-grow-1"
       style="max-width: 184px"
+      @click="saveInTotal"
     >
       另新增一筆資料
     </router-link>
@@ -74,4 +75,15 @@ onMounted(() => {
   if (!sessionStorage.tempUser) return;
   userInfo.value = JSON.parse(sessionStorage.tempUser);
 });
+
+function saveInTotal() {
+  const totalTemp = sessionStorage.totalTemp ? JSON.parse(sessionStorage.totalTemp) : [];
+  const hasTemp = totalTemp.filter(
+    (item: any) => item.Id === JSON.parse(sessionStorage.tempUser).Id,
+  );
+  if (!hasTemp.length) {
+    totalTemp.push(JSON.parse(sessionStorage.tempUser));
+  }
+  sessionStorage.setItem('totalTemp', JSON.stringify(totalTemp));
+}
 </script>

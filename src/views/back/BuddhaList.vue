@@ -12,15 +12,15 @@
             class="form-select form-select-lg fs-5"
             aria-label=".form-select-lg example"
             v-model="currentYear"
-            @change="filterUsers(currentYear, currentMonth, originData, users)"
+            @change="buddhaStore.getOrderList(currentYear, currentMonth)"
           >
             <option
-              :value="currentYear + 1 - i"
+              :value="new Date().getFullYear() + 1 - i"
               v-for="i in new Date().getFullYear() - 2009"
               :key="i"
-              :selected="i + 2010 === currentYear - 2009"
+              :selected="i + 2010 === new Date().getFullYear() - 2009"
             >
-              {{ currentYear + 1 - i }}
+              {{ new Date().getFullYear() + 1 - i }}
             </option>
           </select>
         </div>
@@ -31,7 +31,7 @@
             class="form-select form-select-lg fs-5"
             aria-label=".form-select-lg example"
             v-model="currentMonth"
-            @change="filterUsers(currentYear, currentMonth, originData, users)"
+            @change="buddhaStore.getOrderList(currentYear, currentMonth)"
           >
             <option :value="i" v-for="i in 12" :key="i" :selected="i === currentMonth">
               {{ i }}
@@ -55,44 +55,53 @@
           </tr>
         </template>
         <template #tbody>
-          <tr v-if="!users.length">
+          <tr v-if="!buddhaStore.totalOrder.length">
             <td colspan="12">當前月份無報名資訊</td>
           </tr>
           <template v-else>
             <tr
-              v-for="(info, index) in users"
-              :key="info.id + index"
-              :class="{ 'table-active': currentUser.id === info.id }"
+              v-for="(info, index) in (buddhaStore.totalOrder as any)"
+              :key="info.Id + index"
+              :class="{ 'table-active': currentUser.Id === info.Id }"
               @click.prevent="currentUser = info"
             >
               <td>{{ index + 1 }}</td>
-              <td>{{ info.sex }}</td>
-              <td>{{ info.legalName }}</td>
-              <td>{{ info.originalName }}</td>
-              <td>{{ info.tel }}</td>
+              <td>{{ info.IsMale ? '男' : '女' }}</td>
+              <td>{{ info.DharmaName }}</td>
+              <td>{{ info.Name }}</td>
+              <td>{{ info.Mobile || info.Phone }}</td>
               <td>
-                {{ getCurrentMonth(info.registrationDate) }} /
-                {{ getCurrentDay(info.registrationDate) }}
+                {{ getCurrentMonth(new Date(info.CheckInDate).valueOf()) }} /
+                {{ getCurrentDay(new Date(info.CheckInDate).valueOf()) }}
               </td>
-              <td>{{ getCurrentMonth(info.leaveDate) }} / {{ getCurrentDay(info.leaveDate) }}</td>
               <td>
-                <template v-if="info.state === '已取消'">已取消</template>
+                {{ getCurrentMonth(new Date(info.CheckOutDate).valueOf()) }} /
+                {{ getCurrentDay(new Date(info.CheckOutDate).valueOf()) }}
+              </td>
+              <td>
+                <template v-if="info.Status === '已取消'">已取消</template>
                 <template v-else>
-                  <p class="mb-0">{{ info.meal ? `用${info.meal}` : '不用齋' }}</p>
+                  <p class="mb-0" v-if="info.CheckInDateBreakfast">用早齋</p>
+                  <p class="mb-0" v-else-if="info.CheckInDateLunch">用午齋</p>
+                  <p class="mb-0" v-else-if="info.CheckInDateDinner">用藥石</p>
+                  <p class="mb-0" v-else>不用齋</p>
                 </template>
               </td>
               <td>
                 <p
                   class="py-2 px-3 mb-0 rounded-4"
-                  :class="`bg-${tagStyle[info.state].bgColor} text-${
-                    tagStyle[info.state].textColor
+                  :class="`bg-${tagStyle[info.Status].bgColor} text-${
+                    tagStyle[info.Status].textColor
                   }`"
                 >
-                  {{ info.state }}
+                  {{ info.Status }}
                 </p>
               </td>
-              <td>{{ info.editorId }}</td>
-              <td>{{ getCurrentMonth(info.editorDate) }} / {{ getCurrentDay(info.editorDate) }}</td>
+              <td>{{ info.UpdateUserDharmaName }}</td>
+              <td>
+                {{ getCurrentMonth(new Date(info.UpdateAt).valueOf()) }} /
+                {{ getCurrentDay(new Date(info.UpdateAt).valueOf()) }}
+              </td>
               <td
                 :class="{
                   'cursor-point': info.state !== '已取消',
@@ -114,7 +123,7 @@
           class="btn btn-outline-primary py-3 flex-grow-1"
           style="max-width: 184px"
           @click.prevent="cancelAppointment(currentUser)"
-          :disabled="currentUser.state === '已取消'"
+          :disabled="currentUser.Status === '已取消'"
         >
           取消預約
         </button>
@@ -132,17 +141,18 @@
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import BuddhaStore from '@/stores/BuddhaStore';
 import StickyTable from '@/components/back/StickyTable.vue';
 import BackTitle from '@/components/back/BackTitle.vue';
 import type { ThInfo } from '@/components/back/StickyTable.vue';
 import Swal from '@/plug/SweetAlert';
 import type { SweetAlertResult } from 'sweetalert2';
 import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
-import filterUsers from '@/plug/FilterData';
 import type TagStyle from '@/interface/TagStyle';
 
 const currentYear = ref<number>(new Date().getFullYear());
-const currentMonth = ref(<number>new Date().getMonth() + 1);
+const currentMonth = ref<number>(new Date().getMonth() + 1);
+const buddhaStore = BuddhaStore();
 
 const tagStyle = ref<TagStyle>({
   已報到: {
@@ -213,94 +223,17 @@ const thInfo = ref<ThInfo[]>([
     needSort: false,
   },
 ]);
-interface UserInfo {
-  id: number;
-  sex: string;
-  legalName: string;
-  originalName: string;
-  tel: string;
-  registrationDate: number;
-  leaveDate: number;
-  meal: string;
-  state: string;
-  editorId: number;
-  editorDate: number;
-}
-const originData = ref<UserInfo[]>([
-  {
-    id: 1,
-    sex: '男',
-    legalName: '',
-    originalName: '王一信',
-    tel: '0910111222',
-    registrationDate: 1651334400000,
-    leaveDate: 1651680000000,
-    meal: '午齋',
-    state: '已報到',
-    editorId: 3,
-    editorDate: 1682575205902,
-  },
-  {
-    id: 2,
-    sex: '男',
-    legalName: '普己',
-    originalName: '',
-    tel: '0910111222',
-    registrationDate: 1682579440377,
-    leaveDate: 1683043200000,
-    meal: '午齋',
-    state: '已報到',
-    editorId: 3,
-    editorDate: 1681315200000,
-  },
-  {
-    id: 3,
-    sex: '男',
-    legalName: '普己',
-    originalName: '王三',
-    tel: '0910111222',
-    registrationDate: 1696089600000,
-    leaveDate: 1696608000000,
-    meal: '午齋',
-    state: '已報到',
-    editorId: 3,
-    editorDate: 1682575205902,
-  },
-  {
-    id: 4,
-    sex: '男',
-    legalName: '普己',
-    originalName: '王四',
-    tel: '0910111222',
-    registrationDate: 1696089600000,
-    leaveDate: 1696608000000,
-    meal: '午齋',
-    state: '已報到',
-    editorId: 3,
-    editorDate: 1696608000000,
-  },
-]);
-const users = ref<UserInfo[]>([]);
+
 onMounted(() => {
-  filterUsers(currentYear.value, currentMonth.value, originData.value, users.value);
+  buddhaStore.getOrderList(currentYear.value, currentMonth.value);
 });
 
 // 取消預約
-const currentUser = ref<UserInfo>({
-  id: 0,
-  sex: '',
-  legalName: '',
-  originalName: '',
-  tel: '',
-  registrationDate: 1682575205902,
-  leaveDate: 1682575205902,
-  meal: '',
-  state: '',
-  editorId: 0,
-  editorDate: 1682575205902,
+const currentUser = ref<any>({
+  Id: 0,
 });
-async function cancelAppointment(current: UserInfo): Promise<void> {
-  const index: number = users.value.findIndex((user: UserInfo) => user.id === current.id);
+async function cancelAppointment(current: any): Promise<void> {
+  const index: number = buddhaStore.totalOrder.findIndex((user: any) => user.Id === current.Id);
   if (index === -1) {
     Swal.fire({
       icon: 'error',
@@ -313,20 +246,13 @@ async function cancelAppointment(current: UserInfo): Promise<void> {
   try {
     const res: SweetAlertResult = await Swal.fire({
       html: `<p class="mb-0 fs-3">是否取消<b class="px-2 text-danger fw-semibold">${
-        current.legalName ? `${current.legalName}-` : ''
-      }${current.originalName ? `${current.originalName}-` : ''}${current.sex}</b>的預約</p>`,
+        current.DharmaName ? `${current.DharmaName}-` : ''
+      }${current.Name ? `${current.Name}-` : ''}${current.IsMale ? '男' : '女'}</b>的預約</p>`,
       showCancelButton: true,
     });
 
     if (res.isConfirmed) {
-      Swal.fire({
-        icon: 'success',
-        title: '已取消佛七預約',
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      users.value[index].state = '已取消';
-      users.value[index].editorDate = Date.now();
+      buddhaStore.deleteOrder(current.Id, currentYear.value, currentMonth.value);
     }
   } catch (err) {
     console.error(err);

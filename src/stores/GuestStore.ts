@@ -9,6 +9,7 @@ export default defineStore('guestStore', {
     guestsData: [] as any[],
   }),
   actions: {
+    // 取得全部四眾個資
     async getTotal() {
       const userStore = UserStore();
       try {
@@ -21,6 +22,33 @@ export default defineStore('guestStore', {
         // console.log(res.data);
       } catch (err: any) {
         console.log(err);
+      }
+    },
+    // 新增個資
+    async addUser(user: any) {
+      const url = `${VITE_BASEURL}/users`;
+      const data = {
+        Name: user.Name,
+        IsMonk: user.IsMonk,
+        IsMale: user.IsMale,
+        DharmaName: user.DharmaName,
+        Mobile: user.Mobile,
+        Phone: user.Phone,
+        Remarks: user.Remarks,
+      };
+
+      try {
+        const res: { data: any } = await axios.post(url, data);
+        return {
+          data: res.data.data.user,
+          status: res.data.status,
+          message: res.data.message,
+        };
+      } catch (err: any) {
+        return {
+          status: err.response.data.status,
+          message: err.response.data.message,
+        };
       }
     },
   },

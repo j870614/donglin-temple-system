@@ -79,7 +79,12 @@ const router = useRouter();
 function tempTotal() {
   if (checkNum.value.length >= notion.value.length) {
     const totalTemp = sessionStorage.totalTemp ? JSON.parse(sessionStorage.totalTemp) : [];
-    totalTemp.push(JSON.parse(sessionStorage.tempUser));
+    const hasTemp = totalTemp.filter(
+      (item: any) => item.Id === JSON.parse(sessionStorage.tempUser).Id,
+    );
+    if (!hasTemp.length) {
+      totalTemp.push(JSON.parse(sessionStorage.tempUser));
+    }
     sessionStorage.setItem('totalTemp', JSON.stringify(totalTemp));
     router.push('/back/buddha/signUp?step=7');
   } else {
