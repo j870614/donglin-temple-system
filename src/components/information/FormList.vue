@@ -7,7 +7,7 @@
         <div class="d-flex gap-4 fw-semibold mb-3">
           <div class="form-check" v-for="(item, index) in ['男眾', '女眾']" :key="item + index">
             <input
-              v-model="user.sex"
+              v-model="userInput.sex"
               class="form-check-input"
               type="radio"
               name="sex"
@@ -22,7 +22,7 @@
             <label for="birthday" class="form-label fw-semibold"
               ><span class="text-danger">*</span>出生年月日</label
             >
-            <DatePicker v-model="user.birthday" trim-weeks color="orange">
+            <DatePicker v-model="date.BirthDate" trim-weeks color="orange">
               <template #default="{ inputValue, inputEvents }">
                 <input
                   class="form-control rounded-4"
@@ -55,6 +55,7 @@
               class="form-control rounded-4"
               id="phone"
               placeholder="請輸入手機號碼"
+              v-model.trim="userInput.Mobile"
             />
           </div>
           <div class="col-xl">
@@ -82,14 +83,14 @@
               type="radio"
               name="point"
               :id="item + index"
-              v-model="user.address.point"
+              v-model="userInput.address.point"
               :value="item"
             />
             <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
         <!-- 國內 -->
-        <template v-if="user.address.point === '國內'">
+        <template v-if="userInput.address.point === '國內'">
           <div class="row mb-3 gap-4 gap-xl-0">
             <div class="col-xl">
               <label for="postal" class="form-label fw-semibold">郵遞區號</label>
@@ -99,7 +100,7 @@
                 id="postal"
                 placeholder="請輸入郵遞區號"
                 disabled
-                :value="user.address.township.zip"
+                :value="userInput.address.township.zip"
               />
             </div>
             <div class="col-xl">
@@ -107,8 +108,8 @@
               <select
                 class="form-select form-select-lg rounded-4"
                 id="county"
-                v-model="user.address.county"
-                @change="(user.address.township = { zip: '', name: '' }), (countyIndex = -1)"
+                v-model="userInput.address.county"
+                @change="(userInput.address.township = { zip: '', name: '' }), (countyIndex = -1)"
               >
                 <option value="" selected disabled>請選擇縣市</option>
                 <option
@@ -125,7 +126,7 @@
               <select
                 class="form-select form-select-lg rounded-4"
                 id="township"
-                v-model="user.address.township"
+                v-model="userInput.address.township"
               >
                 <option :value="{ zip: '', name: '' }" selected disabled>請選擇鄉鎮市區</option>
                 <template v-if="countyIndex !== -1">
@@ -147,7 +148,7 @@
               class="form-control rounded-4"
               id="address"
               placeholder="OO路OO巷OO號"
-              v-model="user.address.taiwan"
+              v-model.trim="userInput.address.taiwan"
             />
           </div>
         </template>
@@ -159,7 +160,7 @@
               <select
                 class="form-select form-select-lg rounded-4"
                 id="state"
-                v-model="user.address.state"
+                v-model="userInput.address.state"
               >
                 <option value="" selected disabled>請選擇州別</option>
                 <option :value="state" v-for="(county, state) in overseasArea" :key="state">
@@ -173,7 +174,7 @@
                 <option value="" selected disabled>請選擇國家</option>
                 <option
                   :value="county"
-                  v-for="(county, index) in overseasArea[user.address.state]"
+                  v-for="(county, index) in overseasArea[userInput.address.state]"
                   :key="county + index"
                 >
                   {{ county }}
@@ -188,7 +189,7 @@
               class="form-control rounded-4"
               id="address"
               placeholder="OO路OO巷OO號"
-              v-model="user.address.oversea"
+              v-model.trim="userInput.address.oversea"
             />
           </div>
         </template>
@@ -217,7 +218,11 @@
           </div>
         </div>
         <label for="relation" class="form-label fw-semibold">關係</label>
-        <select class="form-select form-select-lg mb-3" id="relation" v-model="user.Relationship">
+        <select
+          class="form-select form-select-lg mb-3"
+          id="relation"
+          v-model="userInput.Relationship"
+        >
           <option value="" selected disabled>請選擇關係</option>
           <option
             :value="item"
@@ -250,7 +255,12 @@
       </section>
       <section class="mt-5">
         <label for="msg" class="h3 mb-4 fw-semibold">備註</label>
-        <textarea class="form-control rounded-4" id="msg" style="min-height: 10rem"></textarea>
+        <textarea
+          class="form-control rounded-4"
+          id="msg"
+          style="min-height: 10rem"
+          v-model.trim="userInput.Remarks"
+        ></textarea>
       </section>
     </div>
     <div class="col-xl-5 box-style gx-xl-0 p-xl-5 p-3 h-max">
@@ -263,7 +273,7 @@
               type="radio"
               name="identity"
               :id="item + index"
-              v-model="user.identity"
+              v-model="userInput.identity"
               :value="item"
             />
             <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
@@ -272,7 +282,7 @@
       </section>
 
       <div class="row mb-5 pt-2 gap-4 gap-xl-0">
-        <template v-if="user.identity === '法師'">
+        <template v-if="userInput.identity === '法師'">
           <div class="col-xl">
             <label for="outerName" class="form-label fw-semibold"
               ><span class="text-danger">*</span>外號</label
@@ -282,6 +292,7 @@
               class="form-control rounded-4"
               id="outerName"
               placeholder="請輸入外號"
+              v-model.trim="userInput.DharmaName"
             />
           </div>
           <div class="col-xl">
@@ -291,6 +302,7 @@
               class="form-control rounded-4"
               id="innerName"
               placeholder="請輸入內號"
+              v-model.trim="userInput.MageNickname"
             />
           </div>
         </template>
@@ -302,22 +314,24 @@
               class="form-control rounded-4"
               id="legalName"
               placeholder="請輸入法名"
+              v-model.trim="userInput.DharmaName"
             />
           </div>
         </template>
         <div class="col-xl">
           <label for="originName" class="form-label fw-semibold"
-            ><span class="text-danger" v-if="user.identity === '居士'">*</span>俗名</label
+            ><span class="text-danger" v-if="userInput.identity === '居士'">*</span>俗名</label
           >
           <input
             type="text"
             class="form-control rounded-4"
             id="originName"
             placeholder="請輸入俗名"
+            v-model.trim="userInput.Name"
           />
         </div>
       </div>
-      <template v-if="user.identity === '法師'">
+      <template v-if="userInput.identity === '法師'">
         <div class="row mb-5 pt-2 gap-4 gap-xl-0">
           <div class="col-xl">
             <label for="ordainedDojo" class="form-label fw-semibold"
@@ -328,13 +342,14 @@
               class="form-control rounded-4"
               id="ordainedDojo"
               placeholder="請輸入受戒道場"
+              v-model.trim="userInput.OrdinationTemple"
             />
           </div>
           <div class="col-xl">
             <label for="ordainedDate" class="form-label fw-semibold"
               ><span class="text-danger">*</span>受戒日期</label
             >
-            <DatePicker v-model="user.ordainedDate" trim-weeks color="orange">
+            <DatePicker v-model="date.OrdinationDate" trim-weeks color="orange">
               <template #default="{ inputValue, inputEvents }">
                 <input
                   class="form-control rounded-4"
@@ -348,11 +363,13 @@
           <div class="col-xl">
             <label for="altar" class="form-label fw-semibold">壇別</label>
             <input
-              type="number"
+              type="text"
               class="form-control rounded-4"
               id="altar"
               placeholder="請輸入壇別"
               min="0"
+              @input="userInput.Altar = userInput.Altar.replace(/[^\d]/g, '')"
+              v-model.trim="userInput.Altar"
             />
           </div>
         </div>
@@ -366,6 +383,7 @@
               class="form-control rounded-4"
               id="teacherName"
               placeholder="請輸入剃度師長德號"
+              v-model.trim="userInput.ShavedMaster"
             />
           </div>
           <div class="col-xl">
@@ -375,6 +393,7 @@
               class="form-control rounded-4"
               id="roomName"
               placeholder="請輸入現住道場名稱"
+              v-model="userInput.ResidentialTemple"
             />
           </div>
         </div>
@@ -385,7 +404,7 @@
       >
         <div class="col-xl">
           <label for="area" class="form-label fw-semibold mb-2">所屬地區</label>
-          <select class="form-select form-select-lg rounded-4" id="area" v-model="user.area">
+          <select class="form-select form-select-lg rounded-4" id="area" v-model="userInput.area">
             <option value="" selected disabled>請選擇所屬地區</option>
             <option
               :value="item"
@@ -415,7 +434,7 @@
         />
       </div>
       <!-- 上殿服裝 -->
-      <div v-if="user.identity === '居士' && !$route.fullPath.includes('/buddha/signUp')">
+      <div v-if="userInput.identity === '居士' && !$route.fullPath.includes('/buddha/signUp')">
         <div class="row gap-4">
           <section class="col-xl">
             <h3 class="h3 mb-4 fw-semibold">上殿服裝</h3>
@@ -425,7 +444,7 @@
                   class="form-check-input"
                   type="radio"
                   name="clothing"
-                  v-model="user.clothingType"
+                  v-model="userInput.ClothType"
                   :value="item"
                   :id="item + index"
                 />
@@ -433,12 +452,12 @@
               </div>
             </div>
           </section>
-          <div class="col-xl" v-if="user.clothingType === '專念'">
+          <div class="col-xl" v-if="userInput.ClothType === '專念'">
             <label for="clothingSize" class="form-label fw-semibold mb-2">尺寸</label>
             <select
               class="form-select form-select-lg rounded-4"
               id="clothingSize"
-              v-model="user.clothingSize"
+              v-model="userInput.ClothSize"
             >
               <option value="" selected disabled>請選擇專念服尺寸</option>
               <option
@@ -451,7 +470,7 @@
             </select>
           </div>
         </div>
-        <div class="row mt-4" v-if="user.clothingType === '專念'">
+        <div class="row mt-4" v-if="userInput.ClothType === '專念'">
           <div class="col-xl">
             <label for="cm" class="form-label fw-semibold">身高</label>
             <input type="number" class="form-control rounded-4" id="cm" placeholder="cm" />
@@ -476,17 +495,65 @@
       :to="props.next"
       class="btn btn-primary text-white py-3 flex-grow-1"
       style="max-width: 184px"
+      @click="saveTemp"
     >
       下一步
     </router-link>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, defineProps } from 'vue';
+import { ref, computed, defineProps, onMounted } from 'vue';
 import type { ComputedRef } from 'vue';
 import { DatePicker } from 'v-calendar';
 import taiwan_districts from '@/assets/lib/taiwan_districts.json';
 import overseas_districts from '@/assets/lib/overseas_districts.json';
+
+// address area 需另外做判斷
+const userInput = ref({
+  sex: '男眾',
+  identity: '法師',
+  BirthDate: new Date(), // 出生年月日
+  Mobile: '', // 手機號碼
+  Phone: '', // 市話號碼
+  Remarks: '', // 備註
+  MageNickname: '', // 內號
+  DharmaName: '', // 法名 外號
+  Name: '', // 俗名
+  OrdinationTemple: '', // 受戒道場
+  OrdinationDate: new Date(), // 受戒日期
+  Altar: '', // 壇別
+  ShavedMaster: '', // 剃度師長德號
+  ResidentialTemple: '', // 寶剎
+  ClothType: '海清',
+  ClothSize: '',
+  address: {
+    point: '國內',
+    state: '',
+    county: '',
+    township: { zip: '', name: '' },
+    taiwan: '',
+    oversea: '',
+  },
+  Relationship: '',
+  area: '',
+});
+const date = ref({
+  BirthDate: new Date(),
+  OrdinationDate: new Date(),
+});
+
+const tempUser = ref();
+onMounted(() => {
+  if (!sessionStorage.tempUser) return;
+  tempUser.value = sessionStorage.tempUser && JSON.parse(sessionStorage.tempUser);
+  const { IsMale, IsMonk, OrdinationDate, BirthDate, Mobile } = tempUser.value;
+  userInput.value = tempUser.value;
+  userInput.value.Mobile = Mobile;
+  userInput.value.sex = IsMale === undefined || IsMale ? '男眾' : '女眾';
+  userInput.value.identity = IsMonk === undefined || IsMonk ? '法師' : '居士';
+  date.value.BirthDate = BirthDate ? new Date(BirthDate) : new Date(0);
+  date.value.OrdinationDate = OrdinationDate ? new Date(OrdinationDate) : new Date(0);
+});
 
 const props = defineProps({
   next: {
@@ -499,6 +566,17 @@ const props = defineProps({
   },
 });
 
+function saveTemp() {
+  if (userInput.value.identity === '法師')
+    userInput.value.OrdinationDate = date.value.OrdinationDate;
+  // @ts-ignore
+  if (new Date(date.value.OrdinationDate).getTime() === 0) userInput.value.OrdinationDate = null;
+  // @ts-ignore
+  if (new Date(date.value.BirthDate) === 0) userInput.value.BirthDate = null;
+  sessionStorage.setItem('tempUser', JSON.stringify(userInput.value));
+}
+
+// 地址配置
 interface TaiwanArea {
   districts: { zip: string; name: string }[];
   name: string;
@@ -531,27 +609,9 @@ const overseasArea = overseas_districts.reduce((acc: OverseaObj, cur: Oversea) =
   return acc;
 }, {});
 
-const user = ref({
-  sex: '男眾',
-  identity: '法師',
-  ordainedDate: new Date(),
-  birthday: new Date(),
-  clothingType: '海清',
-  clothingSize: '',
-  address: {
-    point: '國內',
-    state: '',
-    county: '',
-    township: { zip: '', name: '' },
-    taiwan: '',
-    oversea: '',
-  },
-  Relationship: '',
-  area: '',
-});
 const countyIndex: ComputedRef<number> = computed(() =>
-  user.value.address.point === '國內'
-    ? taiwanArea.findIndex((item) => item.name === user.value.address.county)
+  userInput.value.address.point === '國內'
+    ? taiwanArea.findIndex((item) => item.name === userInput.value.address.county)
     : -1,
 );
 </script>

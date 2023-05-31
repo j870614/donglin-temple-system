@@ -19,24 +19,12 @@
           </tr>
         </template>
         <template #tbody>
-          <tr>
-            <td>普甲</td>
-            <td>王大同</td>
+          <tr v-for="user in totalTemp" :key="user.Id">
+            <td>{{ user.DharmaName }}</td>
+            <td>{{ user.Name }}</td>
             <td>2022/9/10</td>
             <td>2022/9/28</td>
-            <td class="cursor-point">
-              <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
-                <span class="material-symbols-outlined"> edit </span
-                ><span class="d-none d-xl-block">修改</span>
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td>普甲</td>
-            <td>王大同</td>
-            <td>2022/9/10</td>
-            <td>2022/9/28</td>
-            <td class="cursor-point">
+            <td class="cursor-point" @click="editorUser(user)" @keydown="editorUser(user)">
               <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
                 <span class="material-symbols-outlined"> edit </span
                 ><span class="d-none d-xl-block">修改</span>
@@ -65,7 +53,24 @@
   </div>
 </template>
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import StickyTable from '../back/StickyTable.vue';
+
+const totalTemp = ref<any[]>([]);
+onMounted(() => {
+  if (!sessionStorage.tempUser) return;
+  totalTemp.value = sessionStorage.totalTemp && JSON.parse(sessionStorage.totalTemp);
+});
+
+const router = useRouter();
+function editorUser(user: any) {
+  const index: number = totalTemp.value.indexOf((item: any) => item.Id === user.Id);
+  totalTemp.value.splice(index, 1);
+  sessionStorage.setItem('totalTemp', JSON.stringify(totalTemp.value));
+  sessionStorage.setItem('tempUser', JSON.stringify(user));
+  router.push('/back/buddha/signUp?step=2');
+}
 </script>
 <style scoped lang="scss">
 .material-symbols-outlined {

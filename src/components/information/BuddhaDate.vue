@@ -6,6 +6,7 @@
         borderless
         trim-weeks
         expanded
+        :min-date="new Date()"
         :is-range="true"
         :columns="columns"
         :rows="rows"
@@ -13,16 +14,7 @@
         v-model="date"
       ></DatePicker>
     </div>
-    <BookingInfo>
-      <template #start>
-        {{ getCurrentMonth(new Date(date.start).getTime()) }} 月
-        {{ getCurrentDay(new Date(date.start).getTime()) }} 日
-      </template>
-      <template #end>
-        {{ getCurrentMonth(new Date(date.end).getTime()) }} 月
-        {{ getCurrentDay(new Date(date.end).getTime()) }} 日
-      </template>
-    </BookingInfo>
+    <BookingInfo :date="date" />
   </div>
   <div class="d-flex justify-content-end gap-3 mt-3 mt-xl-4">
     <router-link
@@ -36,6 +28,7 @@
       to="/back/buddha/signUp?step=4"
       class="btn btn-primary text-white py-3 flex-grow-1"
       style="max-width: 184px"
+      @click="saveTemp"
     >
       下一步
     </router-link>
@@ -44,14 +37,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { DatePicker } from 'v-calendar';
-import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
 import BookingInfo from './BookingInfo.vue';
+
+const tempUser = ref(JSON.parse(sessionStorage.tempUser));
 
 const rows = ref(1);
 const columns = ref(2);
 const date = ref({
-  start: new Date(),
-  end: new Date(),
+  start: (tempUser.value.date && tempUser.value.date[0]) || new Date(),
+  end: (tempUser.value.date && tempUser.value.date[1]) || new Date(),
 });
 onMounted(() => {
   if (window.innerWidth < 1200) {
@@ -59,4 +53,10 @@ onMounted(() => {
     columns.value = 1;
   }
 });
+
+function saveTemp() {
+  tempUser.value.date = [date.value.start, date.value.end];
+  sessionStorage.setItem('tempUser', JSON.stringify(tempUser.value));
+  console.log(tempUser);
+}
 </script>

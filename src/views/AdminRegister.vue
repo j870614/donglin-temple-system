@@ -114,7 +114,7 @@ const submit: () => void = handleSubmit(() => {
     email: '',
     password: '',
     checkPw: '',
-    userId: 17,
+    userId: 100,
   };
   userInput.email = VEmail.value as string;
   userInput.password = VPassWord.value as string;

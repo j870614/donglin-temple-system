@@ -50,15 +50,39 @@
       :to="props.next"
       class="btn btn-primary text-white py-3 flex-grow-1"
       style="max-width: 184px"
+      @click="saveTemp"
     >
       下一步
     </router-link>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, onMounted } from 'vue';
 
 const meal = ref<string[]>(['早齋', '午齋', '藥石']);
+onMounted(() => {
+  if (!sessionStorage.tempUser) return;
+  const { EatBreakfast, EatLunch, EatDinner } = JSON.parse(sessionStorage.tempUser);
+  if (EatBreakfast === undefined || EatBreakfast) {
+    if (!meal.value.includes('早齋')) meal.value.push('早齋');
+  } else {
+    const index = meal.value.indexOf('早齋');
+    meal.value.splice(index, 1);
+  }
+  if (EatLunch === undefined || EatLunch) {
+    if (!meal.value.includes('午齋')) meal.value.push('午齋');
+  } else {
+    const index = meal.value.indexOf('午齋');
+    meal.value.splice(index, 1);
+  }
+  if (EatDinner === undefined || EatDinner) {
+    if (!meal.value.includes('藥石')) meal.value.push('藥石');
+  } else {
+    const index = meal.value.indexOf('藥石');
+    meal.value.splice(index, 1);
+  }
+});
+
 const props = defineProps({
   next: {
     type: String,
@@ -69,4 +93,12 @@ const props = defineProps({
     required: true,
   },
 });
+
+function saveTemp() {
+  const tempUser = JSON.parse(sessionStorage.tempUser);
+  tempUser.EatBreakfast = meal.value.includes('早齋');
+  tempUser.EatLunch = meal.value.includes('午齋');
+  tempUser.EatDinner = meal.value.includes('藥石');
+  sessionStorage.setItem('tempUser', JSON.stringify(tempUser));
+}
 </script>

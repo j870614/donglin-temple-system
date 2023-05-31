@@ -9,13 +9,24 @@
   <div class="row justify-content-center gap-4 mx-0">
     <section class="col-xl-6 box-style gx-xl-0 p-xl-5 p-3 h-max">
       <h3 class="h2 mb-5 fw-semibold">個人資料</h3>
-      <p class="fs-4"><span class="fw-semibold me-4">法名</span>普甲</p>
-      <p class="fs-4"><span class="fw-semibold me-4">俗名</span>王大同</p>
-      <p class="fs-4"><span class="fw-semibold me-4">性別</span>男眾</p>
-      <p class="fs-4"><span class="fw-semibold me-4">電話</span>03-9591234</p>
-      <p class="fs-4"><span class="fw-semibold me-4">手機</span>0935-333-888</p>
+      <p class="fs-4"><span class="fw-semibold me-4">法名</span>{{ userInfo.DharmaName }}</p>
+      <p class="fs-4"><span class="fw-semibold me-4">俗名</span>{{ userInfo.Name }}</p>
+      <p class="fs-4">
+        <span class="fw-semibold me-4">性別</span>{{ userInfo.IsMale ? '男眾' : '女眾' }}
+      </p>
+      <p class="fs-4">
+        <span class="fw-semibold me-4">電話</span
+        >{{
+          userInfo.Phone &&
+          (userInfo.Phone === 'null' ? '' : userInfo.Phone.replace(/(\d{2})(\d+)/, '$1-$2'))
+        }}
+      </p>
+      <p class="fs-4">
+        <span class="fw-semibold me-4">手機</span
+        >{{ userInfo.Mobile && userInfo.Mobile.replace(/(\d{4})(\d{3})(\d+)/, '$1-$2-$3') }}
+      </p>
     </section>
-    <BookingInfo></BookingInfo>
+    <BookingInfo :date="date"></BookingInfo>
   </div>
   <div class="d-flex justify-content-end gap-3 mt-3 mt-xl-4">
     <router-link
@@ -42,5 +53,25 @@
   </div>
 </template>
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import BookingInfo from './BookingInfo.vue';
+
+const tempUser = ref(JSON.parse(sessionStorage.tempUser));
+
+const date = ref({
+  start: tempUser.value.date[0],
+  end: tempUser.value.date[1],
+});
+
+const userInfo = ref({
+  DharmaName: '',
+  Name: '',
+  Phone: '',
+  Mobile: '',
+  IsMale: true,
+});
+onMounted(() => {
+  if (!sessionStorage.tempUser) return;
+  userInfo.value = JSON.parse(sessionStorage.tempUser);
+});
 </script>

@@ -85,6 +85,9 @@ a {
     background-color: transparent;
   }
 }
+.vc-nav-item.is-active{
+  --vc-nav-item-active-color: #000;
+}
 .vc-black {
   --vc-accent-200: #f9f9f9;
   --vc-accent-600: #000;

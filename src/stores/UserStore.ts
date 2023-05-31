@@ -1,39 +1,45 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import Swal from '@/plug/SweetAlert';
-import { useRouter } from 'vue-router';
 
 const { VITE_BASEURL } = import.meta.env;
 
 export default defineStore('userStore', {
   state: () => ({
     isLogin: false,
+    user: {
+      MageNickname: '',
+      DharmaName: '',
+      Name: '',
+    },
   }),
   actions: {
     async checkLogin(token: string): Promise<void | boolean> {
       this.isLogin = !!localStorage.isLogin;
-
       if (!token) {
-        this.isLogin = false;
-        localStorage.setItem('isLogin', 'false');
-        const router = useRouter();
-
-        if (router.currentRoute.value.fullPath !== '/') {
-          const swal = await Swal.fire('請重新登入');
-          if (swal.isConfirmed || swal.isDismissed) router.push('/admin');
-        }
+        this.overLogin();
         return;
       }
+      this.user = sessionStorage.user && JSON.parse(sessionStorage.user);
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       const url: string = `${VITE_BASEURL}/managers/check`;
       try {
-        const res: { data: any } = await axios.post(url);
-        console.log('user checkLogin');
-        console.log(res.data);
-        console.log('----------');
-      } catch (err) {
-        this.isLogin = false;
-        localStorage.setItem('isLogin', 'false');
+        const check: { data: any } = await axios.post(url);
+        if (check.data.status && !this.isLogin) {
+          this.isLogin = true;
+          localStorage.setItem('isLogin', 'true');
+        }
+
+        if (this.user) return;
+        const profile: { data: any } = await axios.post(`${VITE_BASEURL}/managers/profile`);
+        const { userId } = profile.data.data;
+        const userData: { data: any } = await axios.get(`${VITE_BASEURL}/users/${userId}`);
+        const { user } = userData.data.data;
+        this.user = user;
+        sessionStorage.setItem('user', JSON.stringify(user));
+      } catch (err: any) {
+        console.error(err);
+        this.overLogin();
       }
     },
     async login(Email: string, Password: string, Remember: boolean = false) {
@@ -50,13 +56,13 @@ export default defineStore('userStore', {
           } else {
             localStorage.removeItem('userAccount');
           }
-          const swal = await Swal.fire('登入成功');
+          const swal = await Swal.fire(res.data.message);
           localStorage.setItem('isLogin', 'true');
           // const router = useRouter();
 
           if (swal.isConfirmed || swal.isDismissed) {
-            document.cookie = `token=${res.data.token}; expires=${new Date(
-              res.data.expired * 1000,
+            document.cookie = `token=${res.data.data.token}; expires=${new Date(
+              res.data.data.expired * 1000,
             )}`;
             window.location.href = '/';
             // this.checkLogin(res.data.token);
@@ -105,6 +111,14 @@ export default defineStore('userStore', {
       this.clearCookie();
       const swal = await Swal.fire('登出成功');
       if (swal.isConfirmed || swal.isDismissed) window.location.href = '/';
+    },
+    async overLogin() {
+      this.clearCookie();
+      if (window.location.hash !== '#/') {
+        const swal = await Swal.fire('請重新登入');
+        if (swal.isConfirmed || swal.isDismissed)
+          window.location.href = `${window.location.origin}/#/admin`;
+      }
     },
     clearCookie(): void {
       this.isLogin = false;

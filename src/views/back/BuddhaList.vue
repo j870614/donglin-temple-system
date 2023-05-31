@@ -118,9 +118,14 @@
         >
           取消預約
         </button>
-        <button type="button" class="btn btn-primary py-3 flex-grow-1" style="max-width: 184px">
+        <router-link
+          to="/back/buddha/signUp?step=1"
+          type="button"
+          class="btn btn-primary py-3 flex-grow-1"
+          style="max-width: 184px"
+        >
           報名佛七
-        </button>
+        </router-link>
       </div>
     </div>
   </main>

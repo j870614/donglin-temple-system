@@ -24,7 +24,8 @@
   </main>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router';
 import BackTitle from '@/components/back/BackTitle.vue';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
 import beforeSearch from '@/components/information/BeforeSearch.vue';
@@ -44,4 +45,29 @@ const steps = ref([
   '掛單注意事項',
   '預約清單',
 ]);
+
+onBeforeRouteLeave((to, from, next) => {
+  sessionStorage.removeItem('totalTemp');
+  sessionStorage.removeItem('tempUser');
+  next();
+});
+
+const route = useRoute();
+const router = useRouter();
+const currentPath = route.path;
+
+watch(
+  () => route.fullPath,
+  (to) => {
+    const { tempUser } = sessionStorage;
+
+    if (to.startsWith('/back/buddha/signUp') && to.split('step=')[1] !== '1') {
+      if (!tempUser) router.push('/back/buddha/signUp?step=1');
+    }
+    if (!to.includes(currentPath)) {
+      sessionStorage.removeItem('totalTemp');
+      sessionStorage.removeItem('tempUser');
+    }
+  },
+);
 </script>
