@@ -31,10 +31,11 @@
         >
           <input
             class="form-check-input"
-            type="checkbox"
+            type="radio"
             :value="name"
             :id="name"
             v-model="checkMeals"
+            name="meal"
           />
           <label class="form-check-label fs-5" :for="name">
             <span class="fw-semibold me-2">{{ name }}</span

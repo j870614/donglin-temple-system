@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import Swal from '@/plug/SweetAlert';
+import GuestStore from './GuestStore';
 // import router from '@/router'
 
 const { VITE_BASEURL } = import.meta.env;
@@ -70,6 +71,8 @@ export default defineStore('buddhaStore', {
     async applyBuddha(dataArr: any, router: any) {
       const url = `${VITE_BASEURL}/buddha-seven-apply`;
       const allAxios: any[] = [];
+      const allEditor: any[] = [];
+      const guestStore = GuestStore();
       dataArr.forEach((data: any) => {
         const temp = {
           UserId: data.Id,
@@ -82,10 +85,11 @@ export default defineStore('buddhaStore', {
           UpdateUserId: JSON.parse(sessionStorage.user).Id,
         };
         allAxios.push(axios.post(url, temp));
+        allEditor.push(guestStore.editorInfo(data.Id, data));
       });
 
       try {
-        const res = await Promise.all(allAxios);
+        const res = await Promise.all([...allEditor, ...allAxios]);
         const swal = await Swal.fire({
           icon: 'success',
           title: res[0].data.message,
@@ -126,6 +130,34 @@ export default defineStore('buddhaStore', {
         });
         this.getOrderList(year, month);
       } catch (err) {
+        console.log(err);
+      }
+    },
+    // 修改佛七報名
+    async editorInfo(info: any) {
+      const url = `${VITE_BASEURL}/buddha-seven-apply/${info.Id}`;
+      const data = {
+        UserId: info.UserId,
+        CheckInDate: new Date(info.CheckInDate),
+        CheckOutDate: new Date(info.CheckOutDate),
+        CheckInDateBreakfast: info.CheckInDateBreakfast,
+        CheckInDateLunch: info.CheckInDateLunch,
+        CheckInDateDinner: info.CheckInDateDinner,
+        Remarks: info.Remarks,
+        UpdateUserId: JSON.parse(sessionStorage.user).Id,
+      };
+
+      try {
+        const res: { data: any } = await axios.patch(url, data);
+        console.log(res);
+
+        Swal.fire({
+          icon: 'success',
+          title: res.data.message,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (err: any) {
         console.log(err);
       }
     },

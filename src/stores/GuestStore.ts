@@ -51,5 +51,26 @@ export default defineStore('guestStore', {
         };
       }
     },
+    async editorInfo(id: number, info: any) {
+      const url = `${VITE_BASEURL}/users/${id}`;
+      const data = { ...info };
+      const keys = Object.keys(info);
+      keys.forEach((key) => {
+        if (!data[key]) delete data[key];
+      });
+      delete data.Id;
+      delete data.UpdateAt;
+      delete data.sex;
+      delete data.identity;
+      delete data.date;
+      delete data.CheckInDateBreakfast;
+      delete data.CheckInDateLunch;
+      delete data.CheckInDateDinner;
+      try {
+        await axios.patch(url, data);
+      } catch (err: any) {
+        console.log(err);
+      }
+    },
   },
 });
