@@ -28,7 +28,7 @@
         </ul>
         <p class="d-flex align-items-center text-neutral-80 me-2 mb-0" v-if="userStore.isLogin">
           <span class="material-symbols-outlined me-2"> account_circle </span>
-          知客 {{ userStore.user.DharmaName || userStore.user.Name }}
+          知客 {{ userStore.user?.DharmaName || userStore.user?.Name }}
         </p>
         <router-link :to="btnConfig.path" class="btn btn-primary py-3 px-5 text-white fw-semibold">
           {{ btnConfig.content }}

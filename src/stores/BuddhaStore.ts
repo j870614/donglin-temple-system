@@ -89,7 +89,7 @@ export default defineStore('buddhaStore', {
       });
 
       try {
-        const res = await Promise.all([...allEditor, ...allAxios]);
+        const res = await Promise.all([...allAxios, ...allEditor]);
         const swal = await Swal.fire({
           icon: 'success',
           title: res[0].data.message,

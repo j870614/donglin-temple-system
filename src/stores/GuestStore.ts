@@ -26,6 +26,8 @@ export default defineStore('guestStore', {
     },
     // 新增個資
     async addUser(user: any) {
+      const userStore = UserStore();
+      axios.defaults.headers.common.Authorization = `Bearer ${userStore.getToken()}`;
       const url = `${VITE_BASEURL}/users`;
       const data = {
         Name: user.Name,
@@ -52,6 +54,9 @@ export default defineStore('guestStore', {
       }
     },
     async editorInfo(id: number, info: any) {
+      const userStore = UserStore();
+      axios.defaults.headers.common.Authorization = `Bearer ${userStore.getToken()}`;
+
       const url = `${VITE_BASEURL}/users/${id}`;
       const data = { ...info };
       const keys = Object.keys(info);
