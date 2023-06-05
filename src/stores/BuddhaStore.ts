@@ -9,6 +9,7 @@ export default defineStore('buddhaStore', {
   state: () => ({
     totalBuddha: [],
     totalOrder: [],
+    ajaxFinish: false,
   }),
   actions: {
     // 全部佛七期數
@@ -34,7 +35,6 @@ export default defineStore('buddhaStore', {
         });
         return 1;
       } catch (err: any) {
-        console.error(err);
         Swal.fire({
           icon: 'error',
           title: err.response.data.message,
@@ -59,7 +59,6 @@ export default defineStore('buddhaStore', {
         });
         return 1;
       } catch (err: any) {
-        console.error(err);
         Swal.fire({
           icon: 'error',
           title: err.response.data.message,
@@ -113,8 +112,11 @@ export default defineStore('buddhaStore', {
       try {
         const res: { data: any } = await axios.get(url);
         this.totalOrder = res.data.data.buddhaSevenApplyMonthly;
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        Swal.fire({
+          icon: 'error',
+          title: err.response.data.message,
+        });
       }
     },
     // 取消佛七報名
@@ -129,8 +131,11 @@ export default defineStore('buddhaStore', {
           timer: 1500,
         });
         this.getOrderList(year, month);
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        Swal.fire({
+          icon: 'error',
+          title: err.response.data.message,
+        });
       }
     },
     // 修改佛七報名
@@ -143,14 +148,12 @@ export default defineStore('buddhaStore', {
         CheckInDateBreakfast: info.CheckInDateBreakfast,
         CheckInDateLunch: info.CheckInDateLunch,
         CheckInDateDinner: info.CheckInDateDinner,
-        Remarks: info.Remarks,
+        Remarks: info.Remarks ? info.Remarks : '',
         UpdateUserId: JSON.parse(sessionStorage.user).Id,
       };
 
       try {
         const res: { data: any } = await axios.patch(url, data);
-        console.log(res);
-
         Swal.fire({
           icon: 'success',
           title: res.data.message,
@@ -158,7 +161,10 @@ export default defineStore('buddhaStore', {
           timer: 1500,
         });
       } catch (err: any) {
-        console.log(err);
+        Swal.fire({
+          icon: 'error',
+          title: err.response.data.message,
+        });
       }
     },
   },

@@ -232,6 +232,7 @@
               <button
                 type="button"
                 class="btn btn-primary"
+                data-bs-dismiss="modal"
                 @click="buddhaStore.editorInfo(tempUser)"
               >
                 確認
@@ -268,6 +269,7 @@ const tempUser = ref({
   CheckInDateDinner: false,
   Remarks: '',
 });
+
 watch(
   () => tempUser.value,
   () => {
