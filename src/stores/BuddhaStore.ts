@@ -111,7 +111,8 @@ export default defineStore('buddhaStore', {
       const url = `${VITE_BASEURL}/buddha-seven/applies?year=${year}&month=${month}`;
       try {
         const res: { data: any } = await axios.get(url);
-        this.totalOrder = res.data.data.buddhaSevenApplyMonthly;
+        this.totalOrder = res.data.data.buddhaSevenApplies;
+        console.log(this.totalOrder);
       } catch (err: any) {
         Swal.fire({
           icon: 'error',
@@ -121,7 +122,9 @@ export default defineStore('buddhaStore', {
     },
     // 取消佛七報名
     async deleteOrder(Id: number, year: number, month: number) {
-      const url = `${VITE_BASEURL}/buddha-seven/applies/cancel/${Id}`;
+      const url = `${VITE_BASEURL}/buddha-seven/applies/cancel/${Id}?UpdateUserId=${
+        JSON.parse(sessionStorage.user).Id
+      }`;
       try {
         const res = await axios.patch(url);
         Swal.fire({
@@ -139,7 +142,7 @@ export default defineStore('buddhaStore', {
       }
     },
     // 修改佛七報名
-    async editorInfo(info: any) {
+    async editorInfo(info: any, year: number, month: number) {
       const url = `${VITE_BASEURL}/buddha-seven/applies/${info.Id}`;
       const data = {
         UserId: info.UserId,
@@ -160,6 +163,7 @@ export default defineStore('buddhaStore', {
           showConfirmButton: false,
           timer: 1500,
         });
+        this.getOrderList(year, month);
       } catch (err: any) {
         Swal.fire({
           icon: 'error',
@@ -167,9 +171,16 @@ export default defineStore('buddhaStore', {
         });
       }
     },
-    // 佛七報到
-    async checkIn() {
-      console.log(1);
+    // 佛七報到清單
+    async getCheckInList() {
+      const url = `${VITE_BASEURL}/buddha-seven/check-ins`;
+      try {
+        const res: { data: any } = await axios.get(url);
+        this.checkInOrder = res.data.data.buddhaSevenApplies;
+        console.log(this.checkInOrder);
+      } catch (err: any) {
+        console.log(err);
+      }
     },
   },
 });

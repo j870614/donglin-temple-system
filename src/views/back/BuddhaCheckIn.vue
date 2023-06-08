@@ -19,7 +19,9 @@
           </div>
           <button type="button" class="btn btn-primary flex-shrink-0">查詢</button>
         </form>
-        <h2 class="h3 fw-semibold">9/21今日預計報到名單</h2>
+        <h2 class="h3 fw-semibold">
+          {{ getCurrentMonth(Date.now()) }}/{{ getCurrentDay(Date.now()) }}今日預計報到名單
+        </h2>
         <StickyTable>
           <template #thead>
             <tr>
@@ -38,26 +40,28 @@
             </tr>
           </template>
           <template #tbody>
-            <!-- <tr>
-                <td colspan="12">今日無報名人員</td>
-              </tr> -->
-            <tr>
-              <td>3</td>
-              <td>男</td>
-              <td>無辰師</td>
-              <td></td>
-              <td>0910111222</td>
-              <td>9/12</td>
-              <td>9/27</td>
-              <td>不用齋</td>
-              <td>
-                <p class="mb-0 py-2 px-3 rounded-4 bg-success-10 text-success">已報到安單</p>
-                <!-- <p class="mb-0 py-2 px-3 rounded-4 bg-neutral-40 text-neutral-80">尚未報到</p> -->
-              </td>
-              <td>普乙</td>
-              <td>14：00</td>
-              <td></td>
+            <tr v-if="!buddhaStore.checkInOrder.length">
+              <td colspan="12">今日無報名人員</td>
             </tr>
+            <template v-else>
+              <tr v-for="item in (buddhaStore.checkInOrder as any[])" :key="item.Id">
+                <td>{{ item.Id }}</td>
+                <td>男</td>
+                <td>無辰師</td>
+                <td></td>
+                <td>0910111222</td>
+                <td>9/12</td>
+                <td>9/27</td>
+                <td>不用齋</td>
+                <td>
+                  <p class="mb-0 py-2 px-3 rounded-4 bg-success-10 text-success">已報到安單</p>
+                  <!-- <p class="mb-0 py-2 px-3 rounded-4 bg-neutral-40 text-neutral-80">尚未報到</p> -->
+                </td>
+                <td>普乙</td>
+                <td>14：00</td>
+                <td></td>
+              </tr>
+            </template>
           </template>
         </StickyTable>
         <div class="d-flex justify-content-end gap-3 mt-3 mt-xl-4">
@@ -159,10 +163,12 @@ import HealthyInfo from '@/components/information/HealthyInfo.vue';
 import OtherInfo from '@/components/information/OtherInfo.vue';
 import BuddhaCheckEnd from '@/components/information/BuddhaCheckEnd.vue';
 import { Modal } from 'bootstrap';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import QrcodeVue from 'qrcode.vue';
 import Swal from '@/plug/SweetAlert';
+import BuddhaStore from '@/stores/BuddhaStore';
+import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
 
 const steps = ref([
   '報名資料查詢',
@@ -173,6 +179,11 @@ const steps = ref([
   '學經歷、專長及來寺因緣',
   '簽署同意遵守掛單規約',
 ]);
+
+const buddhaStore = BuddhaStore();
+onMounted(() => {
+  buddhaStore.getCheckInList();
+});
 
 const telSearch = ref(null);
 const url = ref('');

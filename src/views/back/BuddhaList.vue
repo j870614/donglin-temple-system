@@ -81,7 +81,10 @@
               <td>
                 <template v-if="info.Status === '已取消'">已取消</template>
                 <template v-else>
-                  <p class="mb-0" v-if="info.CheckInDateLunch">用午齋</p>
+                  <p class="mb-0" v-if="info.CheckInDateDinner && info.CheckInDateLunch">
+                    用午齋、藥石
+                  </p>
+                  <p class="mb-0" v-else-if="info.CheckInDateLunch">用午齋</p>
                   <p class="mb-0" v-else-if="info.CheckInDateDinner">用藥石</p>
                   <p class="mb-0" v-else>不用齋</p>
                 </template>
@@ -106,7 +109,7 @@
                   type="button"
                   data-bs-toggle="modal"
                   data-bs-target="#exampleModal"
-                  :disabled="info.Status === '已取消'"
+                  :disabled="info.Status === '已取消掛單'"
                   class="btn border-0 mb-0 d-flex align-items-center justify-content-center gap-2"
                   @click="tempUser = info"
                 >
@@ -192,11 +195,11 @@
                   :class="{ 'mb-3': name === '午齋' }"
                   v-for="(item, name) in {
                     午齋: {
-                      config: tempUser.CheckInDateLunch,
+                      config: 'CheckInDateLunch',
                       content: '用齋時間11：10，要用午齋者請於10：30前報到',
                     },
                     藥石: {
-                      config: tempUser.CheckInDateDinner,
+                      config: 'CheckInDateDinner',
                       content: '用齋時間17：10，要用藥石者請於15：00前報到',
                     },
                   }"
@@ -207,7 +210,7 @@
                     type="checkbox"
                     :value="name"
                     :id="name"
-                    v-model="item.config"
+                    v-model="tempUser[item.config]"
                   />
                   <label class="form-check-label fs-5" :for="name">
                     <span class="fw-semibold me-2">{{ name }}</span
@@ -233,7 +236,7 @@
                 type="button"
                 class="btn btn-primary"
                 data-bs-dismiss="modal"
-                @click="buddhaStore.editorInfo(tempUser)"
+                @click="buddhaStore.editorInfo(tempUser, currentYear, currentMonth)"
               >
                 確認
               </button>
