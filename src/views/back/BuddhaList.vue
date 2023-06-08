@@ -253,7 +253,7 @@ import type { ThInfo } from '@/components/back/StickyTable.vue';
 import Swal from '@/plug/SweetAlert';
 import type { SweetAlertResult } from 'sweetalert2';
 import { getCurrentMonth, getCurrentDay, formatDate } from '@/plug/Timer';
-import type TagStyle from '@/interface/TagStyle';
+import tagStyle from '@/interface/TagStyle';
 
 const currentYear = ref<number>(new Date().getFullYear());
 const currentMonth = ref<number>(new Date().getMonth() + 1);
@@ -285,37 +285,6 @@ watch(
     );
   },
 );
-
-const tagStyle = ref<TagStyle>({
-  已報到佛七: {
-    textColor: 'success',
-    bgColor: 'success-10',
-  },
-  寮房已確認: {
-    textColor: 'white',
-    bgColor: 'primary',
-  },
-  已報名佛七: {
-    textColor: 'primary',
-    bgColor: 'primary-tint',
-  },
-  已取消: {
-    textColor: 'neutral-80',
-    bgColor: 'neutral-40',
-  },
-  已離單: {
-    textColor: 'neutral-80',
-    bgColor: 'neutral-40',
-  },
-  已取消掛單: {
-    textColor: 'neutral-80',
-    bgColor: 'neutral-40',
-  },
-  無故未報到: {
-    textColor: 'neutral-80',
-    bgColor: 'neutral-40',
-  },
-});
 
 const thInfo = ref<ThInfo[]>([
   {

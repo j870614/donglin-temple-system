@@ -17,6 +17,10 @@ const router = createRouter({
           path: 'buddha',
           component: () => import('@/views/front/BuddhaSeven.vue'),
         },
+        {
+          path: ':id',
+          component: () => import('@/views/front/BuddhaCheckIn.vue'),
+        },
       ],
     },
     {

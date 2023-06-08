@@ -2,26 +2,26 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import Swal from '@/plug/SweetAlert';
 import GuestStore from './GuestStore';
-// import router from '@/router'
 
 const { VITE_BASEURL } = import.meta.env;
 export default defineStore('buddhaStore', {
   state: () => ({
     totalBuddha: [],
     totalOrder: [],
+    checkInOrder: [],
     ajaxFinish: false,
   }),
   actions: {
     // 全部佛七期數
     async getTotal(year: number) {
-      const url = `${VITE_BASEURL}/buddha-seven?year=${year}`;
+      const url = `${VITE_BASEURL}/buddha-seven/periods?year=${year}`;
       const res: { data: any } = await axios.get(url);
-      this.totalBuddha = res.data.data.buddhaSevenYearly;
+      this.totalBuddha = res.data.data.buddhaSevenPeriods;
     },
     // 新增期數
     async addBuddha(data: any) {
       const { StartSevenDate, CompleteDate, Remarks } = data;
-      const url = `${VITE_BASEURL}/buddha-seven`;
+      const url = `${VITE_BASEURL}/buddha-seven/periods`;
       const buddha = {
         StartSevenDate,
         CompleteDate,
@@ -45,7 +45,7 @@ export default defineStore('buddhaStore', {
     // 修改期數
     async editorBuddha(data: any) {
       const { StartSevenDate, CompleteDate, Remarks, Id } = data;
-      const url = `${VITE_BASEURL}/buddha-seven/${Id}`;
+      const url = `${VITE_BASEURL}/buddha-seven/periods/${Id}`;
       const buddha = {
         StartSevenDate,
         CompleteDate,
@@ -68,7 +68,7 @@ export default defineStore('buddhaStore', {
     },
     // 佛七報名
     async applyBuddha(dataArr: any, router: any) {
-      const url = `${VITE_BASEURL}/buddha-seven-apply`;
+      const url = `${VITE_BASEURL}/buddha-seven/applies`;
       const allAxios: any[] = [];
       const allEditor: any[] = [];
       const guestStore = GuestStore();
@@ -108,7 +108,7 @@ export default defineStore('buddhaStore', {
     },
     // 佛七預約報名表
     async getOrderList(year: number, month: number) {
-      const url = `${VITE_BASEURL}/buddha-seven-apply?year=${year}&month=${month}`;
+      const url = `${VITE_BASEURL}/buddha-seven/applies?year=${year}&month=${month}`;
       try {
         const res: { data: any } = await axios.get(url);
         this.totalOrder = res.data.data.buddhaSevenApplyMonthly;
@@ -121,9 +121,9 @@ export default defineStore('buddhaStore', {
     },
     // 取消佛七報名
     async deleteOrder(Id: number, year: number, month: number) {
-      const url = `${VITE_BASEURL}/buddha-seven-apply/${Id}`;
+      const url = `${VITE_BASEURL}/buddha-seven/applies/cancel/${Id}`;
       try {
-        const res = await axios.delete(url);
+        const res = await axios.patch(url);
         Swal.fire({
           icon: 'success',
           title: res.data.message,
@@ -140,7 +140,7 @@ export default defineStore('buddhaStore', {
     },
     // 修改佛七報名
     async editorInfo(info: any) {
-      const url = `${VITE_BASEURL}/buddha-seven-apply/${info.Id}`;
+      const url = `${VITE_BASEURL}/buddha-seven/applies/${info.Id}`;
       const data = {
         UserId: info.UserId,
         CheckInDate: new Date(info.CheckInDate),
@@ -166,6 +166,10 @@ export default defineStore('buddhaStore', {
           title: err.response.data.message,
         });
       }
+    },
+    // 佛七報到
+    async checkIn() {
+      console.log(1);
     },
   },
 });

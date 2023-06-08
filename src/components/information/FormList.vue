@@ -22,7 +22,7 @@
             <label for="birthday" class="form-label fw-semibold"
               ><span class="text-danger">*</span>出生年月日</label
             >
-            <DatePicker v-model="date.BirthDate" trim-weeks color="orange">
+            <DatePicker v-model="userInput.BirthDate" trim-weeks color="orange">
               <template #default="{ inputValue, inputEvents }">
                 <input
                   class="form-control rounded-4"
@@ -40,6 +40,7 @@
               class="form-control rounded-4"
               id="id"
               placeholder="請輸入身分證字號"
+              v-model.trim="userInput.IdNumber"
             />
           </div>
         </div>
@@ -76,6 +77,7 @@
             class="form-control rounded-4"
             id="line"
             placeholder="請輸入 LINE 帳號"
+            v-model.trim="userInput.LineId"
           />
         </div>
       </section>
@@ -89,14 +91,14 @@
               type="radio"
               name="point"
               :id="item + index"
-              v-model="userInput.address.point"
+              v-model="userInput.Address.point"
               :value="item"
             />
             <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
         <!-- 國內 -->
-        <template v-if="userInput.address.point === '國內'">
+        <template v-if="userInput.Address.point === '國內'">
           <div class="row mb-3 gap-4 gap-xl-0">
             <div class="col-xl">
               <label for="postal" class="form-label fw-semibold">郵遞區號</label>
@@ -106,7 +108,7 @@
                 id="postal"
                 placeholder="請輸入郵遞區號"
                 disabled
-                :value="userInput.address.township.zip"
+                :value="userInput.Address.township.zip"
               />
             </div>
             <div class="col-xl">
@@ -114,8 +116,8 @@
               <select
                 class="form-select form-select-lg rounded-4"
                 id="county"
-                v-model="userInput.address.county"
-                @change="(userInput.address.township = { zip: '', name: '' }), (countyIndex = -1)"
+                v-model="userInput.Address.county"
+                @change="(userInput.Address.township = { zip: '', name: '' }), (countyIndex = -1)"
               >
                 <option value="" selected disabled>請選擇縣市</option>
                 <option
@@ -132,7 +134,7 @@
               <select
                 class="form-select form-select-lg rounded-4"
                 id="township"
-                v-model="userInput.address.township"
+                v-model="userInput.Address.township"
               >
                 <option :value="{ zip: '', name: '' }" selected disabled>請選擇鄉鎮市區</option>
                 <template v-if="countyIndex !== -1">
@@ -154,7 +156,7 @@
               class="form-control rounded-4"
               id="address"
               placeholder="OO路OO巷OO號"
-              v-model.trim="userInput.address.taiwan"
+              v-model.trim="userInput.Address.taiwan"
             />
           </div>
         </template>
@@ -166,7 +168,7 @@
               <select
                 class="form-select form-select-lg rounded-4"
                 id="state"
-                v-model="userInput.address.state"
+                v-model="userInput.Address.state"
               >
                 <option value="" selected disabled>請選擇州別</option>
                 <option :value="state" v-for="(county, state) in overseasArea" :key="state">
@@ -180,7 +182,7 @@
                 <option value="" selected disabled>請選擇國家</option>
                 <option
                   :value="county"
-                  v-for="(county, index) in overseasArea[userInput.address.state]"
+                  v-for="(county, index) in overseasArea[userInput.Address.state]"
                   :key="county + index"
                 >
                   {{ county }}
@@ -195,7 +197,7 @@
               class="form-control rounded-4"
               id="address"
               placeholder="OO路OO巷OO號"
-              v-model.trim="userInput.address.oversea"
+              v-model.trim="userInput.Address.oversea"
             />
           </div>
         </template>
@@ -211,6 +213,7 @@
               class="form-control rounded-4"
               id="urgentName"
               placeholder="請輸入緊急聯絡人姓名"
+              v-model.trim="userInput.EmergencyName"
             />
           </div>
           <div class="col-xl">
@@ -220,6 +223,7 @@
               class="form-control rounded-4"
               id="urgentPhone"
               placeholder="請輸入緊急聯絡人電話號碼"
+              v-model.trim="userInput.EmergencyPhone"
             />
           </div>
         </div>
@@ -437,6 +441,7 @@
           class="form-control rounded-4"
           id="introducer"
           placeholder="請輸入介紹人"
+          v-model.trim="userInput.Referrer"
         />
       </div>
       <!-- 上殿服裝 -->
@@ -538,7 +543,13 @@ const userInput = ref({
   ResidentialTemple: '', // 寶剎
   ClothType: '海清',
   ClothSize: '',
-  address: {
+  IdNumber: '', // 身分證字號
+  EmergencyName: '', // 緊急連絡人姓名
+  EmergencyPhone: '', // 緊急連絡電話
+  Relationship: '', // 緊急連絡關係
+  Referrer: '', // 介紹人
+  LineId: '',
+  Address: {
     point: '國內',
     state: '',
     county: '',
@@ -546,7 +557,6 @@ const userInput = ref({
     taiwan: '',
     oversea: '',
   },
-  Relationship: '',
   area: '',
 });
 const date = ref({
@@ -565,6 +575,16 @@ onMounted(() => {
   userInput.value.identity = IsMonk === undefined || IsMonk ? '法師' : '居士';
   date.value.BirthDate = BirthDate ? new Date(BirthDate) : new Date(0);
   date.value.OrdinationDate = OrdinationDate ? new Date(OrdinationDate) : new Date(0);
+
+  // 地址 尚未配置初始值
+  userInput.value.Address = {
+    point: '國內',
+    state: '',
+    county: '',
+    township: { zip: '', name: '' },
+    taiwan: '',
+    oversea: '',
+  };
 });
 
 const props = defineProps({
@@ -670,8 +690,8 @@ const overseasArea = overseas_districts.reduce((acc: OverseaObj, cur: Oversea) =
 }, {});
 
 const countyIndex: ComputedRef<number> = computed(() =>
-  userInput.value.address.point === '國內'
-    ? taiwanArea.findIndex((item) => item.name === userInput.value.address.county)
+  userInput.value.Address.point === '國內'
+    ? taiwanArea.findIndex((item) => item.name === userInput.value.Address.county)
     : -1,
 );
 </script>

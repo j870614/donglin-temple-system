@@ -18,7 +18,12 @@
         v-if="$route.query.step === '4'"
       ></MealSurvey>
       <CheckInfo v-if="$route.query.step === '5'"></CheckInfo>
-      <BuddhaNotice v-if="$route.query.step === '6'"></BuddhaNotice>
+      <BuddhaNotice
+        :pre="`/back/buddha/signUp?step=5`"
+        :next="`/back/buddha/signUp?step=7`"
+        :has-next="true"
+        v-if="$route.query.step === '6'"
+      ></BuddhaNotice>
       <BuddhaFinish v-if="$route.query.step === '7'"></BuddhaFinish>
     </div>
   </main>

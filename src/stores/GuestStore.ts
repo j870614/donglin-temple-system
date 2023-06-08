@@ -61,7 +61,7 @@ export default defineStore('guestStore', {
       const data = { ...info };
       const keys = Object.keys(info);
       keys.forEach((key) => {
-        if (!data[key]) delete data[key];
+        if (data[key] === null || data[key] === undefined) delete data[key];
       });
       delete data.Id;
       delete data.UpdateAt;
@@ -71,8 +71,17 @@ export default defineStore('guestStore', {
       delete data.CheckInDateBreakfast;
       delete data.CheckInDateLunch;
       delete data.CheckInDateDinner;
+      delete data.Address; // 資料庫未給出欄位範例
       try {
         await axios.patch(url, data);
+      } catch (err: any) {
+        console.log(err);
+      }
+    },
+    async getUser(id: number) {
+      try {
+        const res = await axios.get(`${VITE_BASEURL}/users/${id}`);
+        sessionStorage.setItem('tempUser', JSON.stringify(res.data.data.user));
       } catch (err: any) {
         console.log(err);
       }

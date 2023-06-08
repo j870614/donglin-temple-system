@@ -134,7 +134,8 @@
               ></button>
             </div>
             <div class="modal-body">
-              <div class="bg-secondary mx-auto" style="width: 200px; height: 200px">這裡放QR</div>
+              <QrcodeVue class="d-block mx-auto" :value="url" :size="150"></QrcodeVue>
+              <!-- <img :src="qrImg" alt="佛七報到" class="d-block mx-auto" /> -->
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
@@ -160,6 +161,7 @@ import BuddhaCheckEnd from '@/components/information/BuddhaCheckEnd.vue';
 import { Modal } from 'bootstrap';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import QrcodeVue from 'qrcode.vue';
 import Swal from '@/plug/SweetAlert';
 
 const steps = ref([
@@ -173,11 +175,7 @@ const steps = ref([
 ]);
 
 const telSearch = ref(null);
-// function searchTel() {
-//   if (!telSearch.value) return;
-//   const form = telSearch.value as HTMLFormElement;
-//   const telInput = form.elements.namedItem('tel') as HTMLInputElement;
-// }
+const url = ref('');
 
 const modal = ref<unknown>(null);
 const router = useRouter();
@@ -202,6 +200,7 @@ function checkIn() {
     .then((res) => {
       if (res.isConfirmed) {
         const myModal = new Modal(modal.value as string | Element);
+        url.value = `${window.location.origin}/#/1?step=1`;
         myModal.show();
       }
       if (res.isDenied) {
