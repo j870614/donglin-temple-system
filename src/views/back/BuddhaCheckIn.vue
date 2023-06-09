@@ -2,11 +2,11 @@
   <main class="row mx-0">
     <div class="col h-100 gx-xl-5 pt-xl-4 pb-xl-5 py-3 mb-xl-2">
       <BackTitle>
-        <template #title> 佛七報到 </template>
+        <template #title> {{ steps[Number($route.query.step) - 1] }} </template>
       </BackTitle>
       <ProcessSteps :steps="steps"></ProcessSteps>
       <template v-if="$route.query.step === '1'">
-        <form class="d-flex align-items-center gap-2 gap-xl-4 mb-5" ref="telSearch">
+        <form class="d-flex align-items-center gap-2 gap-xl-4 mb-5">
           <div class="form-floating" style="max-width: 500px">
             <input
               type="tel"
@@ -14,10 +14,18 @@
               id="floatingInput"
               placeholder="09xxxxxxxx"
               name="tel"
+              v-model="telSearch"
             />
             <label for="floatingInput">請輸入報名時填寫之聯絡電話</label>
           </div>
-          <button type="button" class="btn btn-primary flex-shrink-0">查詢</button>
+          <button
+            type="button"
+            class="btn btn-primary flex-shrink-0"
+            :disabled="!telSearch"
+            @click="search"
+          >
+            查詢
+          </button>
         </form>
         <h2 class="h3 fw-semibold">
           {{ getCurrentMonth(Date.now()) }}/{{ getCurrentDay(Date.now()) }}今日預計報到名單
@@ -40,26 +48,62 @@
             </tr>
           </template>
           <template #tbody>
-            <tr v-if="!buddhaStore.checkInOrder.length">
-              <td colspan="12">今日無報名人員</td>
+            <tr v-if="!checkInList.length">
+              <td colspan="12">{{ isSearch ? '查無此報名人員' : '今日無報名人員' }}</td>
             </tr>
             <template v-else>
-              <tr v-for="item in (buddhaStore.checkInOrder as any[])" :key="item.Id">
+              <tr
+                v-for="item in checkInList"
+                :key="item.Id"
+                @click="tempUser = item"
+                :class="{ 'table-active': tempUser.Id === item.Id }"
+              >
                 <td>{{ item.Id }}</td>
-                <td>男</td>
-                <td>無辰師</td>
-                <td></td>
-                <td>0910111222</td>
-                <td>9/12</td>
-                <td>9/27</td>
-                <td>不用齋</td>
+                <td>{{ item.IsMale ? '男' : '女' }}</td>
+                <td>{{ item.DharmaName }}</td>
+                <td>{{ item.Name }}</td>
+                <td>{{ item.Mobile || item.Phone }}</td>
                 <td>
-                  <p class="mb-0 py-2 px-3 rounded-4 bg-success-10 text-success">已報到安單</p>
-                  <!-- <p class="mb-0 py-2 px-3 rounded-4 bg-neutral-40 text-neutral-80">尚未報到</p> -->
+                  {{ getCurrentMonth(new Date(item.CheckInDate).valueOf()) }}/{{
+                    getCurrentDay(new Date(item.CheckInDate).valueOf())
+                  }}
                 </td>
-                <td>普乙</td>
-                <td>14：00</td>
-                <td></td>
+                <td>
+                  {{ getCurrentMonth(new Date(item.CheckOutDate).valueOf()) }}/{{
+                    getCurrentDay(new Date(item.CheckOutDate).valueOf())
+                  }}
+                </td>
+                <td>
+                  <p class="mb-0" v-if="item.CheckInDateDinner && item.CheckInDateLunch">
+                    用午齋、藥石
+                  </p>
+                  <p class="mb-0" v-else-if="item.CheckInDateLunch">用午齋</p>
+                  <p class="mb-0" v-else-if="item.CheckInDateDinner">用藥石</p>
+                  <p class="mb-0" v-else>不用齋</p>
+                </td>
+                <td>
+                  <p
+                    class="py-2 px-3 mb-0 rounded-4"
+                    :class="`bg-${tagStyle[item.Status].bgColor} text-${
+                      tagStyle[item.Status].textColor
+                    }`"
+                  >
+                    {{ item.Status }}
+                  </p>
+                </td>
+                <td>{{ item.CheckInUserDharmaName || item.CheckInUserName }}</td>
+                <td>
+                  {{
+                    new Date(item.CheckInTime).getHours() < 10
+                      ? `0${new Date(item.CheckInTime).getHours()}`
+                      : new Date(item.CheckInTime).getHours()
+                  }}：{{
+                    new Date(item.CheckInTime).getMinutes() < 10
+                      ? `0${new Date(item.CheckInTime).getMinutes()}`
+                      : new Date(item.CheckInTime).getMinutes()
+                  }}
+                </td>
+                <td>{{ item.Remarks }}</td>
               </tr>
             </template>
           </template>
@@ -69,13 +113,16 @@
             type="button"
             class="btn btn-outline-primary py-3 flex-grow-1"
             style="max-width: 184px"
+            v-if="isSearch"
+            @click="reSearch"
           >
             重新查詢
           </button>
           <button
             type="button"
-            class="btn btn-primary text-white py-3 flex-grow-1"
+            class="btn btn-primary py-3 flex-grow-1"
             style="max-width: 184px"
+            :disabled="!tempUser.Id || tempUser.Status !== '已報名佛七'"
             @click="checkIn"
           >
             報到
@@ -142,7 +189,12 @@
               <!-- <img :src="qrImg" alt="佛七報到" class="d-block mx-auto" /> -->
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+              <button
+                type="button"
+                class="btn btn-outline-primary"
+                @click="reSearch"
+                data-bs-dismiss="modal"
+              >
                 回到報名單頁
               </button>
             </div>
@@ -163,12 +215,14 @@ import HealthyInfo from '@/components/information/HealthyInfo.vue';
 import OtherInfo from '@/components/information/OtherInfo.vue';
 import BuddhaCheckEnd from '@/components/information/BuddhaCheckEnd.vue';
 import { Modal } from 'bootstrap';
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, onBeforeRouteLeave, useRoute } from 'vue-router';
 import QrcodeVue from 'qrcode.vue';
 import Swal from '@/plug/SweetAlert';
 import BuddhaStore from '@/stores/BuddhaStore';
+import GuestStore from '@/stores/GuestStore';
 import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
+import tagStyle from '@/interface/TagStyle';
 
 const steps = ref([
   '報名資料查詢',
@@ -179,17 +233,60 @@ const steps = ref([
   '學經歷、專長及來寺因緣',
   '簽署同意遵守掛單規約',
 ]);
+const checkInList = ref<any[]>([]);
+const tempUser = ref<any>({});
+const router = useRouter();
+const route = useRoute();
+const currentPath = route.path;
+function checkSessionTemp(to: string) {
+  const { tempUser: user } = sessionStorage;
+  if (to.startsWith('/back/buddha/checkIn') && to.split('step=')[1] !== '1') {
+    if (!user) router.push('/back/buddha/checkIn?step=1');
+  }
+  if (!to.includes(currentPath)) {
+    sessionStorage.removeItem('tempUser');
+  }
+}
+watch(
+  () => route.fullPath,
+  (to) => checkSessionTemp(to),
+);
 
+const isSearch = ref<boolean>(false);
 const buddhaStore = BuddhaStore();
 onMounted(() => {
   buddhaStore.getCheckInList();
+  checkSessionTemp(route.fullPath);
+});
+watch(
+  () => buddhaStore.checkInOrder,
+  () => {
+    checkInList.value = buddhaStore.checkInOrder;
+  },
+);
+onBeforeRouteLeave((to, from, next) => {
+  sessionStorage.removeItem('totalTemp');
+  next();
 });
 
-const telSearch = ref(null);
-const url = ref('');
+const telSearch = ref('');
+function search() {
+  checkInList.value = buddhaStore.checkInOrder.filter(
+    (item: any) => telSearch.value === item.Mobile || telSearch.value === item.Phone,
+  );
+  isSearch.value = true;
+}
+function reSearch() {
+  isSearch.value = false;
+  checkInList.value = buddhaStore.checkInOrder;
+  telSearch.value = '';
+  tempUser.value = {};
+}
 
+// 報到
+const url = ref('');
 const modal = ref<unknown>(null);
-const router = useRouter();
+const guestStore = GuestStore();
 function checkIn() {
   const checkSwal = Swal.mixin({
     customClass: {
@@ -210,11 +307,14 @@ function checkIn() {
     })
     .then((res) => {
       if (res.isConfirmed) {
+        // 報到者填寫
         const myModal = new Modal(modal.value as string | Element);
-        url.value = `${window.location.origin}/#/1?step=1`;
+        url.value = `${window.location.origin}/#/${tempUser.value.Id}?step=1`;
         myModal.show();
       }
       if (res.isDenied) {
+        // 知客代填
+        guestStore.getUser(tempUser.value.Id);
         router.push('/back/buddha/checkIn?step=2');
       }
     });

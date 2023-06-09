@@ -31,7 +31,7 @@
         >
           <input
             class="form-check-input"
-            type="radio"
+            type="checkbox"
             :value="name"
             :id="name"
             v-model="checkMeals"

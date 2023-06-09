@@ -94,7 +94,7 @@ const props = defineProps({
   },
   isFinish: {
     type: Boolean,
-    required: true,
+    default: false,
   },
 });
 </script>

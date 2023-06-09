@@ -108,11 +108,10 @@ export default defineStore('buddhaStore', {
     },
     // 佛七預約報名表
     async getOrderList(year: number, month: number) {
-      const url = `${VITE_BASEURL}/buddha-seven/applies?year=${year}&month=${month}`;
+      const url = `${VITE_BASEURL}/buddha-seven/applies/views?year=${year}&month=${month}`;
       try {
         const res: { data: any } = await axios.get(url);
-        this.totalOrder = res.data.data.buddhaSevenApplies;
-        console.log(this.totalOrder);
+        this.totalOrder = res.data.data.buddhaSevenApplyViews;
       } catch (err: any) {
         Swal.fire({
           icon: 'error',
@@ -173,10 +172,10 @@ export default defineStore('buddhaStore', {
     },
     // 佛七報到清單
     async getCheckInList() {
-      const url = `${VITE_BASEURL}/buddha-seven/check-ins`;
+      const url = `${VITE_BASEURL}/buddha-seven/check-ins/views`;
       try {
         const res: { data: any } = await axios.get(url);
-        this.checkInOrder = res.data.data.buddhaSevenApplies;
+        this.checkInOrder = res.data.data.buddhaSevenApplyViews;
         console.log(this.checkInOrder);
       } catch (err: any) {
         console.log(err);

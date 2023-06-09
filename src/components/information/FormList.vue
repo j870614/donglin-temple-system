@@ -22,7 +22,7 @@
             <label for="birthday" class="form-label fw-semibold"
               ><span class="text-danger">*</span>出生年月日</label
             >
-            <DatePicker v-model="userInput.BirthDate" trim-weeks color="orange">
+            <DatePicker v-model="date.BirthDate" trim-weeks color="orange">
               <template #default="{ inputValue, inputEvents }">
                 <input
                   class="form-control rounded-4"
