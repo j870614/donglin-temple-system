@@ -43,6 +43,10 @@ const router = createRouter({
           component: () => import('@/views/back/RoomsArrange.vue'),
         },
         {
+          path: 'booking',
+          component: () => import('@/views/back/RoomsBooking.vue'),
+        },
+        {
           path: 'permissions',
           children: [
             {
