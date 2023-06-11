@@ -70,6 +70,8 @@ const currentBuddha = ref([]);
 watch(
   () => props.date,
   (newValue, oldValue) => {
+    console.log(props.date);
+
     currentBuddha.value = buddhaStore.totalBuddha
       .filter((item: any) => new Date().getTime() <= new Date(item.CompleteDate).getTime())
       .filter(
@@ -100,13 +102,19 @@ onMounted(() => {
 watch(
   () => buddhaStore.totalBuddha,
   () => {
-    currentBuddha.value = buddhaStore.totalBuddha.filter(
-      (item: any) =>
-        new Date(item.StartSevenDate).getTime() >=
-          new Date(formatDate(props.date.start)).getTime() &&
-        new Date(item.CompleteDate).getTime() <=
-          new Date(formatDate(new Date(props.date.end).getTime() + 24 * 60 * 60 * 60)).getTime(),
-    );
+    currentBuddha.value = buddhaStore.totalBuddha
+      .filter((item: any) => new Date().getTime() <= new Date(item.CompleteDate).getTime())
+      .filter(
+        (item: any) =>
+          (new Date(formatDate(props.date.start)).getTime() >=
+            new Date(formatDate(item.StartSevenDate)).getTime() &&
+            new Date(formatDate(props.date.start)).getTime() <=
+              new Date(formatDate(item.CompleteDate)).getTime()) ||
+          (new Date(formatDate(props.date.end)).getTime() >=
+            new Date(formatDate(item.StartSevenDate)).getTime() &&
+            new Date(formatDate(props.date.end)).getTime() <=
+              new Date(formatDate(item.CompleteDate)).getTime()),
+      );
   },
 );
 </script>
