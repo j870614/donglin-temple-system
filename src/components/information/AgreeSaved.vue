@@ -39,6 +39,7 @@
   </div>
   <div class="d-flex justify-content-end gap-3 mt-3 mt-xl-4">
     <router-link
+      v-if="props.pre"
       :to="props.pre"
       class="btn btn-outline-primary py-3 flex-grow-1"
       style="max-width: 184px"
@@ -64,7 +65,7 @@ const props = defineProps({
   },
   pre: {
     type: String,
-    required: true,
+    default: '',
   },
 });
 </script>

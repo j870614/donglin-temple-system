@@ -49,12 +49,21 @@
       上一步
     </router-link>
     <router-link
+      v-if="props.next"
       :to="props.next"
       class="btn btn-primary text-white py-3 flex-grow-1"
       style="max-width: 184px"
     >
       下一步
     </router-link>
+    <button
+      v-if="props.isFinish"
+      type="button"
+      class="btn btn-primary text-white py-3 flex-grow-1"
+      style="max-width: 184px"
+    >
+      完成
+    </button>
   </div>
 </template>
 <script setup lang="ts">
@@ -77,11 +86,15 @@ const sick = ref<string[]>([
 const props = defineProps({
   next: {
     type: String,
-    required: true,
+    default: '',
   },
   pre: {
     type: String,
     required: true,
+  },
+  isFinish: {
+    type: Boolean,
+    default: false,
   },
 });
 </script>

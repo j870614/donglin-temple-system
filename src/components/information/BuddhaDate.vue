@@ -57,6 +57,5 @@ onMounted(() => {
 function saveTemp() {
   tempUser.value.date = [date.value.start, date.value.end];
   sessionStorage.setItem('tempUser', JSON.stringify(tempUser.value));
-  console.log(tempUser);
 }
 </script>

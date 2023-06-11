@@ -25,8 +25,9 @@
     </ol>
   </div>
   <div class="d-flex justify-content-end gap-3 mt-3 mt-xl-4">
+    <!-- to="/back/buddha/signUp?step=5" -->
     <router-link
-      to="/back/buddha/signUp?step=5"
+      :to="props.pre"
       class="btn btn-outline-primary py-3 flex-grow-1"
       style="max-width: 184px"
     >
@@ -43,9 +44,30 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
+
+const props = defineProps({
+  next: {
+    type: String,
+    default: '',
+  },
+  pre: {
+    type: String,
+    default: '',
+  },
+  hasNext: {
+    type: Boolean,
+    required: true,
+  },
+  nextFn: {
+    type: Function,
+    default: () => {
+      console.log(1);
+    },
+  },
+});
 
 const identity = ref<string>('法師');
 const notion = ref<string[]>([]);
@@ -79,9 +101,19 @@ const router = useRouter();
 function tempTotal() {
   if (checkNum.value.length >= notion.value.length) {
     const totalTemp = sessionStorage.totalTemp ? JSON.parse(sessionStorage.totalTemp) : [];
-    totalTemp.push(JSON.parse(sessionStorage.tempUser));
+    const hasTemp = totalTemp.filter(
+      (item: any) => item.Id === JSON.parse(sessionStorage.tempUser).Id,
+    );
+    if (!hasTemp.length) {
+      totalTemp.push(JSON.parse(sessionStorage.tempUser));
+    }
     sessionStorage.setItem('totalTemp', JSON.stringify(totalTemp));
-    router.push('/back/buddha/signUp?step=7');
+
+    if (props.hasNext) {
+      router.push(props.next);
+    } else {
+      props.nextFn();
+    }
   } else {
     Swal.fire({
       icon: 'error',

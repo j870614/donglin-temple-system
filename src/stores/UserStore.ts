@@ -8,7 +8,6 @@ export default defineStore('userStore', {
   state: () => ({
     isLogin: false,
     user: {
-      MageNickname: '',
       DharmaName: '',
       Name: '',
     },
@@ -31,7 +30,7 @@ export default defineStore('userStore', {
         }
 
         if (this.user) return;
-        const profile: { data: any } = await axios.post(`${VITE_BASEURL}/managers/profile`);
+        const profile: { data: any } = await axios.get(`${VITE_BASEURL}/managers/profile`);
         const { userId } = profile.data.data;
         const userData: { data: any } = await axios.get(`${VITE_BASEURL}/users/${userId}`);
         const { user } = userData.data.data;
@@ -39,7 +38,7 @@ export default defineStore('userStore', {
         sessionStorage.setItem('user', JSON.stringify(user));
       } catch (err: any) {
         console.error(err);
-        this.overLogin();
+        // this.overLogin();
       }
     },
     async login(Email: string, Password: string, Remember: boolean = false) {
@@ -58,17 +57,12 @@ export default defineStore('userStore', {
           }
           const swal = await Swal.fire(res.data.message);
           localStorage.setItem('isLogin', 'true');
-          // const router = useRouter();
 
           if (swal.isConfirmed || swal.isDismissed) {
             document.cookie = `token=${res.data.data.token}; expires=${new Date(
               res.data.data.expired * 1000,
             )}`;
             window.location.href = '/';
-            // this.checkLogin(res.data.token);
-            console.log('user login');
-            console.log(res.data);
-            console.log('----------');
           }
         }
       } catch (err: any) {

@@ -54,7 +54,7 @@
       <button
         type="button"
         class="btn btn-primary px-4"
-        data-bs-toggle="modal"
+        :data-bs-toggle="filterConfig.input ? 'modal' : ''"
         data-bs-target="#staticBackdrop"
         @click="search"
       >
@@ -158,6 +158,7 @@ import { ref, onMounted } from 'vue';
 import GuestStore from '@/stores/GuestStore';
 import { useRouter, useRoute } from 'vue-router';
 import { getCurrentYear, getCurrentMonth, getCurrentDay } from '@/plug/Timer';
+import Swal from 'sweetalert2';
 
 const guest = GuestStore();
 
@@ -170,6 +171,13 @@ const filterConfig = ref({
 // 根據條件搜索
 const searchData = ref<any[]>([]);
 function search() {
+  if (!filterConfig.value.input) {
+    Swal.fire({
+      icon: 'error',
+      title: '請輸入查詢關鍵字',
+    });
+    return;
+  }
   searchData.value.length = 0;
   const data = guest.guestsData
     .filter(

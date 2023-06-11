@@ -102,7 +102,7 @@
                   id="buddhaId"
                   placeholder="請輸入佛七期數"
                   v-model="tempBuddha.Id"
-                  readonly
+                  disabled
                 />
               </div>
               <div class="mb-4">

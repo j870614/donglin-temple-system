@@ -17,6 +17,10 @@ const router = createRouter({
           path: 'buddha',
           component: () => import('@/views/front/BuddhaSeven.vue'),
         },
+        {
+          path: ':id',
+          component: () => import('@/views/front/BuddhaCheckIn.vue'),
+        },
       ],
     },
     {
@@ -38,6 +42,9 @@ const router = createRouter({
             },
             {
               path: 'signUp',
+              meta: {
+                name: '佛七報名',
+              },
               component: () => import('@/views/back/BuddhaSignUp.vue'),
             },
             {

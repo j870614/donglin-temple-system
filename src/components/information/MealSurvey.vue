@@ -29,7 +29,14 @@
           }"
           :key="name + content"
         >
-          <input class="form-check-input" type="checkbox" :value="name" :id="name" />
+          <input
+            class="form-check-input"
+            type="checkbox"
+            :value="name"
+            :id="name"
+            v-model="checkMeals"
+            name="meal"
+          />
           <label class="form-check-label fs-5" :for="name">
             <span class="fw-semibold me-2">{{ name }}</span
             >{{ content }}
@@ -60,9 +67,12 @@
 import { ref, defineProps, onMounted } from 'vue';
 
 const meal = ref<string[]>(['早齋', '午齋', '藥石']);
+const checkMeals = ref<string[]>([]);
 onMounted(() => {
   if (!sessionStorage.tempUser) return;
-  const { EatBreakfast, EatLunch, EatDinner } = JSON.parse(sessionStorage.tempUser);
+  const { EatBreakfast, EatLunch, EatDinner, CheckInDateLunch, CheckInDateDinner } = JSON.parse(
+    sessionStorage.tempUser,
+  );
   if (EatBreakfast === undefined || EatBreakfast) {
     if (!meal.value.includes('早齋')) meal.value.push('早齋');
   } else {
@@ -80,6 +90,13 @@ onMounted(() => {
   } else {
     const index = meal.value.indexOf('藥石');
     meal.value.splice(index, 1);
+  }
+
+  if (CheckInDateLunch) {
+    checkMeals.value.push('午齋');
+  }
+  if (CheckInDateDinner) {
+    checkMeals.value.push('藥石');
   }
 });
 
@@ -99,6 +116,9 @@ function saveTemp() {
   tempUser.EatBreakfast = meal.value.includes('早齋');
   tempUser.EatLunch = meal.value.includes('午齋');
   tempUser.EatDinner = meal.value.includes('藥石');
+  tempUser.CheckInDateBreakfast = meal.value.includes('早齋');
+  tempUser.CheckInDateLunch = checkMeals.value.includes('午齋');
+  tempUser.CheckInDateDinner = checkMeals.value.includes('藥石');
   sessionStorage.setItem('tempUser', JSON.stringify(tempUser));
 }
 </script>

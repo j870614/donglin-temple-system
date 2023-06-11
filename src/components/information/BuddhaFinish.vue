@@ -22,8 +22,8 @@
           <tr v-for="user in totalTemp" :key="user.Id">
             <td>{{ user.DharmaName }}</td>
             <td>{{ user.Name }}</td>
-            <td>2022/9/10</td>
-            <td>2022/9/28</td>
+            <td>{{ formatDate(user.date[0]) }}</td>
+            <td>{{ formatDate(user.date[1]) }}</td>
             <td class="cursor-point" @click="editorUser(user)" @keydown="editorUser(user)">
               <p class="mb-0 d-flex align-items-center justify-content-center gap-2">
                 <span class="material-symbols-outlined"> edit </span
@@ -47,6 +47,7 @@
       type="button"
       class="btn btn-primary text-white py-3 flex-grow-1"
       style="max-width: 184px"
+      @click="buddhaStore.applyBuddha(totalTemp, router)"
     >
       報名完成
     </button>
@@ -55,9 +56,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import BuddhaStore from '@/stores/BuddhaStore';
+import { formatDate } from '@/plug/Timer';
 import StickyTable from '../back/StickyTable.vue';
 
 const totalTemp = ref<any[]>([]);
+const buddhaStore = BuddhaStore();
 onMounted(() => {
   if (!sessionStorage.tempUser) return;
   totalTemp.value = sessionStorage.totalTemp && JSON.parse(sessionStorage.totalTemp);
@@ -65,8 +69,12 @@ onMounted(() => {
 
 const router = useRouter();
 function editorUser(user: any) {
-  const index: number = totalTemp.value.indexOf((item: any) => item.Id === user.Id);
-  totalTemp.value.splice(index, 1);
+  const index = totalTemp.value.findIndex(
+    (item: any) =>
+      item.Id === user.Id || item.DharmaName === user.DharmaName || item.Name === user.Name,
+  );
+  if (index !== -1) totalTemp.value.splice(index, 1);
+
   sessionStorage.setItem('totalTemp', JSON.stringify(totalTemp.value));
   sessionStorage.setItem('tempUser', JSON.stringify(user));
   router.push('/back/buddha/signUp?step=2');
