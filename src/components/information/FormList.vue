@@ -414,7 +414,8 @@
       >
         <div class="col-xl">
           <label for="area" class="form-label fw-semibold mb-2">所屬地區</label>
-          <select class="form-select form-select-lg rounded-4" id="area" v-model="userInput.area">
+          {{ userInput.Area }}
+          <select class="form-select form-select-lg rounded-4" id="area" v-model="userInput.Area">
             <option value="" selected disabled>請選擇所屬地區</option>
             <option
               :value="item"
@@ -484,11 +485,23 @@
         <div class="row mt-4" v-if="userInput.ClothType === '專念'">
           <div class="col-xl">
             <label for="cm" class="form-label fw-semibold">身高</label>
-            <input type="number" class="form-control rounded-4" id="cm" placeholder="cm" />
+            <input
+              type="number"
+              class="form-control rounded-4"
+              id="cm"
+              placeholder="cm"
+              v-model.number="userInput.Height"
+            />
           </div>
           <div class="col-xl">
             <label for="kg" class="form-label fw-semibold">體重</label>
-            <input type="number" class="form-control rounded-4" id="kg" placeholder="kg" />
+            <input
+              type="number"
+              class="form-control rounded-4"
+              id="kg"
+              placeholder="kg"
+              v-model.number="userInput.Weight"
+            />
           </div>
         </div>
       </div>
@@ -522,7 +535,7 @@ import { useRouter, useRoute } from 'vue-router';
 import Swal from '@/plug/SweetAlert';
 import GuestStore from '@/stores/GuestStore';
 
-// address area 需另外做判斷
+// address  需另外做判斷 缺身高體重
 const userInput = ref({
   Id: null,
   sex: '男眾',
@@ -557,7 +570,9 @@ const userInput = ref({
     taiwan: '',
     oversea: '',
   },
-  area: '',
+  Area: '', // 地區
+  Height: null,
+  Weight: null,
 });
 const date = ref({
   BirthDate: new Date(),
@@ -568,16 +583,19 @@ const tempUser = ref();
 onMounted(() => {
   if (!sessionStorage.tempUser) return;
   tempUser.value = sessionStorage.tempUser && JSON.parse(sessionStorage.tempUser);
-  const { IsMale, IsMonk, OrdinationDate, BirthDate, Mobile } = tempUser.value;
+  const { IsMale, IsMonk, OrdinationDate, BirthDate, Mobile, Area, ClothSize, Address } =
+    tempUser.value;
   userInput.value = tempUser.value;
   userInput.value.Mobile = Mobile;
-  userInput.value.sex = IsMale === undefined || IsMale ? '男眾' : '女眾';
-  userInput.value.identity = IsMonk === undefined || IsMonk ? '法師' : '居士';
+  userInput.value.sex = IsMale ? '男眾' : '女眾';
+  userInput.value.identity = IsMonk ? '法師' : '居士';
+  userInput.value.Area = Area || '';
+  userInput.value.ClothSize = ClothSize || '';
   date.value.BirthDate = BirthDate ? new Date(BirthDate) : new Date(0);
   date.value.OrdinationDate = OrdinationDate ? new Date(OrdinationDate) : new Date(0);
 
   // 地址 尚未配置初始值
-  userInput.value.Address = {
+  userInput.value.Address = Address || {
     point: '國內',
     state: '',
     county: '',
@@ -605,11 +623,10 @@ async function saveTemp() {
   // 驗證
   if (userInput.value.identity === '法師') {
     if (
-      route.meta.name === '佛七報名' &&
-      (!userInput.value.DharmaName ||
-        !userInput.value.OrdinationTemple ||
-        new Date(date.value.OrdinationDate).getTime() === 0 ||
-        !userInput.value.ShavedMaster)
+      !userInput.value.DharmaName ||
+      !userInput.value.OrdinationTemple ||
+      new Date(date.value.OrdinationDate).getTime() === 0 ||
+      !userInput.value.ShavedMaster
     ) {
       Swal.fire({
         icon: 'error',
@@ -618,7 +635,7 @@ async function saveTemp() {
       return;
     }
   } else if (userInput.value.identity === '居士') {
-    if (route.meta.name === '佛七報名' && !userInput.value.Name) {
+    if (!userInput.value.Name) {
       Swal.fire({
         icon: 'error',
         title: '表單欄位填寫錯誤',
@@ -626,15 +643,25 @@ async function saveTemp() {
       return;
     }
   }
+  if (route.meta.name === '佛七報到' && new Date(date.value.BirthDate).getTime() === 0) {
+    Swal.fire({
+      icon: 'error',
+      title: '請輸入正確出生年月日',
+    });
+    return;
+  }
 
   // 驗證通過
   if (userInput.value.identity === '法師')
     userInput.value.OrdinationDate = date.value.OrdinationDate;
   // @ts-ignore
   if (new Date(date.value.OrdinationDate).getTime() === 0) userInput.value.OrdinationDate = null;
-  // @ts-ignore
-  if (new Date(date.value.BirthDate) === 0) userInput.value.BirthDate = null;
-
+  if (new Date(date.value.BirthDate).getTime() === 0) {
+    // @ts-ignore
+    userInput.value.BirthDate = null;
+  } else {
+    userInput.value.BirthDate = date.value.BirthDate;
+  }
   userInput.value.IsMonk = userInput.value.identity === '法師';
   userInput.value.IsMale = userInput.value.sex === '男眾';
 

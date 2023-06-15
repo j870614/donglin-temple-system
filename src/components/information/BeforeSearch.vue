@@ -110,11 +110,12 @@
                   <td>{{ user.DharmaName }}</td>
                   <td>{{ user.Name }}</td>
                   <td>{{ user.Mobile || user.Phone }}</td>
-                  <!-- 46/8/7 -->
                   <td>
-                    {{ getCurrentYear(user.BirthDate) - 1911 }}/{{
-                      getCurrentMonth(user.BirthDate)
-                    }}/{{ getCurrentDay(user.BirthDate) }}
+                    <span v-if="user.BirthDate">
+                      {{ getCurrentYear(user.BirthDate) - 1911 }}/{{
+                        getCurrentMonth(user.BirthDate)
+                      }}/{{ getCurrentDay(user.BirthDate) }}
+                    </span>
                   </td>
                   <td>{{ user.IdNumber && user.IdNumber.slice(-5) }}</td>
                 </tr>
@@ -158,7 +159,7 @@ import { ref, onMounted } from 'vue';
 import GuestStore from '@/stores/GuestStore';
 import { useRouter, useRoute } from 'vue-router';
 import { getCurrentYear, getCurrentMonth, getCurrentDay } from '@/plug/Timer';
-import Swal from 'sweetalert2';
+import Swal from '@/plug/SweetAlert';
 
 const guest = GuestStore();
 

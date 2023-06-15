@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { ref, onMounted, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
-import Swal from 'sweetalert2';
+import Swal from '@/plug/SweetAlert';
 
 const props = defineProps({
   next: {
