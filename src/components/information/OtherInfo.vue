@@ -155,6 +155,7 @@ function saveTemp() {
     const index = tempUser.value.Expertise.expertise.indexOf('外語');
     tempUser.value.Expertise.expertise.splice(index, 1);
   }
+  tempUser.value.Expertise = JSON.stringify(tempUser.value.Expertise);
   sessionStorage.setItem('tempUser', JSON.stringify(tempUser.value));
 }
 </script>

@@ -190,7 +190,7 @@ export default defineStore('buddhaStore', {
       const data = {
         UpdateUserId: JSON.parse(sessionStorage.user).Id,
         CheckInUserId: tempUser.Id,
-        Remarks: '',
+        Remarks: tempUser.Remarks,
       };
       try {
         const user = tempUser;
@@ -201,7 +201,6 @@ export default defineStore('buddhaStore', {
           axios.patch(url, data),
           guestStore.editorInfo(user.Id, user),
         ]);
-        console.log(res);
 
         const swal = await Swal.fire({
           icon: 'success',
@@ -217,7 +216,7 @@ export default defineStore('buddhaStore', {
           title: err.response.data.message,
         });
         if (res.isConfirmed) {
-          // router.push('/back/buddha/checkIn?step=1');
+          router.push('/back/buddha/checkIn?step=1');
         }
       }
     },

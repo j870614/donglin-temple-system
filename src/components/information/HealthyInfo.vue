@@ -125,6 +125,7 @@ function saveTemp() {
     const index = tempUser.value.HealthStatus.state.indexOf('其他');
     tempUser.value.HealthStatus.state.splice(index, 1);
   }
+  tempUser.value.HealthStatus = JSON.stringify(tempUser.value.HealthStatus);
   sessionStorage.setItem('tempUser', JSON.stringify(tempUser.value));
 }
 </script>

@@ -83,7 +83,7 @@
       </section>
       <!-- 通訊地址 -->
       <section class="mb-5 pt-2 pt-xl-0" v-if="!$route.fullPath.includes('/buddha/signUp')">
-        <h3 class="h3 mb-4 fw-semibold">通訊地址</h3>
+        <h3 class="h3 mb-4 fw-semibold"><span class="text-danger">*</span>通訊地址</h3>
         <div class="d-flex gap-4 fw-semibold mb-3">
           <div class="form-check" v-for="(item, index) in ['國內', '海外']" :key="item + index">
             <input
@@ -97,6 +97,7 @@
             <label class="form-check-label fs-5" :for="item + index"> {{ item }} </label>
           </div>
         </div>
+
         <!-- 國內 -->
         <template v-if="userInput.Address.point === '國內'">
           <div class="row mb-3 gap-4 gap-xl-0">
@@ -178,7 +179,11 @@
             </div>
             <div class="col-xl">
               <label for="county" class="form-label fw-semibold mb-2">國家</label>
-              <select class="form-select form-select-lg rounded-4" id="county">
+              <select
+                class="form-select form-select-lg rounded-4"
+                id="county"
+                v-model="userInput.Address.overCounty"
+              >
                 <option value="" selected disabled>請選擇國家</option>
                 <option
                   :value="county"
@@ -190,6 +195,7 @@
               </select>
             </div>
           </div>
+
           <div>
             <label for="address" class="form-label fw-semibold">詳細地址</label>
             <input
@@ -204,7 +210,7 @@
       </section>
       <!-- 緊急聯絡人 -->
       <section class="pt-2 pt-xl-0" v-if="!$route.fullPath.includes('/buddha/signUp')">
-        <h3 class="h3 mb-4 fw-semibold">緊急聯絡人</h3>
+        <h3 class="h3 mb-4 fw-semibold"><span class="text-danger">*</span>緊急聯絡人</h3>
         <div class="row mb-3 gap-4 gap-xl-0">
           <div class="col-xl">
             <label for="urgentName" class="form-label fw-semibold">姓名</label>
@@ -465,7 +471,9 @@
             </div>
           </section>
           <div class="col-xl" v-if="userInput.ClothType === '專念'">
-            <label for="clothingSize" class="form-label fw-semibold mb-2">尺寸</label>
+            <label for="clothingSize" class="form-label fw-semibold mb-2"
+              ><span class="text-danger">*</span>尺寸</label
+            >
             <select
               class="form-select form-select-lg rounded-4"
               id="clothingSize"
@@ -526,7 +534,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, defineProps, onMounted } from 'vue';
+import { ref, computed, defineProps, onMounted, watch } from 'vue';
 import type { ComputedRef } from 'vue';
 import { DatePicker } from 'v-calendar';
 import taiwan_districts from '@/assets/lib/taiwan_districts.json';
@@ -566,6 +574,7 @@ const userInput = ref({
     point: '國內',
     state: '',
     county: '',
+    overCounty: '',
     township: { zip: '', name: '' },
     taiwan: '',
     oversea: '',
@@ -583,14 +592,24 @@ const tempUser = ref();
 onMounted(() => {
   if (!sessionStorage.tempUser) return;
   tempUser.value = sessionStorage.tempUser && JSON.parse(sessionStorage.tempUser);
-  const { IsMale, IsMonk, OrdinationDate, BirthDate, Mobile, Area, ClothSize, Address } =
-    tempUser.value;
+  const {
+    IsMale,
+    IsMonk,
+    OrdinationDate,
+    BirthDate,
+    Mobile,
+    Area,
+    ClothSize,
+    Address,
+    Relationship,
+  } = tempUser.value;
   userInput.value = tempUser.value;
   userInput.value.Mobile = Mobile;
   userInput.value.sex = IsMale ? '男眾' : '女眾';
   userInput.value.identity = IsMonk ? '法師' : '居士';
   userInput.value.Area = Area || '';
   userInput.value.ClothSize = ClothSize || '';
+  userInput.value.Relationship = Relationship || '';
   date.value.BirthDate = BirthDate ? new Date(BirthDate) : new Date(0);
   date.value.OrdinationDate = OrdinationDate ? new Date(OrdinationDate) : new Date(0);
 
@@ -599,6 +618,7 @@ onMounted(() => {
     point: '國內',
     state: '',
     county: '',
+    overCounty: '',
     township: { zip: '', name: '' },
     taiwan: '',
     oversea: '',
@@ -643,12 +663,56 @@ async function saveTemp() {
       return;
     }
   }
-  if (route.meta.name === '佛七報到' && new Date(date.value.BirthDate).getTime() === 0) {
-    Swal.fire({
-      icon: 'error',
-      title: '請輸入正確出生年月日',
-    });
-    return;
+  if (route.meta.name === '佛七報到') {
+    if (new Date(date.value.BirthDate).getTime() === 0) {
+      Swal.fire({
+        icon: 'error',
+        title: '請輸入正確出生年月日',
+      });
+      return;
+    }
+    // 地址驗證
+    if (userInput.value.Address.point === '國內') {
+      if (!userInput.value.Address.township.zip || !userInput.value.Address.taiwan) {
+        Swal.fire({
+          icon: 'error',
+          title: '請填寫通訊地址',
+        });
+        return;
+      }
+    } else if (userInput.value.Address.point === '海外') {
+      if (
+        !userInput.value.Address.state ||
+        !userInput.value.Address.overCounty ||
+        !userInput.value.Address.oversea
+      ) {
+        Swal.fire({
+          icon: 'error',
+          title: '請填寫通訊地址',
+        });
+        return;
+      }
+    }
+    // 緊急聯絡人
+    if (
+      !userInput.value.EmergencyName ||
+      !userInput.value.EmergencyPhone ||
+      !userInput.value.Relationship
+    ) {
+      Swal.fire({
+        icon: 'error',
+        title: '請填寫緊急聯絡人',
+      });
+      return;
+    }
+    // 上殿服裝-專念
+    if (userInput.value.ClothType === '專念' && !userInput.value.ClothSize) {
+      Swal.fire({
+        icon: 'error',
+        title: '請選擇專念服尺寸',
+      });
+      return;
+    }
   }
 
   // 驗證通過
@@ -720,6 +784,21 @@ const countyIndex: ComputedRef<number> = computed(() =>
   userInput.value.Address.point === '國內'
     ? taiwanArea.findIndex((item) => item.name === userInput.value.Address.county)
     : -1,
+);
+
+watch(
+  () => userInput.value.Address.point,
+  (point: string) => {
+    if (point === '國內') {
+      userInput.value.Address.state = '';
+      userInput.value.Address.overCounty = '';
+      userInput.value.Address.oversea = '';
+    } else {
+      userInput.value.Address.county = '';
+      userInput.value.Address.taiwan = '';
+      userInput.value.Address.township = { zip: '', name: '' };
+    }
+  },
 );
 </script>
 <style scoped lang="scss"></style>
