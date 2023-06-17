@@ -186,7 +186,6 @@
             </div>
             <div class="modal-body">
               <QrcodeVue class="d-block mx-auto" :value="url" :size="150"></QrcodeVue>
-              <!-- <img :src="qrImg" alt="佛七報到" class="d-block mx-auto" /> -->
             </div>
             <div class="modal-footer">
               <button
@@ -237,14 +236,11 @@ const checkInList = ref<any[]>([]);
 const tempUser = ref<any>({});
 const router = useRouter();
 const route = useRoute();
-const currentPath = route.path;
+// const currentPath = route.path;
 function checkSessionTemp(to: string) {
   const { tempUser: user } = sessionStorage;
   if (to.startsWith('/back/buddha/checkIn') && to.split('step=')[1] !== '1') {
     if (!user) router.push('/back/buddha/checkIn?step=1');
-  }
-  if (!to.includes(currentPath)) {
-    sessionStorage.removeItem('tempUser');
   }
 }
 watch(
@@ -257,6 +253,9 @@ const buddhaStore = BuddhaStore();
 onMounted(() => {
   buddhaStore.getCheckInList();
   checkSessionTemp(route.fullPath);
+  if (!sessionStorage.tempUser) {
+    sessionStorage.setItem('tempUser', '{}');
+  }
 });
 watch(
   () => buddhaStore.checkInOrder,
@@ -265,7 +264,7 @@ watch(
   },
 );
 onBeforeRouteLeave((to, from, next) => {
-  sessionStorage.removeItem('totalTemp');
+  sessionStorage.clear();
   next();
 });
 
@@ -309,12 +308,16 @@ function checkIn() {
       if (res.isConfirmed) {
         // 報到者填寫
         const myModal = new Modal(modal.value as string | Element);
-        url.value = `${window.location.origin}/#/${tempUser.value.Id}?step=1`;
+        url.value = `${window.location.origin}/#/${tempUser.value.UserId}?step=1`;
         myModal.show();
       }
+
       if (res.isDenied) {
         // 知客代填
-        guestStore.getUser(tempUser.value.Id);
+
+        guestStore.getUser(tempUser.value.UserId);
+        sessionStorage.setItem('tempId', tempUser.value.Id);
+
         router.push('/back/buddha/checkIn?step=2');
       }
     });

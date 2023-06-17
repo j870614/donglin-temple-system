@@ -70,8 +70,6 @@ const currentBuddha = ref([]);
 watch(
   () => props.date,
   (newValue, oldValue) => {
-    console.log(props.date);
-
     currentBuddha.value = buddhaStore.totalBuddha
       .filter((item: any) => new Date().getTime() <= new Date(item.CompleteDate).getTime())
       .filter(

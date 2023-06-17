@@ -6,6 +6,7 @@
           class="form-select form-select-lg rounded-4 mb-3"
           aria-label="血型"
           style="max-width: 400px"
+          v-model="tempUser.BloodType"
         >
           <option value="" selected disabled>請選擇血型</option>
           <option :value="item" v-for="(item, index) in ['A', 'B', 'O', 'AB']" :key="item + index">
@@ -15,17 +16,30 @@
       </div>
       <div class="d-flex flex-wrap gap-4 fs-5">
         <div class="form-check" v-for="(item, index) in sick" :key="index">
-          <input class="form-check-input" type="checkbox" :value="item" :id="item + index" />
+          <input
+            class="form-check-input"
+            type="checkbox"
+            :value="item"
+            :id="item + index"
+            v-model="tempUser.HealthStatus.state"
+          />
           <label class="form-check-label" :for="item + index"> {{ item }} </label>
         </div>
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="其他" id="other" />
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="其他"
+            id="other"
+            v-model="tempUser.HealthStatus.state"
+          />
           <label class="form-check-label" for="other"> 其他: </label>
           <input
             class="border-0 border-bottom border-neutral-80 ms-2-5 w-75"
             type="text"
             placeholder="請輸入症狀"
             aria-label="其他症狀"
+            v-model="tempUser.HealthStatus.otherSick"
           />
         </div>
       </div>
@@ -43,14 +57,22 @@
       :to="props.next"
       class="btn btn-primary text-white py-3 flex-grow-1"
       style="max-width: 184px"
+      @click="saveTemp"
     >
       下一步
     </router-link>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, onMounted } from 'vue';
 
+const tempUser = ref({
+  BloodType: '',
+  HealthStatus: {
+    state: [] as string[],
+    otherSick: '',
+  },
+});
 const sick = ref<string[]>([
   '高血壓',
   '失眠',
@@ -70,6 +92,18 @@ const sick = ref<string[]>([
   '憂鬱症',
   '躁鬱症',
 ]);
+
+onMounted(() => {
+  tempUser.value = JSON.parse(sessionStorage.tempUser);
+  const { HealthStatus, BloodType } = tempUser.value;
+  tempUser.value.HealthStatus = JSON.parse(HealthStatus) || {
+    state: [],
+    otherSick: '',
+  };
+
+  tempUser.value.BloodType = BloodType || '';
+});
+
 const props = defineProps({
   next: {
     type: String,
@@ -80,6 +114,20 @@ const props = defineProps({
     required: true,
   },
 });
+
+function saveTemp() {
+  if (!tempUser.value.HealthStatus.state.includes('其他'))
+    tempUser.value.HealthStatus.otherSick = '';
+  if (
+    !tempUser.value.HealthStatus.otherSick &&
+    tempUser.value.HealthStatus.state.includes('其他')
+  ) {
+    const index = tempUser.value.HealthStatus.state.indexOf('其他');
+    tempUser.value.HealthStatus.state.splice(index, 1);
+  }
+  tempUser.value.HealthStatus = JSON.stringify(tempUser.value.HealthStatus);
+  sessionStorage.setItem('tempUser', JSON.stringify(tempUser.value));
+}
 </script>
 <style scoped>
 .form-check-label {

@@ -49,6 +49,9 @@ const router = createRouter({
             },
             {
               path: 'checkIn',
+              meta: {
+                name: '佛七報到',
+              },
               component: () => import('@/views/back/BuddhaCheckIn.vue'),
             },
           ],
