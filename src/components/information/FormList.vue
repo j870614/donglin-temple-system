@@ -420,7 +420,6 @@
       >
         <div class="col-xl">
           <label for="area" class="form-label fw-semibold mb-2">所屬地區</label>
-          {{ userInput.Area }}
           <select class="form-select form-select-lg rounded-4" id="area" v-model="userInput.Area">
             <option value="" selected disabled>請選擇所屬地區</option>
             <option
