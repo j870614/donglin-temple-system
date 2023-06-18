@@ -613,15 +613,17 @@ onMounted(() => {
   date.value.OrdinationDate = OrdinationDate ? new Date(OrdinationDate) : new Date(0);
 
   // 地址 尚未配置初始值
-  userInput.value.Address = Address || {
-    point: '國內',
-    state: '',
-    county: '',
-    overCounty: '',
-    township: { zip: '', name: '' },
-    taiwan: '',
-    oversea: '',
-  };
+  userInput.value.Address = Address
+    ? JSON.parse(Address)
+    : {
+        point: '國內',
+        state: '',
+        county: '',
+        overCounty: '',
+        township: { zip: '', name: '' },
+        taiwan: '',
+        oversea: '',
+      };
 });
 
 const props = defineProps({
@@ -714,7 +716,6 @@ async function saveTemp() {
     }
   }
 
-  // 驗證通過
   if (userInput.value.identity === '法師')
     userInput.value.OrdinationDate = date.value.OrdinationDate;
   // @ts-ignore
@@ -725,9 +726,10 @@ async function saveTemp() {
   } else {
     userInput.value.BirthDate = date.value.BirthDate;
   }
+
+  // 全部驗證完成
   userInput.value.IsMonk = userInput.value.identity === '法師';
   userInput.value.IsMale = userInput.value.sex === '男眾';
-
   if (!userInput.value.Id) {
     const res = await guestStore.addUser(userInput.value);
     if (res.status) {

@@ -63,6 +63,11 @@ export default defineStore('guestStore', {
       keys.forEach((key) => {
         if (data[key] === null || data[key] === undefined) delete data[key];
       });
+      data.Address = JSON.stringify(data.Address);
+      if (typeof data.Address === 'string') data.Address.replace('/\\/g', '');
+      if (typeof data.Expertise === 'string') data.Address.replace('/\\/g', '');
+      if (typeof data.HealthStatus === 'string') data.Address.replace('/\\/g', '');
+
       delete data.Id;
       delete data.UpdateAt;
       delete data.sex;
@@ -71,7 +76,6 @@ export default defineStore('guestStore', {
       delete data.CheckInDateBreakfast;
       delete data.CheckInDateLunch;
       delete data.CheckInDateDinner;
-      delete data.Address; // 資料庫未給出欄位範例
       try {
         await axios.patch(url, data);
       } catch (err: any) {
