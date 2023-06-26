@@ -24,23 +24,37 @@
           </tr>
         </template>
         <template #tbody>
-          <tr>
-            <td>1</td>
-            <td>男</td>
-            <td>普一</td>
-            <td>王某</td>
-            <td>知客</td>
-            <td>知客志工</td>
-            <td>普甲</td>
-            <td>2023/1/3</td>
-            <td>
-              <span class="mb-0 text-secondary bg-secondary-tint rounded-4 py-2 px-3"
-                >已產出註冊連結</span
-              >
-              <!-- <span class="mb-0 text-success bg-success-10 rounded-4 py-2 px-3">註冊成功</span> -->
-              <!-- <span class="mb-0 text-danger bg-danger-10 rounded-4 py-2 px-3">註冊連結失效</span> -->
-            </td>
+          <tr v-if="!adminStore.adminStatus.length">
+            <td colspan="9">當前無待核發人員</td>
           </tr>
+          <template v-else>
+            <tr
+              :class="{ 'table-active': tempUser.Id === item.Id }"
+              v-for="(item, index) in adminStore.adminStatus"
+              :key="item.Id"
+              @click="tempUser = item"
+            >
+              <td>{{ index + 1 }}</td>
+              <td>{{ item.Gender }}</td>
+              <td>{{ item.DharmaName }}</td>
+              <td>{{ item.Name }}</td>
+              <td>
+                {{ item.ChurchName }}
+              </td>
+              <td>{{ item.DeaconName }}</td>
+              <td>{{ item.AuthorizeDharmaName }}</td>
+              <td>{{ item.AuthorizeDate }}</td>
+              <td>
+                <span
+                  class="mb-0 rounded-4 py-2 px-3"
+                  :class="`bg-${tagStyle[item.Status].bgColor} text-${
+                    tagStyle[item.Status].textColor
+                  }`"
+                  >{{ item.Status }}</span
+                >
+              </td>
+            </tr>
+          </template>
         </template>
       </StickyTable>
       <div class="d-flex justify-content-end gap-3 mt-5">
@@ -48,12 +62,59 @@
           type="button"
           class="btn btn-outline-primary py-3 flex-grow-1"
           style="max-width: 184px"
+          @click="deletePermissions(tempUser)"
         >
           移除
         </button>
-        <button type="button" class="btn btn-primary py-3 flex-grow-1" style="max-width: 184px">
+        <button
+          type="button"
+          class="btn btn-primary py-3 flex-grow-1"
+          style="max-width: 184px"
+          @click="adminStore.createdQR(tempUser)"
+          :disabled="!tempUser.Id"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
           重新產出連結
         </button>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="staticBackdropLabel"
+      aria-hidden="true"
+      ref="modal"
+    >
+      <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">註冊鏈接</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <QrcodeVue
+              v-if="adminStore.qrcode"
+              class="d-block mx-auto"
+              :value="url + adminStore.qrcode"
+              :size="150"
+            ></QrcodeVue>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+              確認
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -61,4 +122,44 @@
 <script setup lang="ts">
 import BackTitle from '@/components/back/BackTitle.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
+import { ref, onMounted } from 'vue';
+import AdminStore from '@/stores/AdminStore';
+import UserStore from '@/stores/UserStore';
+import tagStyle from '@/interface/TagStyle';
+import QrcodeVue from 'qrcode.vue';
+import Swal from '@/plug/SweetAlert';
+import type { SweetAlertResult } from 'sweetalert2';
+
+const tempUser = ref({ Id: 0 });
+const adminStore = AdminStore();
+const userStore = UserStore();
+
+const url = ref(`${window.location.origin}/#/register?qr=`);
+onMounted(() => {
+  userStore.checkLogin(userStore.getToken());
+  adminStore.getAuthStatus();
+});
+
+async function deletePermissions(current: any): Promise<void> {
+  try {
+    const res: SweetAlertResult = await Swal.fire({
+      html: `<p class="mb-0 fs-3">是否移除<b class="px-2 text-danger fw-semibold">${
+        current.DharmaName ? `${current.DharmaName}-` : ''
+      }${current.Name ? `${current.Name}-` : ''}${current.Gender}</b>的權限</p>`,
+      showCancelButton: true,
+    });
+
+    if (res.isConfirmed) {
+      adminStore.patchAuth(current, false);
+      // Swal.fire({
+      //   icon: 'success',
+      //   title: '已移除權限',
+      //   showConfirmButton: false,
+      //   timer: 1500,
+      // });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
 </script>

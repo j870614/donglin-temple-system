@@ -7,7 +7,12 @@
       <ProcessSteps :steps="steps"></ProcessSteps>
       <div>
         <beforeSearch v-if="Number($route.query.step) === 1" />
-        <template v-else-if="Number($route.query.step) === 2">
+        <FormList
+          pre="/back/permissions/authorized/new?step=1"
+          next="/back/permissions/authorized/new?step=3"
+          v-if="Number($route.query.step) === 2"
+        ></FormList>
+        <template v-else-if="Number($route.query.step) === 3">
           <section class="box-style p-xl-5 p-3">
             <h2 class="h3 fw-semibold mb-4">請選擇堂口名稱及執事</h2>
             <div class="row">
@@ -18,7 +23,7 @@
                   id="hall"
                   class="form-select form-select-lg"
                   aria-label=".form-select-lg example"
-                  v-model="currentHall"
+                  v-model="ChurchName"
                 >
                   <option :value="index" v-for="(item, index) in auth" :key="index">
                     {{ index }}
@@ -32,10 +37,11 @@
                   id="deacon"
                   class="form-select form-select-lg"
                   aria-label=".form-select-lg example"
+                  v-model="DeaconName"
                 >
                   <option
                     :value="item"
-                    v-for="(item, index) in auth[currentHall]"
+                    v-for="(item, index) in auth[ChurchName]"
                     :key="item + index"
                   >
                     {{ item }}
@@ -52,19 +58,25 @@
             >
               上一步
             </router-link>
-            <router-link
-              to="/back/permissions/authorized/new?step=3"
+            <button
+              type="button"
               class="btn btn-primary text-white py-3 flex-grow-1"
               style="max-width: 184px"
+              @click="createQR"
             >
               產出註冊連結
-            </router-link>
+            </button>
           </div>
         </template>
-        <template v-else>
+        <template v-if="Number($route.query.step) === 4">
           <div class="box-style d-flex flex-column align-items-center py-xl-5 py-3">
             <h2 class="h3 fw-semibold">使用者註冊連結</h2>
-            <div class="bg-secondary" style="width: 200px; height: 200px">這裡放QR</div>
+            <QrcodeVue
+              v-if="adminStore.qrcode"
+              class="d-block mx-auto"
+              :value="url + adminStore.qrcode"
+              :size="200"
+            ></QrcodeVue>
             <section class="text-danger mt-3">
               <h3 class="h4 fw-semibold mb-3">注意事項</h3>
               <p class="fs-5 mb-5">此為一次性註冊連結 <br />二十分鐘後失效</p>
@@ -84,11 +96,16 @@
 import BackTitle from '@/components/back/BackTitle.vue';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
 import beforeSearch from '@/components/information/BeforeSearch.vue';
-
-import { ref } from 'vue';
+import FormList from '@/components/information/FormList.vue';
+import AdminStore from '@/stores/AdminStore';
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import type { Ref } from 'vue';
+import QrcodeVue from 'qrcode.vue';
 
-const steps = ref(['個資查詢', '權限設定', '註冊連結']);
+const adminStore = AdminStore();
+const router = useRouter();
+const steps = ref(['個資查詢', '基本資料', '權限設定', '註冊連結']);
 
 interface Auth {
   [key: string]: string[];
@@ -98,5 +115,21 @@ const auth = ref<Auth>({
   寮房: ['寮房師', '副寮房師', '寮房志工'],
   系統管理員: ['系統管理員'],
 });
-const currentHall: Ref<string> = ref('知客');
+const ChurchName: Ref<string> = ref('知客');
+const DeaconName: Ref<string> = ref(auth.value[ChurchName.value][0]);
+const url = ref(`${window.location.origin}/#/register?qr=`);
+function createQR() {
+  const tempUser = {
+    UserId: JSON.parse(sessionStorage.tempUser).Id,
+    DeaconName: DeaconName.value,
+    ChurchName: ChurchName.value,
+  };
+  adminStore.createdQR(tempUser);
+}
+watch(
+  () => adminStore.qrcode,
+  () => {
+    router.push('/back/permissions/authorized/new?step=4');
+  },
+);
 </script>
