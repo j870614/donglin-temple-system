@@ -35,24 +35,24 @@
           </tr>
         </template>
         <template #tbody>
-          <tr v-if="!filterUser.length">
+          <tr v-if="!users.length">
             <td colspan="9">當前堂口無任何人員</td>
           </tr>
           <template v-else>
             <tr
-              v-for="(user, index) in filterUser"
-              :key="user.Id"
-              :class="{ 'table-active': tempUser.Id === user.Id }"
-              @click="tempUser = user"
+              v-for="(user, index) in users"
+              :key="user.id"
+              :class="{ 'table-active': currentUser.id === user.id }"
+              @click="currentUser = user"
             >
               <td>{{ index + 1 }}</td>
-              <td>性別</td>
-              <td>法名</td>
-              <td>俗名</td>
-              <td>電話</td>
-              <td>執事名稱</td>
-              <td>核發權限者</td>
-              <td>{{ getCurrentMonth(user.CreatedAt) }} / {{ getCurrentDay(user.CreatedAt) }}</td>
+              <td>{{ user.sex }}</td>
+              <td>{{ user.legalName }}</td>
+              <td>{{ user.originalName }}</td>
+              <td>{{ user.tel }}</td>
+              <td>{{ user.deacon }}</td>
+              <td>{{ user.editorId }}</td>
+              <td>{{ getCurrentMonth(user.editorDate) }} / {{ getCurrentDay(user.editorDate) }}</td>
               <td
                 class="cursor-point"
                 @click.prevent="() => editorPermissions(user)"
@@ -72,8 +72,7 @@
           type="button"
           class="btn btn-outline-primary py-3 flex-grow-1"
           style="max-width: 184px"
-          :disabled="!tempUser.Id"
-          @click.prevent="deletePermissions(tempUser)"
+          @click.prevent="deletePermissions(currentUser)"
         >
           移除權限
         </button>
@@ -87,32 +86,88 @@
 <script setup lang="ts">
 import BackTitle from '@/components/back/BackTitle.vue';
 import StickyTable from '@/components/back/StickyTable.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted } from 'vue';
 import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
 import Swal from '@/plug/SweetAlert';
 import type { SweetAlertResult } from 'sweetalert2';
-import AdminStore from '@/stores/AdminStore';
 
 const search = ref<string>('知客');
-const adminStore = AdminStore();
-const filterUser = ref<any[]>([]);
 
-onMounted(() => {
-  adminStore.getManagers();
-});
-watch(
-  () => adminStore.managers,
-  () => {
-    filterUser.value = adminStore.managers;
-  },
-);
-function filterUserHall() {
-  console.log(1);
+interface UserInfo {
+  id: number;
+  sex: string;
+  legalName: string;
+  originalName: string;
+  tel: string;
+  hall: string;
+  deacon: string;
+  editorId: number;
+  editorDate: number;
 }
+const originDate = ref<UserInfo[]>([
+  {
+    id: 1,
+    sex: '男',
+    legalName: '',
+    originalName: '王一信',
+    tel: '0910111222',
+    hall: '知客',
+    deacon: '總知客',
+    editorId: 3,
+    editorDate: 1682575205902,
+  },
+  {
+    id: 2,
+    sex: '男',
+    legalName: '普戊',
+    originalName: '王大信',
+    tel: '0910111222',
+    hall: '寮房',
+    deacon: '寮房師',
+    editorId: 3,
+    editorDate: 1682575205902,
+  },
+  {
+    id: 3,
+    sex: '女',
+    legalName: '',
+    originalName: '李大花',
+    tel: '0910111222',
+    hall: '知客',
+    deacon: '知客志工',
+    editorId: 3,
+    editorDate: 1682575205902,
+  },
+]);
+const users = ref<UserInfo[]>([]);
+function filterUserHall() {
+  users.value = originDate.value.filter((user) => user.hall === search.value);
+}
+onMounted(() => filterUserHall());
 
 // 移除權限
-const tempUser = ref({ Id: 0, ChurchName: '', DeaconName: '' });
-async function deletePermissions(current: any): Promise<void> {
+const currentUser = ref<UserInfo>({
+  id: 0,
+  sex: '',
+  legalName: '',
+  originalName: '',
+  tel: '',
+  hall: '',
+  deacon: '',
+  editorId: 0,
+  editorDate: 1682575205902,
+});
+async function deletePermissions(current: UserInfo): Promise<void> {
+  const index: number = originDate.value.findIndex((user: UserInfo) => user.id === current.id);
+  if (index === -1) {
+    Swal.fire({
+      icon: 'error',
+      title: '還未選擇四眾法眷',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    return;
+  }
   try {
     const res: SweetAlertResult = await Swal.fire({
       html: `<p class="mb-0 fs-3">是否移除<b class="px-2 text-danger fw-semibold">${
@@ -122,13 +177,13 @@ async function deletePermissions(current: any): Promise<void> {
     });
 
     if (res.isConfirmed) {
-      adminStore.patchAuth(tempUser.value, false);
-      // Swal.fire({
-      //   icon: 'success',
-      //   title: '已移除權限',
-      //   showConfirmButton: false,
-      //   timer: 1500,
-      // });
+      Swal.fire({
+        icon: 'success',
+        title: '已移除權限',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      originDate.value.splice(index, 1);
       filterUserHall();
     }
   } catch (err) {
@@ -136,7 +191,17 @@ async function deletePermissions(current: any): Promise<void> {
   }
 }
 // 修改權限
-async function editorPermissions(current: any): Promise<void> {
+async function editorPermissions(current: UserInfo): Promise<void> {
+  const index: number = originDate.value.findIndex((user: UserInfo) => user.id === current.id);
+  if (index === -1) {
+    Swal.fire({
+      icon: 'error',
+      title: '還未選擇四眾法眷',
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    return;
+  }
   try {
     const { value: res } = await Swal.fire({
       html: `<p class="mb-0 fs-3">是否修改<b class="px-2 text-danger fw-semibold">${
@@ -168,17 +233,15 @@ async function editorPermissions(current: any): Promise<void> {
       },
     });
     if (!res) return;
-    console.log(res);
-    // 已選擇權限
+    if (originDate.value[index].deacon === res) return;
     if (res.includes('知客')) {
-      tempUser.value.ChurchName = '知客';
-    } else if (res.includes('寮房')) {
-      tempUser.value.ChurchName = '寮房';
+      originDate.value[index].hall = '知客';
+      originDate.value[index].deacon = res;
     } else {
-      tempUser.value.ChurchName = '系統管理員';
+      originDate.value[index].hall = '寮房';
+      originDate.value[index].deacon = res;
     }
-    tempUser.value.DeaconName = res;
-    adminStore.patchAuth(tempUser.value, true);
+    originDate.value[index].editorDate = Date.now();
     Swal.fire({
       icon: 'success',
       title: '已修改權限',
