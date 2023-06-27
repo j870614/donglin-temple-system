@@ -33,6 +33,18 @@ const tagStyle: TagStyle = {
     textColor: 'neutral-80',
     bgColor: 'neutral-40',
   },
+  已產出註冊連結: {
+    textColor: 'secondary',
+    bgColor: 'secondary-tint',
+  },
+  已註冊: {
+    textColor: 'success',
+    bgColor: 'success-10',
+  },
+  註冊連結失效: {
+    textColor: 'danger',
+    bgColor: 'danger-10',
+  },
 };
 
 export default tagStyle;

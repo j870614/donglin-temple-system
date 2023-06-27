@@ -11,6 +11,7 @@ export default defineStore('userStore', {
       DharmaName: '',
       Name: '',
     },
+    deaconName: '',
   }),
   actions: {
     async checkLogin(token: string): Promise<void | boolean> {
@@ -20,6 +21,8 @@ export default defineStore('userStore', {
         return;
       }
       this.user = sessionStorage.user && JSON.parse(sessionStorage.user);
+      this.deaconName = sessionStorage.deaconName;
+
       axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       const url: string = `${VITE_BASEURL}/managers/check`;
       try {
@@ -49,6 +52,7 @@ export default defineStore('userStore', {
       };
       try {
         const res: { data: any } = await axios.post(url, data);
+
         if (res.data.status) {
           if (Remember) {
             localStorage.setItem('userAccount', Email);
@@ -57,7 +61,7 @@ export default defineStore('userStore', {
           }
           const swal = await Swal.fire(res.data.message);
           localStorage.setItem('isLogin', 'true');
-
+          sessionStorage.setItem('deaconName', res.data.data.deaconName);
           if (swal.isConfirmed || swal.isDismissed) {
             document.cookie = `token=${res.data.data.token}; expires=${new Date(
               res.data.data.expired * 1000,
@@ -66,16 +70,20 @@ export default defineStore('userStore', {
           }
         }
       } catch (err: any) {
-        console.error(err);
-
         Swal.fire({
           icon: 'error',
           title: err.response.data.message,
         });
       }
     },
-    async register(Email: string, Password: string, ConfirmPassword: string, UserId: number) {
-      const url: string = `${VITE_BASEURL}/managers/signup`;
+    async register(
+      Email: string,
+      Password: string,
+      ConfirmPassword: string,
+      UserId: number,
+      qr: string,
+    ) {
+      const url: string = `${VITE_BASEURL}/managers/signup${qr ? `/${qr}` : ''}`;
       // const url: string = `${VITE_BASEURL}/managers/generate`; // 不會被userId驗證
       const data: { Email: string; Password: string; ConfirmPassword: string; UserId: number } = {
         Email,
