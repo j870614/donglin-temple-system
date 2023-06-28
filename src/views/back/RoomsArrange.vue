@@ -542,7 +542,7 @@
 </template>
 <script setup lang="ts">
 import { ref, reactive, toRefs, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import BackTitle from '@/components/back/BackTitle.vue';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -664,6 +664,7 @@ function filterRoomArea(roomsArea: string | null) {
 }
 const { VITE_BASEURL } = import.meta.env;
 const route = useRoute();
+const router = useRouter();
 const { id } = route.query;
 async function setRoom(roomId: number) {
   try {
@@ -678,7 +679,7 @@ async function setRoom(roomId: number) {
       showConfirmButton: false,
       timer: 1500,
     });
-    // 這裡加上要跳轉頁面
+    router.push('/back/booking');
   } catch (err: any) {
     Swal.fire({
       icon: 'error',
