@@ -139,7 +139,7 @@
       <div class="d-flex flex-wrap justify-content-between" style="margin-top: 56px">
         <div
           v-for="roomData in filterRoomArea(selectRoomsArea)"
-          :key="roomData.id"
+          :key="roomData.Id"
           class="card text-center mb-3"
           :class="calculateRoomClass(roomData, 'border')"
           type="button"
@@ -162,11 +162,11 @@
                   <span class="box me-1">{{ index }}</span>
                   <p class="card-text">
                     {{
-                      !roomData.roomUsers[index - 1]
+                      !roomData.ongoingUsers[index - 1]
                         ? ''
-                        : !roomData.roomUsers[index - 1].DharmaName
-                        ? roomData.roomUsers[index - 1].Name
-                        : roomData.roomUsers[index - 1].DharmaName
+                        : !roomData.ongoingUsers[index - 1].DharmaName
+                        ? roomData.ongoingUsers[index - 1].Name
+                        : roomData.ongoingUsers[index - 1].DharmaName
                     }}
                   </p>
                 </div>
@@ -202,31 +202,31 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="roomData in filterRoomArea(selectRoomsArea)" :key="roomData.id">
+          <tr v-for="roomData in filterRoomArea(selectRoomsArea)" :key="roomData.Id">
             <td>{{ roomData.BuildingName }}棟</td>
             <td>{{ roomData.BuildingName }} {{ roomData.ShareId }}</td>
             <td>{{ roomData.RoomTypeName }}</td>
             <td>{{ roomData.TotalBeds }}</td>
-            <td>{{ roomData.ReservedBeds }}</td>
-            <td>{{ roomData.TotalBeds - roomData.ReservedBeds }}</td>
-            <template v-if="roomData.roomUsers.length > 0">
+            <td>{{ roomData.ongoingUsers.length }}</td>
+            <td>{{ roomData.TotalBeds - roomData.ongoingUsers.length - roomData.ReservedBeds }}</td>
+            <template v-if="roomData.ongoingUsers.length > 0">
               <td>
                 {{
-                  roomData.roomUsers[0].IsMonk
-                    ? `${roomData.roomUsers[0].DharmaName} 法師`
-                    : !roomData.roomUsers[0].DharmaName
-                    ? roomData.roomUsers[0].Name
-                    : roomData.roomUsers[0].DharmaName
+                  roomData.ongoingUsers[0].IsMonk
+                    ? `${roomData.ongoingUsers[0].DharmaName} 法師`
+                    : !roomData.ongoingUsers[0].DharmaName
+                    ? roomData.ongoingUsers[0].Name
+                    : roomData.ongoingUsers[0].DharmaName
                 }}
               </td>
-              <template v-if="roomData.roomUsers.length > 1">
+              <template v-if="roomData.ongoingUsers.length > 1">
                 <td>
                   {{
-                    roomData.roomUsers[0].IsMonk
-                      ? `${roomData.roomUsers[0].DharmaName} 法師`
-                      : !roomData.roomUsers[0].DharmaName
-                      ? roomData.roomUsers[0].Name
-                      : roomData.roomUsers[0].DharmaName
+                    roomData.ongoingUsers[0].IsMonk
+                      ? `${roomData.ongoingUsers[0].DharmaName} 法師`
+                      : !roomData.ongoingUsers[0].DharmaName
+                      ? roomData.ongoingUsers[0].Name
+                      : roomData.ongoingUsers[0].DharmaName
                   }}
                 </td>
               </template>
@@ -257,6 +257,7 @@
     </div>
     <div
       class="offcanvas offcanvas-end"
+      data-bs-backdrop="static"
       tabindex="-1"
       id="offcanvasRight"
       aria-labelledby="offcanvasRightLabel"
@@ -286,7 +287,11 @@
             </div>
             <div>
               <i class="bi bi-circle-fill text-primary p-2"></i>已安排 / 掛單床數
-              <span class="fs-bold">{{ tempRoom.ReservedBeds }}</span>
+              <span class="fs-bold">{{
+                tempRoom.ongoingUsers && tempRoom.ongoingUsers.length
+                  ? tempRoom.ongoingUsers.length
+                  : 0
+              }}</span>
             </div>
             <div>
               <i class="bi bi-circle-fill text-secondary p-2"></i>保留床數
@@ -297,7 +302,12 @@
               <span class="fs-bold">{{ tempRoom.TotalBeds }}</span>
             </div>
           </div>
-          <button type="button" class="btn btn-primary w-100 p-3" @click="setRoom(tempRoom.Id)">
+          <button
+            type="button"
+            class="btn btn-primary w-100 p-3"
+            @click="setRoom(tempRoom.Id)"
+            :disabled="tempRoom.TotalBeds - tempRoom.ReservedBeds === 0"
+          >
             安排寮房
           </button>
         </div>
@@ -318,32 +328,36 @@
             <tr v-for="index in tempRoom.TotalBeds" :key="index">
               <td>
                 {{
-                  !tempRoom.roomUsers[index - 1]
+                  !tempRoom.ongoingUsers[index - 1]
                     ? ''
-                    : tempRoom.roomUsers[index - 1].BedStayOrderNumber
+                    : tempRoom.ongoingUsers[index - 1].BedStayOrderNumber
                 }}
               </td>
               <td>
                 {{
-                  !tempRoom.roomUsers[index - 1]
+                  !tempRoom.ongoingUsers[index - 1]
                     ? ''
-                    : tempRoom.roomUsers[index - 1].StayIdentityName
+                    : tempRoom.ongoingUsers[index - 1].StayIdentityName
                 }}
               </td>
               <td>
-                {{ !tempRoom.roomUsers[index - 1] ? '' : tempRoom.roomUsers[index - 1].DharmaName }}
-              </td>
-              <td>
-                {{ !tempRoom.roomUsers[index - 1] ? '' : tempRoom.roomUsers[index - 1].Name }}
-              </td>
-              <td>
-                <span v-if="tempRoom.roomUsers[index - 1]">2023</span><br />{{
-                  !tempRoom.roomUsers[index - 1] ? '' : tempRoom.roomUsers[index - 1].inDate
+                {{
+                  !tempRoom.ongoingUsers[index - 1]
+                    ? ''
+                    : tempRoom.ongoingUsers[index - 1].DharmaName
                 }}
               </td>
               <td>
-                <span v-if="tempRoom.roomUsers[index - 1]">2023</span><br />{{
-                  !tempRoom.roomUsers[index - 1] ? '' : tempRoom.roomUsers[index - 1].outDate
+                {{ !tempRoom.ongoingUsers[index - 1] ? '' : tempRoom.ongoingUsers[index - 1].Name }}
+              </td>
+              <td>
+                <span v-if="tempRoom.ongoingUsers[index - 1]">2023</span><br />{{
+                  !tempRoom.ongoingUsers[index - 1] ? '' : tempRoom.ongoingUsers[index - 1].inDate
+                }}
+              </td>
+              <td>
+                <span v-if="tempRoom.ongoingUsers[index - 1]">2023</span><br />{{
+                  !tempRoom.ongoingUsers[index - 1] ? '' : tempRoom.ongoingUsers[index - 1].outDate
                 }}
               </td>
               <td>
@@ -351,7 +365,7 @@
                   type="button"
                   class="btn btn-success-10"
                   style="color: #0da97e"
-                  v-if="tempRoom.roomUsers[index - 1]"
+                  v-if="tempRoom.ongoingUsers[index - 1]"
                 >
                   已安單
                 </button>
@@ -454,7 +468,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(user, index) in tempRoom.roomUsers" :key="index">
+                <tr v-for="(user, index) in tempRoom.futureUsers" :key="index">
                   <td>{{ index + 1 }}</td>
                   <td>{{ user.DharmaName }}</td>
                   <td>{{ user.Name }}</td>
@@ -471,8 +485,29 @@
             aria-labelledby="history-tab"
             tabindex="0"
           >
-            歷史住眾
+            <h3 class="contentTitle">歷史住眾資訊</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>報名序號</th>
+                  <th>俗名</th>
+                  <th>法名</th>
+                  <th>報到日</th>
+                  <th>離單日</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(user, index) in tempRoom.historicalUsers" :key="index">
+                  <td>{{ index + 1 }}</td>
+                  <td>{{ user.DharmaName }}</td>
+                  <td>{{ user.Name }}</td>
+                  <td>2023<br />{{ user.inDate }}</td>
+                  <td>2023<br />{{ user.outDate }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
+
           <div
             class="tab-pane fade"
             id="roomCheck-tab-pane"
@@ -516,13 +551,72 @@ import RoomsProgressBar from '@/components/back/RoomsProgressBar.vue';
 import RoomStore from '@/stores/RoomStore';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-// import router from '@/router';
+
+interface RoomUser {
+  UserId: number;
+  Name: string;
+  DharmaName: string;
+  IsMonk: boolean;
+  IsMale: boolean;
+  StayIdentity: number;
+  StayIdentityName: string;
+  Mobile: string;
+  Phone: string;
+  EatBreakfast: boolean;
+  EatLunch: boolean;
+  EatDinner: boolean;
+  RoomId: number;
+  BedStayOrderNumber: number;
+  CheckInDate: string;
+  CheckOutDate: string;
+  CheckInDateBreakfast: boolean;
+  CheckInDateLunch: boolean;
+  CheckInDateDinner: boolean;
+  CheckInTime: string;
+  CheckInUserId: number;
+  CheckInUserName: string;
+  CheckInUserDharmaName: string;
+  CheckInUserIsMale: boolean;
+  Status: string;
+  Remarks: string;
+  UpdateUserId: number;
+  UpdateUserName: string;
+  UpdateUserDharmaName: string;
+  UpdateUserIsMale: boolean;
+  UpdateAt: string;
+  roomArea: string;
+  inDate: string;
+  outDate: string;
+}
+
+interface Room {
+  Id: number;
+  DormitoryAreaId: number;
+  BuildingId: number;
+  ShareId: number;
+  RoomType: number;
+  IsMale: boolean;
+  TotalBeds: number;
+  ReservedBeds: number;
+  IsActive: true;
+  UpdateAt: string;
+  RoomId: number;
+  DormitoryAreaName: string;
+  BuildingName: string;
+  RoomTypeName: string;
+  GenderName: string;
+  name: string;
+  status: string;
+  roomUsers: RoomUser[];
+  historicalUsers: RoomUser[];
+  ongoingUsers: RoomUser[];
+  futureUsers: RoomUser[];
+  roomEventArray: Array<{ id: number; title: string; start: string; end: string }>;
+}
 
 const roomsData = ref<Room[]>([]);
 const tempRoom = ref<Room[]>([]);
-function insertTepmRoomData(
-  room: { id: number; name: string; status: string; person: { num: number; name: string }[] }[],
-) {
+function insertTepmRoomData(room: any) {
   tempRoom.value = { ...room };
 }
 const countRoomsStatus = reactive({
@@ -546,7 +640,7 @@ function countRooms(filteredRooms: Array<any>) {
   filteredRooms.forEach((element) => {
     reservedBedsCount += element.ReservedBeds;
     totalBedsCount += element.TotalBeds;
-    bookingBedsCount += element.roomUsers.length;
+    bookingBedsCount += element.ongoingUsers.length;
   });
   reservedBeds.value = reservedBedsCount;
   totalBeds.value = totalBedsCount;
@@ -593,61 +687,33 @@ async function setRoom(roomId: number) {
   }
 }
 const selectRoomsArea = ref<string | null>(null);
-interface Room {
-  id: number;
-  name: string;
-  status: string;
-  person: Array<{ num: number; name: string }>;
-}
+
 const roomShowType = ref<string | null>(null);
 const changeShowType = (type: string | null) => {
   roomShowType.value = type;
 };
 
-const roomEvent = [
-  {
-    id: 'dfasdfwer',
-    title: '普甲',
-    start: '2023-06-10',
-    end: '2023-06-17',
-    color: '#FFF4F0',
-    textColor: '#FF5E1F',
-  },
-  {
-    id: 'edfawerpo3',
-    title: '普甲',
-    start: '2023-06-21',
-    end: '2023-06-24',
-    textColor: '#FF5E1F',
-    color: '#FFF4F0',
-  },
-  {
-    id: '12341234342334344',
-    title: '普乙',
-    start: '2023-06-21',
-    end: '2023-06-27',
-    textColor: '#2298EE',
-    color: '#F5FBFF',
-  },
-];
-const calendarOptions = {
-  height: '550px',
-  plugins: [dayGridPlugin, bootstrapPlugin],
-  themeSystem: 'bootstrap5',
-  locale: 'zh-tw',
-  initialEvents: roomEvent,
-  editable: false,
-  selectable: false,
-  selectMirror: false,
-  dayMaxEvents: true,
-  eventDisplay: 'block',
-  weekends: true,
-};
+const calendarOptions = computed(() => {
+  return {
+    height: '550px',
+    plugins: [dayGridPlugin, bootstrapPlugin],
+    themeSystem: 'bootstrap5',
+    locale: 'zh-tw',
+    events: tempRoom.value.roomEventArray,
+    editable: false,
+    selectable: false,
+    selectMirror: false,
+    dayMaxEvents: true,
+    eventDisplay: 'block',
+    weekends: true,
+  };
+});
+
 const calculateRoomClass = computed(() => (roomData: any, where: string) => {
   switch (true) {
     case roomData.RoomTypeName === '庫房':
       return `${where}-neutral-60`;
-    case roomData.TotalBeds - roomData.roomUsers.length === 0:
+    case roomData.TotalBeds - roomData.ongoingUsers.length === 0:
       return `${where}-primary`;
     case roomData.TotalBeds - roomData.ReservedBeds === 0:
       return `${where}-secondary`;
@@ -660,12 +726,12 @@ const calculateRoomStr = computed(() => (roomData: any) => {
   switch (true) {
     case roomData.RoomTypeName === '庫房':
       return '庫房';
-    case roomData.TotalBeds - roomData.roomUsers.length === 0:
+    case roomData.TotalBeds - roomData.ongoingUsers.length === 0:
       return '已滿';
     case roomData.TotalBeds - roomData.ReservedBeds === 0:
       return '保留房';
     default:
-      return `剩${roomData.TotalBeds - roomData.roomUsers.length}床`;
+      return `剩${roomData.TotalBeds - roomData.ongoingUsers.length}床`;
   }
 });
 

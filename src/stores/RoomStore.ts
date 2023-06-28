@@ -70,7 +70,52 @@ export default defineStore('roomStore', {
         const roomUsers = this.monthAppliess.filter((e) => {
           return e.RoomId === element.RoomId;
         });
-        this.roomsData[index] = { ...element, roomUsers };
+
+        const today = new Date();
+        const formattedToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+        const historicalUsers = roomUsers.filter((user) => {
+          const checkInDate = new Date(user.CheckInDate);
+          return checkInDate < formattedToday;
+        });
+
+        const ongoingUsers = roomUsers.filter((user) => {
+          const checkInDate = new Date(user.CheckInDate);
+          const checkOutDate = new Date(user.CheckOutDate);
+          return checkInDate <= formattedToday && checkOutDate >= formattedToday;
+        });
+
+        const futureUsers = roomUsers.filter((user) => {
+          const checkInDate = new Date(user.CheckInDate);
+          return checkInDate > formattedToday;
+        });
+        const roomEventArray: { id: any; title: string; start: any; end: any }[] = [];
+        roomUsers.forEach(
+          (e: {
+            Id: any;
+            DharmaName: string;
+            Name: string;
+            CheckInDate: any;
+            CheckOutDate: any;
+          }) => {
+            const obj = {
+              id: e.Id,
+              title: !e.DharmaName ? e.Name : e.DharmaName,
+              start: moment(new Date(e.CheckInDate)).format('YYYY-MM-DD'),
+              end: moment(new Date(e.CheckOutDate)).format('YYYY-MM-DD'),
+            };
+            roomEventArray.push(obj);
+          },
+        );
+
+        this.roomsData[index] = {
+          ...element,
+          roomUsers,
+          historicalUsers,
+          ongoingUsers,
+          futureUsers,
+          roomEventArray,
+        };
       });
     },
     async fetchDataAndInsertRoomArea(year = defaultYear, month = defaultMonth) {
