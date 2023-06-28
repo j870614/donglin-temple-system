@@ -190,7 +190,7 @@ export default defineStore('buddhaStore', {
       const data = {
         UpdateUserId: JSON.parse(sessionStorage.user).Id,
         CheckInUserId: tempUser.Id,
-        Remarks: tempUser.Remarks || '',
+        Remarks: tempUser.Remarks,
       };
       try {
         const user = tempUser;

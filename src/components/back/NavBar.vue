@@ -98,7 +98,7 @@
           </span>
         </div>
         <div class="login-name fs-5 d-flex py-5 my-3">
-          {{ userStore.deaconName }} {{ userStore.user?.DharmaName || userStore.user?.Name }}
+          知客 {{ userStore.user?.DharmaName || userStore.user?.Name }}
         </div>
         <div class="pe-3 position-relative d-flex justify-content-around">
           <span
