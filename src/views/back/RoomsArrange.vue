@@ -1,227 +1,221 @@
 <!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
-  <main class="row">
-    <BackTitle>
-      <template #title>安排寮房</template>
-    </BackTitle>
-    <ProcessSteps :steps="steps"></ProcessSteps>
+  <main class="row mx-0">
+    <div class="col h-100 gx-xl-5 pt-xl-4 pb-xl-5 py-3 mb-xl-2">
+      <BackTitle>
+        <template #title>安排寮房</template>
+      </BackTitle>
+      <ProcessSteps :steps="steps"></ProcessSteps>
 
-    <div class="roomTitleArea container d-flex flex-column-reverse flex-md-row">
-      <div class="col-12 col-md-5 h-100 gx-xl-5 py-3 py-md-0 mb-xl-2 roomsHeader">
-        <div class="accordion-flush" id="roomsInfo" style="max-width: 360px">
-          <div class="accordion-item">
-            <div class="accordion-header" id="flush-headingOne">
-              <button
-                class="btn btn-white collapsed w-100 p-0"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#flush-collapseOne"
-                aria-expanded="false"
-                aria-controls="flush-collapseOne"
+      <div class="row roomTitleArea d-flex flex-column-reverse flex-md-row">
+        <div class="col-12 col-md-5 h-100 gx-xl-5 py-3 py-md-0 mb-xl-2 roomsHeader">
+          <div class="accordion-flush" id="roomsInfo" style="max-width: 360px">
+            <div class="accordion-item">
+              <div class="accordion-header" id="flush-headingOne">
+                <button
+                  class="btn btn-white accordion-button collapsed w-100 p-0"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#flush-collapseOne"
+                  aria-expanded="false"
+                  aria-controls="flush-collapseOne"
+                >
+                  <div class="d-flex justify-content-between align-items-center w-100">
+                    <h2>寮區資訊</h2>
+                    <i class="bi bi-chevron-down"></i>
+                  </div>
+                </button>
+              </div>
+              <div
+                id="flush-collapseOne"
+                class="accordion-collapse collapse show"
+                aria-labelledby="flush-headingOne"
+                data-bs-parent="#roomsInfo"
               >
-                <div class="d-flex justify-content-between align-items-center w-100">
-                  <h2>寮區資訊</h2>
-                  <i class="bi bi-chevron-down"></i>
-                </div>
-              </button>
-            </div>
-            <div
-              id="flush-collapseOne"
-              class="accordion-collapse collapse show"
-              aria-labelledby="flush-headingOne"
-            >
-              <div class="d-flex flex-wrap justify-content-around align-items-end">
-                <p class="pt-3 mb-0 fw-normal">{{ selectRoomsArea }}</p>
-                <div>
-                  <i class="bi bi-circle-fill text-success p-2"></i
-                  >{{
-                    countRoomsStatus.totalBeds -
-                    countRoomsStatus.bookingBeds -
-                    countRoomsStatus.reservedBeds
-                  }}
-                </div>
-                <div>
-                  <i class="bi bi-circle-fill text-primary p-2"></i
-                  >{{ countRoomsStatus.bookingBeds }}
-                </div>
-                <div>
-                  <i class="bi bi-circle-fill text-secondary p-2"></i
-                  >{{ countRoomsStatus.reservedBeds }}
-                </div>
-                <div>
-                  <i class="bi bi-circle-fill text-neutral-60 p-2"></i
-                  >{{ countRoomsStatus.totalBeds }}
-                </div>
-              </div>
-            </div>
-            <div
-              id="flush-collapseOne"
-              class="accordion-collapse collapse"
-              aria-labelledby="flush-headingOne"
-              data-bs-parent="#roomsInfo"
-            >
-              <div class="accordion-body">
-                <h5 class="mt-5 fw-bold">選擇寮區</h5>
-                <select v-model="selectRoomsArea" class="form-select" aria-label="Default select">
-                  <option value="彌陀家族">彌陀家族</option>
-                  <option value="內院前區">內院前區</option>
-                  <option value="內院大廳">內院大廳</option>
-                </select>
-
-                <h5 class="mt-4 fw-bold">寮區呈現</h5>
-                <div class="mt-3 roomMap d-flex justify-content-around">
-                  <div
-                    class="form-check form-check-inline"
-                    role="button"
-                    @click="changeShowType('map')"
-                    @keydown.enter="changeShowType('map')"
-                    tabindex="0"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="roomShowType"
-                      id="roomMap"
-                      value="map"
-                      v-model="roomShowType"
-                    />
-                    <label class="form-check-label" for="roomMap">寮區平面圖</label>
-                  </div>
-                  <div
-                    class="form-check form-check-inline"
-                    role="button"
-                    @click="changeShowType('table')"
-                    @keydown.enter="changeShowType('table')"
-                    tabindex="0"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="roomShowType"
-                      id="roomTable"
-                      value="table"
-                      v-model="roomShowType"
-                    />
-                    <label class="form-check-label" for="roomTable">寮區表格清單</label>
-                  </div>
-                </div>
-                <hr />
-                <h5 class="mt-5 fw-bold">{{ selectRoomsArea }}</h5>
-                <div class="mt-3 fw-normal">
-                  <i class="bi bi-circle-fill text-success p-2"></i>可安排空床數
-                  <span class="fw-bold ms-2">{{
-                    countRoomsStatus.totalBeds -
-                    countRoomsStatus.bookingBeds -
-                    countRoomsStatus.reservedBeds
-                  }}</span>
-                </div>
-                <div class="mt-3 fw-normal">
-                  <i class="bi bi-circle-fill text-primary p-2"></i>已安排 / 掛單床數
-                  <span class="fw-bold ms-2">{{ countRoomsStatus.bookingBeds }}</span>
-                </div>
-                <div class="mt-3 fw-normal">
-                  <i class="bi bi-circle-fill text-secondary p-2"></i>保留床數
-                  <span class="fw-bold ms-2">{{ countRoomsStatus.reservedBeds }}</span>
-                </div>
-                <div class="mt-3 fw-normal">
-                  <i class="bi bi-circle-fill text-neutral-60 p-2"></i>總床數
-                  <span class="fw-bold ms-2">{{ countRoomsStatus.totalBeds }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-5 text-center ms-md-5">
-        <!-- <RoomsProgressBar :roomsState="'安排寮房'" /> -->
-      </div>
-    </div>
-
-    <div class="col-12" v-if="roomShowType === 'map'">
-      <div class="d-flex flex-wrap justify-content-between" style="margin-top: 56px">
-        <div
-          v-for="roomData in filterRoomArea(selectRoomsArea)"
-          :key="roomData.Id"
-          class="card text-center mb-3"
-          :class="calculateRoomClass(roomData, 'border')"
-          type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasRight"
-          aria-controls="offcanvasRight"
-          style="
-            width: 179px;
-            height: 144px;
-            border-radius: 12px;
-            background-color: #ececec;
-            border: 2px solid;
-          "
-          @click="insertTepmRoomData(roomData)"
-        >
-          <div class="card-body position-relative">
-            <div class="mt-5">
-              <div v-for="index in roomData.TotalBeds" :key="index">
-                <div class="mb-2 d-flex">
-                  <span class="box me-1">{{ index }}</span>
-                  <p class="card-text">
-                    {{
-                      !roomData.ongoingUsers[index - 1]
-                        ? ''
-                        : !roomData.ongoingUsers[index - 1].DharmaName
-                        ? roomData.ongoingUsers[index - 1].Name
-                        : roomData.ongoingUsers[index - 1].DharmaName
+                <div class="d-flex flex-wrap justify-content-around align-items-end">
+                  <p class="pt-3 mb-0 fw-normal">{{ selectRoomsArea }}</p>
+                  <div>
+                    <i class="bi bi-circle-fill text-success p-2"></i
+                    >{{
+                      countRoomsStatus.totalBeds -
+                      countRoomsStatus.bookingBeds -
+                      countRoomsStatus.reservedBeds
                     }}
-                  </p>
+                  </div>
+                  <div>
+                    <i class="bi bi-circle-fill text-primary p-2"></i
+                    >{{ countRoomsStatus.bookingBeds }}
+                  </div>
+                  <div>
+                    <i class="bi bi-circle-fill text-secondary p-2"></i
+                    >{{ countRoomsStatus.reservedBeds }}
+                  </div>
+                  <div>
+                    <i class="bi bi-circle-fill text-neutral-60 p-2"></i
+                    >{{ countRoomsStatus.totalBeds }}
+                  </div>
+                </div>
+              </div>
+              <div
+                id="flush-collapseOne"
+                class="accordion-collapse collapse"
+                aria-labelledby="flush-headingOne"
+                data-bs-parent="#roomsInfo"
+              >
+                <div class="accordion-body">
+                  <h5 class="mt-5 fw-bold">選擇寮區</h5>
+                  <select v-model="selectRoomsArea" class="form-select" aria-label="Default select">
+                    <option value="彌陀家族">彌陀家族</option>
+                    <option value="內院前區">內院前區</option>
+                    <option value="內院大廳">內院大廳</option>
+                  </select>
+
+                  <h5 class="mt-4 fw-bold">寮區呈現</h5>
+                  <div class="mt-3 roomMap d-flex justify-content-around">
+                    <div
+                      class="form-check form-check-inline"
+                      role="button"
+                      @click="changeShowType('map')"
+                      @keydown.enter="changeShowType('map')"
+                      tabindex="0"
+                    >
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="roomShowType"
+                        id="roomMap"
+                        value="map"
+                        v-model="roomShowType"
+                      />
+                      <label class="form-check-label" for="roomMap">寮區平面圖</label>
+                    </div>
+                    <div
+                      class="form-check form-check-inline"
+                      role="button"
+                      @click="changeShowType('table')"
+                      @keydown.enter="changeShowType('table')"
+                      tabindex="0"
+                    >
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="roomShowType"
+                        id="roomTable"
+                        value="table"
+                        v-model="roomShowType"
+                      />
+                      <label class="form-check-label" for="roomTable">寮區表格清單</label>
+                    </div>
+                  </div>
+                  <hr />
+                  <h5 class="mt-5 fw-bold">{{ selectRoomsArea }}</h5>
+                  <div class="mt-3 fw-normal">
+                    <i class="bi bi-circle-fill text-success p-2"></i>可安排空床數
+                    <span class="fw-bold ms-2">{{
+                      countRoomsStatus.totalBeds -
+                      countRoomsStatus.bookingBeds -
+                      countRoomsStatus.reservedBeds
+                    }}</span>
+                  </div>
+                  <div class="mt-3 fw-normal">
+                    <i class="bi bi-circle-fill text-primary p-2"></i>已安排 / 掛單床數
+                    <span class="fw-bold ms-2">{{ countRoomsStatus.bookingBeds }}</span>
+                  </div>
+                  <div class="mt-3 fw-normal">
+                    <i class="bi bi-circle-fill text-secondary p-2"></i>保留床數
+                    <span class="fw-bold ms-2">{{ countRoomsStatus.reservedBeds }}</span>
+                  </div>
+                  <div class="mt-3 fw-normal">
+                    <i class="bi bi-circle-fill text-neutral-60 p-2"></i>總床數
+                    <span class="fw-bold ms-2">{{ countRoomsStatus.totalBeds }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-            <div
-              class="roomsNum position-absolute top-0 start-0"
-              :class="calculateRoomClass(roomData, 'bg')"
-              :aria-label="`預約`"
-            >
-              {{ roomData.BuildingName }} {{ roomData.ShareId }}
-              <span style="font-size: 14px; font-weight: normal"
-                >| {{ calculateRoomStr(roomData) }}</span
+          </div>
+        </div>
+        <div class="text-center ms-md-5">
+          <!-- <RoomsProgressBar :roomsState="'安排寮房'" /> -->
+        </div>
+      </div>
+
+      <div v-if="roomShowType === 'map'">
+        <div class="d-flex flex-wrap justify-content-between" style="margin-top: 56px">
+          <div
+            v-for="roomData in filterRoomArea(selectRoomsArea)"
+            :key="roomData.Id"
+            class="card text-center mb-3"
+            :class="calculateRoomClass(roomData, 'border')"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight"
+            style="
+              width: 179px;
+              height: 144px;
+              border-radius: 12px;
+              background-color: #ececec;
+              border: 2px solid;
+            "
+            @click="insertTepmRoomData(roomData)"
+          >
+            <div class="card-body position-relative">
+              <div class="mt-5">
+                <div v-for="index in roomData.TotalBeds" :key="index">
+                  <div class="mb-2 d-flex">
+                    <span class="box me-1">{{ index }}</span>
+                    <p class="card-text">
+                      {{
+                        !roomData.ongoingUsers[index - 1]
+                          ? ''
+                          : !roomData.ongoingUsers[index - 1].DharmaName
+                          ? roomData.ongoingUsers[index - 1].Name
+                          : roomData.ongoingUsers[index - 1].DharmaName
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="roomsNum position-absolute top-0 start-0"
+                :class="calculateRoomClass(roomData, 'bg')"
+                :aria-label="`預約`"
               >
+                {{ roomData.BuildingName }} {{ roomData.ShareId }}
+                <span style="font-size: 14px; font-weight: normal"
+                  >| {{ calculateRoomStr(roomData) }}</span
+                >
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-12" v-else>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">建築物編號</th>
-            <th scope="col">寮房編號</th>
-            <th scope="col">寮房性質</th>
-            <th scope="col">總床數</th>
-            <th scope="col">已安排 / 掛單床數</th>
-            <th scope="col">可安排床數</th>
-            <th scope="col">住眾1 法名/俗名</th>
-            <th scope="col">住眾2 法名/俗名</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="roomData in filterRoomArea(selectRoomsArea)" :key="roomData.Id">
-            <td>{{ roomData.BuildingName }}棟</td>
-            <td>{{ roomData.BuildingName }} {{ roomData.ShareId }}</td>
-            <td>{{ roomData.RoomTypeName }}</td>
-            <td>{{ roomData.TotalBeds }}</td>
-            <td>{{ roomData.ongoingUsers.length }}</td>
-            <td>{{ roomData.TotalBeds - roomData.ongoingUsers.length - roomData.ReservedBeds }}</td>
-            <template v-if="roomData.ongoingUsers.length > 0">
+      <div v-else>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">建築物編號</th>
+              <th scope="col">寮房編號</th>
+              <th scope="col">寮房性質</th>
+              <th scope="col">總床數</th>
+              <th scope="col">已安排 / 掛單床數</th>
+              <th scope="col">可安排床數</th>
+              <th scope="col">住眾1 法名/俗名</th>
+              <th scope="col">住眾2 法名/俗名</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="roomData in filterRoomArea(selectRoomsArea)" :key="roomData.Id">
+              <td>{{ roomData.BuildingName }}棟</td>
+              <td>{{ roomData.BuildingName }} {{ roomData.ShareId }}</td>
+              <td>{{ roomData.RoomTypeName }}</td>
+              <td>{{ roomData.TotalBeds }}</td>
+              <td>{{ roomData.ongoingUsers.length }}</td>
               <td>
-                {{
-                  roomData.ongoingUsers[0].IsMonk
-                    ? `${roomData.ongoingUsers[0].DharmaName} 法師`
-                    : !roomData.ongoingUsers[0].DharmaName
-                    ? roomData.ongoingUsers[0].Name
-                    : roomData.ongoingUsers[0].DharmaName
-                }}
+                {{ roomData.TotalBeds - roomData.ongoingUsers.length - roomData.ReservedBeds }}
               </td>
-              <template v-if="roomData.ongoingUsers.length > 1">
+              <template v-if="roomData.ongoingUsers.length > 0">
                 <td>
                   {{
                     roomData.ongoingUsers[0].IsMonk
@@ -231,311 +225,326 @@
                       : roomData.ongoingUsers[0].DharmaName
                   }}
                 </td>
+                <template v-if="roomData.ongoingUsers.length > 1">
+                  <td>
+                    {{
+                      roomData.ongoingUsers[0].IsMonk
+                        ? `${roomData.ongoingUsers[0].DharmaName} 法師`
+                        : !roomData.ongoingUsers[0].DharmaName
+                        ? roomData.ongoingUsers[0].Name
+                        : roomData.ongoingUsers[0].DharmaName
+                    }}
+                  </td>
+                </template>
+                <template v-else>
+                  <td></td>
+                </template>
               </template>
               <template v-else>
                 <td></td>
+                <td></td>
               </template>
-            </template>
-            <template v-else>
-              <td></td>
-              <td></td>
-            </template>
-            <td>
-              <button
-                class="btn"
-                :class="calculateRoomClass(roomData, 'btn')"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasRight"
-                aria-controls="offcanvasRight"
-                @click="insertTepmRoomData(roomData)"
-              >
-                <i class="bi bi-search"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div
-      class="offcanvas offcanvas-end"
-      data-bs-backdrop="static"
-      tabindex="-1"
-      id="offcanvasRight"
-      aria-labelledby="offcanvasRightLabel"
-      style="padding: 40px; width: 800px"
-    >
-      <div class="offcanvas-header w-100">
-        <div class="offcanvasTitle">
-          <p class="roomNumber">{{ tempRoom.BuildingName }} {{ tempRoom.ShareId }}</p>
-          <h2 id="offcanvasRightLabel">{{ tempRoom.GenderName }}眾寮房</h2>
-        </div>
-        <div class="offcanvasTitle">
-          <p class="roomType">{{ tempRoom.RoomTypeName }}</p>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="offcanvas"
-            aria-label="Close"
-          ></button>
-        </div>
-      </div>
-      <div class="offcanvas-body">
-        <div class="roomStatus">
-          <div class="d-flex justify-content-between pb-3">
-            <div class="h5 me-5">
-              <i class="bi bi-circle-fill text-success p-2"></i>可安排空床數
-              <span class="fs-bold">{{ tempRoom.TotalBeds - tempRoom.ReservedBeds }}</span>
-            </div>
-            <div>
-              <i class="bi bi-circle-fill text-primary p-2"></i>已安排 / 掛單床數
-              <span class="fs-bold">{{
-                tempRoom.ongoingUsers && tempRoom.ongoingUsers.length
-                  ? tempRoom.ongoingUsers.length
-                  : 0
-              }}</span>
-            </div>
-            <div>
-              <i class="bi bi-circle-fill text-secondary p-2"></i>保留床數
-              <span class="fs-bold">{{ tempRoom.ReservedBeds }}</span>
-            </div>
-            <div>
-              <i class="bi bi-circle-fill text-neutral-60 p-2"></i>總床數
-              <span class="fs-bold">{{ tempRoom.TotalBeds }}</span>
-            </div>
-          </div>
-          <button
-            type="button"
-            class="btn btn-primary w-100 p-3"
-            @click="setRoom(tempRoom.Id)"
-            :disabled="tempRoom.TotalBeds - tempRoom.ReservedBeds === 0"
-          >
-            安排寮房
-          </button>
-        </div>
-        <h3 class="fw-bold">寮房住眾資訊</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>床位入住序號</th>
-              <th>住眾身分別</th>
-              <th>法名</th>
-              <th>俗名</th>
-              <th>報到日</th>
-              <th>離單日</th>
-              <th>狀態</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="index in tempRoom.TotalBeds" :key="index">
-              <td>
-                {{
-                  !tempRoom.ongoingUsers[index - 1]
-                    ? ''
-                    : tempRoom.ongoingUsers[index - 1].BedStayOrderNumber
-                }}
-              </td>
-              <td>
-                {{
-                  !tempRoom.ongoingUsers[index - 1]
-                    ? ''
-                    : tempRoom.ongoingUsers[index - 1].StayIdentityName
-                }}
-              </td>
-              <td>
-                {{
-                  !tempRoom.ongoingUsers[index - 1]
-                    ? ''
-                    : tempRoom.ongoingUsers[index - 1].DharmaName
-                }}
-              </td>
-              <td>
-                {{ !tempRoom.ongoingUsers[index - 1] ? '' : tempRoom.ongoingUsers[index - 1].Name }}
-              </td>
-              <td>
-                <span v-if="tempRoom.ongoingUsers[index - 1]">2023</span><br />{{
-                  !tempRoom.ongoingUsers[index - 1] ? '' : tempRoom.ongoingUsers[index - 1].inDate
-                }}
-              </td>
-              <td>
-                <span v-if="tempRoom.ongoingUsers[index - 1]">2023</span><br />{{
-                  !tempRoom.ongoingUsers[index - 1] ? '' : tempRoom.ongoingUsers[index - 1].outDate
-                }}
-              </td>
               <td>
                 <button
+                  class="btn"
+                  :class="calculateRoomClass(roomData, 'btn')"
                   type="button"
-                  class="btn btn-success-10"
-                  style="color: #0da97e"
-                  v-if="tempRoom.ongoingUsers[index - 1]"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasRight"
+                  aria-controls="offcanvasRight"
+                  @click="insertTepmRoomData(roomData)"
                 >
-                  已安單
+                  <i class="bi bi-search"></i>
                 </button>
-                <button type="button" class="btn btn-neutral-40" v-else>未安排</button>
               </td>
             </tr>
           </tbody>
         </table>
-        <h3 class="mt-5 mb-4 fw-bold">寮房住眾行事曆</h3>
-        <FullCalendar :options="calendarOptions" />
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
+      </div>
+      <div
+        class="offcanvas offcanvas-end"
+        data-bs-backdrop="static"
+        tabindex="-1"
+        id="offcanvasRight"
+        aria-labelledby="offcanvasRightLabel"
+        style="padding: 40px; width: 800px"
+      >
+        <div class="offcanvas-header w-100">
+          <div class="offcanvasTitle">
+            <p class="roomNumber">{{ tempRoom.BuildingName }} {{ tempRoom.ShareId }}</p>
+            <h2 id="offcanvasRightLabel">{{ tempRoom.GenderName }}眾寮房</h2>
+          </div>
+          <div class="offcanvasTitle">
+            <p class="roomType">{{ tempRoom.RoomTypeName }}</p>
             <button
-              class="nav-link active"
-              id="feature-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#feature-tab-pane"
               type="button"
-              role="tab"
-              aria-controls="feature-tab-pane"
-              aria-selected="true"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+        </div>
+        <div class="offcanvas-body">
+          <div class="roomStatus">
+            <div class="d-flex justify-content-between pb-3">
+              <div class="h5 me-5">
+                <i class="bi bi-circle-fill text-success p-2"></i>可安排空床數
+                <span class="fs-bold">{{ tempRoom.TotalBeds - tempRoom.ReservedBeds }}</span>
+              </div>
+              <div>
+                <i class="bi bi-circle-fill text-primary p-2"></i>已安排 / 掛單床數
+                <span class="fs-bold">{{
+                  tempRoom.ongoingUsers && tempRoom.ongoingUsers.length
+                    ? tempRoom.ongoingUsers.length
+                    : 0
+                }}</span>
+              </div>
+              <div>
+                <i class="bi bi-circle-fill text-secondary p-2"></i>保留床數
+                <span class="fs-bold">{{ tempRoom.ReservedBeds }}</span>
+              </div>
+              <div>
+                <i class="bi bi-circle-fill text-neutral-60 p-2"></i>總床數
+                <span class="fs-bold">{{ tempRoom.TotalBeds }}</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn btn-primary w-100 p-3"
+              @click="setRoom(tempRoom.Id)"
+              :disabled="tempRoom.TotalBeds - tempRoom.ReservedBeds === 0"
             >
-              將來掛眾
+              安排寮房
             </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="history-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#history-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="history-tab-pane"
-              aria-selected="false"
+          </div>
+          <h3 class="fw-bold">寮房住眾資訊</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>床位入住序號</th>
+                <th>住眾身分別</th>
+                <th>法名</th>
+                <th>俗名</th>
+                <th>報到日</th>
+                <th>離單日</th>
+                <th>狀態</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="index in tempRoom.TotalBeds" :key="index">
+                <td>
+                  {{
+                    !tempRoom.ongoingUsers[index - 1]
+                      ? ''
+                      : tempRoom.ongoingUsers[index - 1].BedStayOrderNumber
+                  }}
+                </td>
+                <td>
+                  {{
+                    !tempRoom.ongoingUsers[index - 1]
+                      ? ''
+                      : tempRoom.ongoingUsers[index - 1].StayIdentityName
+                  }}
+                </td>
+                <td>
+                  {{
+                    !tempRoom.ongoingUsers[index - 1]
+                      ? ''
+                      : tempRoom.ongoingUsers[index - 1].DharmaName
+                  }}
+                </td>
+                <td>
+                  {{
+                    !tempRoom.ongoingUsers[index - 1] ? '' : tempRoom.ongoingUsers[index - 1].Name
+                  }}
+                </td>
+                <td>
+                  <span v-if="tempRoom.ongoingUsers[index - 1]">2023</span><br />{{
+                    !tempRoom.ongoingUsers[index - 1] ? '' : tempRoom.ongoingUsers[index - 1].inDate
+                  }}
+                </td>
+                <td>
+                  <span v-if="tempRoom.ongoingUsers[index - 1]">2023</span><br />{{
+                    !tempRoom.ongoingUsers[index - 1]
+                      ? ''
+                      : tempRoom.ongoingUsers[index - 1].outDate
+                  }}
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-success-10"
+                    style="color: #0da97e"
+                    v-if="tempRoom.ongoingUsers[index - 1]"
+                  >
+                    已安單
+                  </button>
+                  <button type="button" class="btn btn-neutral-40" v-else>未安排</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <h3 class="mt-5 mb-4 fw-bold">寮房住眾行事曆</h3>
+          <FullCalendar :options="calendarOptions" />
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="feature-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#feature-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="feature-tab-pane"
+                aria-selected="true"
+              >
+                將來掛眾
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="history-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#history-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="history-tab-pane"
+                aria-selected="false"
+              >
+                歷史住眾
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="roomCheck-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#roomCheck-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="roomCheck-tab-pane"
+                aria-selected="false"
+              >
+                寮房查核表
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="permanent-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#permanent-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="permanent-tab-pane"
+                aria-selected="false"
+              >
+                寮房常住物
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="repair-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#repair-tab-pane"
+                type="button"
+                role="tab"
+                aria-controls="repair-tab-pane"
+                aria-selected="false"
+              >
+                設備報修
+              </button>
+            </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+            <div
+              class="tab-pane fade show active"
+              id="feature-tab-pane"
+              role="tabpanel"
+              aria-labelledby="feature-tab"
+              tabindex="0"
             >
-              歷史住眾
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="roomCheck-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#roomCheck-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="roomCheck-tab-pane"
-              aria-selected="false"
+              <h3 class="contentTitle">將來掛單住眾資訊</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>報名序號</th>
+                    <th>俗名</th>
+                    <th>法名</th>
+                    <th>報到日</th>
+                    <th>離單日</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(user, index) in tempRoom.futureUsers" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ user.DharmaName }}</td>
+                    <td>{{ user.Name }}</td>
+                    <td>2023<br />{{ user.inDate }}</td>
+                    <td>2023<br />{{ user.outDate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div
+              class="tab-pane fade"
+              id="history-tab-pane"
+              role="tabpanel"
+              aria-labelledby="history-tab"
+              tabindex="0"
+            >
+              <h3 class="contentTitle">歷史住眾資訊</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>報名序號</th>
+                    <th>俗名</th>
+                    <th>法名</th>
+                    <th>報到日</th>
+                    <th>離單日</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(user, index) in tempRoom.historicalUsers" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ user.DharmaName }}</td>
+                    <td>{{ user.Name }}</td>
+                    <td>2023<br />{{ user.inDate }}</td>
+                    <td>2023<br />{{ user.outDate }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div
+              class="tab-pane fade"
+              id="roomCheck-tab-pane"
+              role="tabpanel"
+              aria-labelledby="roomCheck-tab"
+              tabindex="0"
             >
               寮房查核表
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="permanent-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#permanent-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="permanent-tab-pane"
-              aria-selected="false"
+            </div>
+            <div
+              class="tab-pane fade"
+              id="permanent-tab-pane"
+              role="tabpanel"
+              aria-labelledby="permanent-tab"
+              tabindex="0"
             >
               寮房常住物
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="repair-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#repair-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="repair-tab-pane"
-              aria-selected="false"
+            </div>
+            <div
+              class="tab-pane fade"
+              id="repair-tab-pane"
+              role="tabpanel"
+              aria-labelledby="repair-tab"
+              tabindex="0"
             >
               設備報修
-            </button>
-          </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-          <div
-            class="tab-pane fade show active"
-            id="feature-tab-pane"
-            role="tabpanel"
-            aria-labelledby="feature-tab"
-            tabindex="0"
-          >
-            <h3 class="contentTitle">將來掛單住眾資訊</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>報名序號</th>
-                  <th>俗名</th>
-                  <th>法名</th>
-                  <th>報到日</th>
-                  <th>離單日</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(user, index) in tempRoom.futureUsers" :key="index">
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ user.DharmaName }}</td>
-                  <td>{{ user.Name }}</td>
-                  <td>2023<br />{{ user.inDate }}</td>
-                  <td>2023<br />{{ user.outDate }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div
-            class="tab-pane fade"
-            id="history-tab-pane"
-            role="tabpanel"
-            aria-labelledby="history-tab"
-            tabindex="0"
-          >
-            <h3 class="contentTitle">歷史住眾資訊</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>報名序號</th>
-                  <th>俗名</th>
-                  <th>法名</th>
-                  <th>報到日</th>
-                  <th>離單日</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(user, index) in tempRoom.historicalUsers" :key="index">
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ user.DharmaName }}</td>
-                  <td>{{ user.Name }}</td>
-                  <td>2023<br />{{ user.inDate }}</td>
-                  <td>2023<br />{{ user.outDate }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div
-            class="tab-pane fade"
-            id="roomCheck-tab-pane"
-            role="tabpanel"
-            aria-labelledby="roomCheck-tab"
-            tabindex="0"
-          >
-            寮房查核表
-          </div>
-          <div
-            class="tab-pane fade"
-            id="permanent-tab-pane"
-            role="tabpanel"
-            aria-labelledby="permanent-tab"
-            tabindex="0"
-          >
-            寮房常住物
-          </div>
-          <div
-            class="tab-pane fade"
-            id="repair-tab-pane"
-            role="tabpanel"
-            aria-labelledby="repair-tab"
-            tabindex="0"
-          >
-            設備報修
+            </div>
           </div>
         </div>
       </div>
@@ -693,9 +702,9 @@ async function setRoom(roomId: number) {
 const selectRoomsArea = ref<string | null>(null);
 
 const roomShowType = ref<string | null>(null);
-const changeShowType = (type: string | null) => {
-  roomShowType.value = type;
-};
+// const changeShowType = (type: string | null) => {
+//   roomShowType.value = type;
+// };
 
 const calendarOptions = computed(() => {
   return {

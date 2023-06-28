@@ -1,5 +1,5 @@
 <template>
-  <main class="row">
+  <main class="row mx-0">
     <div class="col h-100 gx-xl-5 pt-xl-4 pb-xl-5 py-3 mb-xl-2">
       <BackTitle>
         <template #title>佛七預約報名表單</template>
@@ -8,7 +8,7 @@
       <ProcessSteps :steps="steps"></ProcessSteps>
       <!-- 日期篩選 -->
       <div
-        class="d-flex flex-column flex-xl-row gap-xl-4 gap-2 col-12 col-md-5 h-100 gx-xl-5 py-3 py-md-0 mb-xl-2 roomsHeader"
+        class="d-flex flex-column flex-xl-row gap-xl-4 gap-2 col-12 col-md-5 h-100 gx-xl-5 py-3 py-md-0 mb-5"
       >
         <div>
           <label class="form-label fw-semibold fs-5" for="year">年份</label>
@@ -44,6 +44,13 @@
           </select>
         </div>
       </div>
+      <h2 class="h3 fw-semibold">
+        {{ currentYear }}&ensp;{{
+          ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'][
+            currentMonth - 1
+          ]
+        }}月
+      </h2>
       <div class="roomTables">
         <StickyTable>
           <template #thead>
@@ -61,11 +68,16 @@
               <th>寮區</th>
               <th>寮房編號</th>
               <th>備註</th>
-              <th>修改</th>
+              <!-- <th>修改</th> -->
             </tr>
           </template>
           <template #tbody>
-            <tr v-for="user in roomStore.monthAppliess" :key="user.UserId">
+            <tr
+              v-for="user in roomStore.monthAppliess"
+              :key="user.UserId"
+              @click="tempUser = user"
+              :class="{ 'table-active': tempUser.Id === user.Id }"
+            >
               <td>{{ user.Id }}</td>
               <td>{{ user.IsMale ? '男' : '女' }}</td>
               <td>{{ user.DharmaName }}</td>
@@ -101,34 +113,37 @@
               <td>{{ user.roomArea }}</td>
               <td>{{ user.RoomId }}</td>
               <td>{{ user.Remarks }}</td>
-              <td>
+              <!-- <td>
                 <button
                   type="button"
                   class="btn border-0 mb-0 d-flex align-items-center justify-content-center gap-2"
+                  :disabled="user.Status === '已取消掛單'"
                 >
                   <span class="material-symbols-outlined"> edit </span
                   ><span class="d-none d-xl-block">修改</span>
                 </button>
-              </td>
+              </td> -->
             </tr>
           </template>
         </StickyTable>
         <div class="d-flex justify-content-end gap-3 mt-5">
-          <router-link
+          <!-- <router-link
             to=""
             type="button"
             class="btn btn-outline-primary py-3 flex-grow-1"
             style="max-width: 184px"
           >
             詳細個資
-          </router-link>
-          <RouterLink
-            :to="`/back/bookingHistory?id=1&step=2`"
+          </router-link> -->
+          <button
+            type="button"
             class="btn btn-primary py-3 flex-grow-1"
             style="max-width: 184px"
+            @click="booking(tempUser.Id)"
+            :disabled="!tempUser.Id || tempUser.Status !== '已報名佛七'"
           >
             安排寮房
-          </RouterLink>
+          </button>
         </div>
       </div>
     </div>
@@ -142,14 +157,22 @@ import RoomStore from '@/stores/RoomStore';
 import StickyTable from '@/components/back/StickyTable.vue';
 import tagStyle from '@/interface/TagStyle';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
+import { useRouter } from 'vue-router';
 
 const steps = ref(['佛七報名名單', '歷史掛單紀錄', '安排寮房']);
+const tempUser = ref({ Id: 0, Status: '' });
+
 const roomStore = RoomStore();
+const router = useRouter();
 const currentYear = ref<number>(new Date().getFullYear());
 const currentMonth = ref<number>(new Date().getMonth() + 1);
 onMounted(async () => {
   await roomStore.fetchDataAndInsertRoomArea(currentYear.value, currentMonth.value);
 });
+
+function booking(id: number | string) {
+  router.push(`/back/bookingHistory?id=${id}&step=2`);
+}
 </script>
 <style scoped lang="scss">
 .form-select {
