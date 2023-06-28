@@ -34,10 +34,12 @@ export default defineStore('userStore', {
 
         if (this.user) return;
         const profile: { data: any } = await axios.get(`${VITE_BASEURL}/managers/profile`);
-        const { userId } = profile.data.data;
+        const { userId, deaconName } = profile.data.data;
         const userData: { data: any } = await axios.get(`${VITE_BASEURL}/users/${userId}`);
         const { user } = userData.data.data;
         this.user = user;
+        this.deaconName = deaconName;
+        sessionStorage.setItem('deaconName', deaconName);
         sessionStorage.setItem('user', JSON.stringify(user));
       } catch (err: any) {
         console.error(err);
