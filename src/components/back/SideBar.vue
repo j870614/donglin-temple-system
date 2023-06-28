@@ -299,7 +299,7 @@ const permissions: Permissions = {
         isOpen: false,
         children: [
           {
-            path: '/booking',
+            path: '/booking?step=1',
             name: '安排寮房',
           },
           {

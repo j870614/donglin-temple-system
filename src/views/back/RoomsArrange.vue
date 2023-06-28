@@ -4,6 +4,8 @@
     <BackTitle>
       <template #title>安排寮房</template>
     </BackTitle>
+    <ProcessSteps :steps="steps"></ProcessSteps>
+
     <div class="roomTitleArea container d-flex flex-column-reverse flex-md-row">
       <div class="col-12 col-md-5 h-100 gx-xl-5 py-3 py-md-0 mb-xl-2 roomsHeader">
         <div class="accordion-flush" id="roomsInfo" style="max-width: 360px">
@@ -131,7 +133,7 @@
         </div>
       </div>
       <div class="col-12 col-md-5 text-center ms-md-5">
-        <RoomsProgressBar :roomsState="'安排寮房'" />
+        <!-- <RoomsProgressBar :roomsState="'安排寮房'" /> -->
       </div>
     </div>
 
@@ -547,11 +549,12 @@ import BackTitle from '@/components/back/BackTitle.vue';
 import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import bootstrapPlugin from '@fullcalendar/bootstrap5';
-import RoomsProgressBar from '@/components/back/RoomsProgressBar.vue';
+import ProcessSteps from '@/components/back/ProcessSteps.vue';
 import RoomStore from '@/stores/RoomStore';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+const steps = ref(['佛七報名名單', '歷史掛單紀錄', '安排寮房']);
 interface RoomUser {
   UserId: number;
   Name: string;

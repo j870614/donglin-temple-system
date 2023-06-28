@@ -75,8 +75,8 @@
       </div>
     </div>
     <div class="btn g-1">
-      <router-link to="/back/booking" class="btn btn-outline-secondary">上一步</router-link>
-      <router-link :to="`/back/rooms?id=${userData.Id}`" class="btn btn-secondary"
+      <router-link to="/back/booking?step=1" class="btn btn-outline-secondary">上一步</router-link>
+      <router-link :to="`/back/rooms?id=${userData.Id}&step=3`" class="btn btn-secondary"
         >安排寮房</router-link
       >
     </div>

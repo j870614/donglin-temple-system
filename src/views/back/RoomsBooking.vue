@@ -1,9 +1,12 @@
 <template>
   <main class="row">
-    <BackTitle>
-      <template #title>佛七預約報名表單</template>
-    </BackTitle>
-    <div class="roomTitleArea container d-flex flex-column-reverse flex-md-row">
+    <div class="col h-100 gx-xl-5 pt-xl-4 pb-xl-5 py-3 mb-xl-2">
+      <BackTitle>
+        <template #title>佛七預約報名表單</template>
+      </BackTitle>
+      <!-- 步驟 -->
+      <ProcessSteps :steps="steps"></ProcessSteps>
+      <!-- 日期篩選 -->
       <div
         class="d-flex flex-column flex-xl-row gap-xl-4 gap-2 col-12 col-md-5 h-100 gx-xl-5 py-3 py-md-0 mb-xl-2 roomsHeader"
       >
@@ -41,83 +44,106 @@
           </select>
         </div>
       </div>
-      <div class="col-12 col-md-5 text-center ms-md-5">
-        <RoomsProgressBar :roomsState="'查詢佛七<br />報名表單'" />
+      <div class="roomTables">
+        <StickyTable>
+          <template #thead>
+            <tr>
+              <th>報名序號</th>
+              <th>性別</th>
+              <th>法名</th>
+              <th>俗名</th>
+              <th>電話</th>
+              <th>預計報到日</th>
+              <th>預計離單日</th>
+              <th>報到當天用齋</th>
+              <th>狀態</th>
+              <th>登錄/修改者</th>
+              <th>寮區</th>
+              <th>寮房編號</th>
+              <th>備註</th>
+              <th>修改</th>
+            </tr>
+          </template>
+          <template #tbody>
+            <tr v-for="user in roomStore.monthAppliess" :key="user.UserId">
+              <td>{{ user.Id }}</td>
+              <td>{{ user.IsMale ? '男' : '女' }}</td>
+              <td>{{ user.DharmaName }}</td>
+              <td>{{ user.Name }}</td>
+              <td>{{ user.Mobile || user.Phone }}</td>
+              <td>
+                {{ getCurrentMonth(new Date(user.CheckInDate).valueOf()) }} /
+                {{ getCurrentDay(new Date(user.CheckInDate).valueOf()) }}
+              </td>
+              <td>
+                {{ getCurrentMonth(new Date(user.CheckOutDate).valueOf()) }} /
+                {{ getCurrentDay(new Date(user.CheckOutDate).valueOf()) }}
+              </td>
+              <td>
+                <p class="mb-0" v-if="user.CheckInDateDinner && user.CheckInDateLunch">
+                  用午齋、藥石
+                </p>
+                <p class="mb-0" v-else-if="user.CheckInDateLunch">用午齋</p>
+                <p class="mb-0" v-else-if="user.CheckInDateDinner">用藥石</p>
+                <p class="mb-0" v-else>不用齋</p>
+              </td>
+              <td>
+                <p
+                  class="py-2 px-3 mb-0 rounded-4"
+                  :class="`bg-${tagStyle[user.Status].bgColor} text-${
+                    tagStyle[user.Status].textColor
+                  }`"
+                >
+                  {{ user.Status }}
+                </p>
+              </td>
+              <td>{{ user.UpdateUserName }}</td>
+              <td>{{ user.roomArea }}</td>
+              <td>{{ user.RoomId }}</td>
+              <td>{{ user.Remarks }}</td>
+              <td>
+                <button
+                  type="button"
+                  class="btn border-0 mb-0 d-flex align-items-center justify-content-center gap-2"
+                >
+                  <span class="material-symbols-outlined"> edit </span
+                  ><span class="d-none d-xl-block">修改</span>
+                </button>
+              </td>
+            </tr>
+          </template>
+        </StickyTable>
+        <div class="d-flex justify-content-end gap-3 mt-5">
+          <router-link
+            to=""
+            type="button"
+            class="btn btn-outline-primary py-3 flex-grow-1"
+            style="max-width: 184px"
+          >
+            詳細個資
+          </router-link>
+          <RouterLink
+            :to="`/back/bookingHistory?id=1&step=2`"
+            class="btn btn-primary py-3 flex-grow-1"
+            style="max-width: 184px"
+          >
+            安排寮房
+          </RouterLink>
+        </div>
       </div>
-    </div>
-    <div class="col-12 roomTables">
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">報名序號</th>
-            <th scope="col">性別</th>
-            <th scope="col">法名</th>
-            <th scope="col">俗名</th>
-            <th scope="col">電話</th>
-            <th scope="col">預計報到日</th>
-            <th scope="col">預計離單日</th>
-            <th scope="col">報到當天用齋</th>
-            <th scope="col">狀態</th>
-            <th scope="col">登錄/修改者</th>
-            <th scope="col">寮區</th>
-            <th scope="col">寮房編號</th>
-            <th scope="col">備註</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="user in roomStore.monthAppliess" :key="user.UserId">
-            <td>{{ user.Id }}</td>
-            <td>{{ user.IsMale ? '男' : '女' }}</td>
-            <td>{{ user.DharmaName }}</td>
-            <td>{{ user.Name }}</td>
-            <td>{{ user.Mobile || user.Phone }}</td>
-            <td>
-              {{ getCurrentMonth(new Date(user.CheckInDate).valueOf()) }} /
-              {{ getCurrentDay(new Date(user.CheckInDate).valueOf()) }}
-            </td>
-            <td>
-              {{ getCurrentMonth(new Date(user.CheckOutDate).valueOf()) }} /
-              {{ getCurrentDay(new Date(user.CheckOutDate).valueOf()) }}
-            </td>
-            <td>
-              <p class="mb-0" v-if="user.CheckInDateDinner && user.CheckInDateLunch">
-                用午齋、藥石
-              </p>
-              <p class="mb-0" v-else-if="user.CheckInDateLunch">用午齋</p>
-              <p class="mb-0" v-else-if="user.CheckInDateDinner">用藥石</p>
-              <p class="mb-0" v-else>不用齋</p>
-            </td>
-            <td>{{ user.Status }}</td>
-            <td>{{ user.UpdateUserName }}</td>
-            <td>{{ user.roomArea }}</td>
-            <td>{{ user.RoomId }}</td>
-            <td>{{ user.Remarks }}</td>
-            <td>
-              <RouterLink
-                :to="`/back/bookingHistory?id=${user.Id}`"
-                type="button"
-                class="btn btn-secondary me-2"
-                >安排寮房</RouterLink
-              >
-              <router-link to="" type="button" class="btn btn-outline-secondary"
-                >詳細個資</router-link
-              >
-              <button type="button" class="btn btn-outline-gray">修改</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </main>
 </template>
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import BackTitle from '@/components/back/BackTitle.vue';
-import RoomsProgressBar from '@/components/back/RoomsProgressBar.vue';
 import { getCurrentMonth, getCurrentDay } from '@/plug/Timer';
 import RoomStore from '@/stores/RoomStore';
+import StickyTable from '@/components/back/StickyTable.vue';
+import tagStyle from '@/interface/TagStyle';
+import ProcessSteps from '@/components/back/ProcessSteps.vue';
 
+const steps = ref(['佛七報名名單', '歷史掛單紀錄', '安排寮房']);
 const roomStore = RoomStore();
 const currentYear = ref<number>(new Date().getFullYear());
 const currentMonth = ref<number>(new Date().getMonth() + 1);
@@ -126,6 +152,12 @@ onMounted(async () => {
 });
 </script>
 <style scoped lang="scss">
+.form-select {
+  min-width: 200px;
+}
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 0, 'opsz' 48;
+}
 .roomTitleArea {
   height: 100%;
   h4 {
@@ -139,45 +171,7 @@ onMounted(async () => {
   top: 20px;
   left: 0;
 }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-  border: none;
-  margin-top: 16px;
-}
 
-tr:first-child th:first-child {
-  border-top-left-radius: 12px;
-}
-tr:last-child td:first-child {
-  border-bottom-left-radius: 12px;
-}
-tr:first-child th:last-child {
-  border-top-right-radius: 12px;
-}
-tr:last-child td:last-child {
-  border-bottom-right-radius: 12px;
-}
-
-th {
-  background-color: #ececec;
-  padding: 8px;
-  font-size: 20px;
-  font-weight: bold;
-  color: #333333;
-  text-align: center;
-}
-td {
-  padding: 10px;
-  font-size: 20px;
-  font-weight: normal;
-  color: #333333;
-  text-align: center;
-}
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
 @media screen and (min-width: 768px) {
   .roomsHeader {
     margin-top: 0;

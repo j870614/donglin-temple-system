@@ -22,7 +22,7 @@
           </div>
         </template>
       </button>
-      <h4 :class="stepTextClass(item)" :style="{ left: `${item.value}%` }">
+      <h4 class="fs-6" :class="stepTextClass(item)" :style="{ left: `${item.value}%` }">
         <span v-html="item.label"></span>
       </h4>
     </template>
