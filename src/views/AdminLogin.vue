@@ -105,7 +105,7 @@ const userInput = ref<UserInput>({
 
 function login(data: UserInput): void {
   const { email, password, isRemember } = data;
-  User.login(email, password, isRemember,router);
+  User.login(email, password, isRemember, router);
 }
 
 function loginWithLine() {
