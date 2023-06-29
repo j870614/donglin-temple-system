@@ -413,7 +413,11 @@ function setSideBarAuth() {
   }
 }
 onMounted(() => {
-  setSideBarAuth();
+  if (!sessionStorage.deaconName) {
+    user.checkLogin(user.getToken());
+  } else {
+    setSideBarAuth();
+  }
 });
 watch(
   () => user.deaconName,

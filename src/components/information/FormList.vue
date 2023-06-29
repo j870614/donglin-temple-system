@@ -727,10 +727,10 @@ async function saveTemp() {
   // 全部驗證完成
   userInput.value.IsMonk = userInput.value.identity === '法師';
   userInput.value.IsMale = userInput.value.sex === '男眾';
+  userInput.value.Address = JSON.stringify(userInput.value.Address);
+
   if (!userInput.value.Id) {
     // 新增個資
-    console.log(userInput.value);
-
     const res = await guestStore.addUser(userInput.value);
     if (res.status) {
       userInput.value.Id = res.data.Id;
@@ -790,6 +790,9 @@ const countyIndex: ComputedRef<number> = computed(() =>
 watch(
   () => userInput.value.Address.point,
   (point: string) => {
+    if (typeof userInput.value.Address === 'string') {
+      userInput.value.Address = JSON.parse(userInput.value.Address);
+    }
     if (point === '國內') {
       userInput.value.Address.state = '';
       userInput.value.Address.overCounty = '';

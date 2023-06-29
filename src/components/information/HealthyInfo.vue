@@ -96,12 +96,12 @@ const sick = ref<string[]>([
 onMounted(() => {
   tempUser.value = JSON.parse(sessionStorage.tempUser);
   const { HealthStatus, BloodType } = tempUser.value;
-  tempUser.value.HealthStatus = HealthStatus
+  tempUser.value.HealthStatus = (typeof HealthStatus === 'string'
     ? JSON.parse(HealthStatus)
-    : {
-        state: [],
-        otherSick: '',
-      };
+    : HealthStatus) || {
+    state: [],
+    otherSick: '',
+  };
 
   tempUser.value.BloodType = BloodType || '';
 });
