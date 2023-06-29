@@ -5,11 +5,11 @@
       <BackTitle>
         <template #title>安排寮房</template>
       </BackTitle>
-      <ProcessSteps :steps="steps"></ProcessSteps>
+      <ProcessSteps :steps="steps" class="w-50"></ProcessSteps>
 
-      <div class="row roomTitleArea d-flex flex-column-reverse flex-md-row">
-        <div class="col-12 col-md-5 h-100 gx-xl-5 py-3 py-md-0 mb-xl-2 roomsHeader">
-          <div class="accordion-flush" id="roomsInfo" style="max-width: 360px">
+      <div class="roomAreaInfo">
+        <div class="h-100 gx-xl-5 py-3 py-md-0 mb-xl-2 roomsHeader">
+          <div class="accordion-flush" id="roomsInfo">
             <div class="accordion-item">
               <div class="accordion-header" id="flush-headingOne">
                 <button
@@ -757,6 +757,16 @@ onMounted(async () => {
 });
 </script>
 <style scoped lang="scss">
+.roomAreaInfo {
+  position: fixed;
+  top: 13rem;
+  z-index: 10;
+  max-width: 360px;
+  @media (max-width: 1200px) {
+    position: static;
+    max-width: 100%;
+  }
+}
 .box {
   box-sizing: border-box;
   display: flex;
