@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import Swal from '@/plug/SweetAlert';
+import type { LineLoginRequest } from '@/interface/line.model';
 
 const { VITE_BASEURL } = import.meta.env;
 
@@ -61,6 +62,30 @@ export default defineStore('userStore', {
           } else {
             localStorage.removeItem('userAccount');
           }
+          const swal = await Swal.fire(res.data.message);
+          localStorage.setItem('isLogin', 'true');
+          sessionStorage.setItem('deaconName', res.data.data.deaconName);
+          if (swal.isConfirmed || swal.isDismissed) {
+            document.cookie = `token=${res.data.data.token}; expires=${new Date(
+              res.data.data.expired * 1000,
+            )}`;
+            window.location.href = '/';
+          }
+        }
+      } catch (err: any) {
+        Swal.fire({
+          icon: 'error',
+          title: err.response.data.message,
+        });
+      }
+    },
+    async lineLogin(lineLoginRequest: LineLoginRequest) {
+      const url: string = `${VITE_BASEURL}/managers/line/signin`;
+      const data: LineLoginRequest = lineLoginRequest;
+      try {
+        const res: { data: any } = await axios.post(url, data);
+
+        if (res.data.status) {
           const swal = await Swal.fire(res.data.message);
           localStorage.setItem('isLogin', 'true');
           sessionStorage.setItem('deaconName', res.data.data.deaconName);
