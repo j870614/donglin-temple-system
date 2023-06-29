@@ -2,33 +2,41 @@
   <main class="row mx-0">
     <div class="col h-100 gx-xl-5 pt-xl-4 pb-xl-5 py-3 mb-xl-2">
       <BackTitle>
-        <template #title>佛七預約報名表單</template>
+        <template #title>歷史掛單紀錄</template>
       </BackTitle>
       <ProcessSteps :steps="steps"></ProcessSteps>
       <div class="mainArea">
-        <div class="userDataArea">
-          <h3>欲安排寮房之四眾資料：</h3>
-          <ul class="list-unstyled">
-            <li>
-              <ul class="list-unstyled">
-                <li>法名：{{ userData.DharmaName }}</li>
-                <li>俗名：{{ userData.Name }}</li>
-                <li>性別：{{ userData.IsMale ? '男' : '女' }}</li>
-                <li>身分別：{{ userData.IsMonk ? '法師' : '居士' }}</li>
+        <div class="box-style p-5">
+          <h3 class="mb-5">欲安排寮房之四眾資料：</h3>
+          <ul class="list-unstyled fs-5">
+            <li class="mb-3">
+              <ul class="list-unstyled row">
+                <li class="col">法名：{{ userData.DharmaName }}</li>
+                <li class="col">俗名：{{ userData.Name }}</li>
+                <li class="col">性別：{{ userData.IsMale ? '男' : '女' }}</li>
+                <li class="col">身分別：{{ userData.IsMonk ? '法師' : '居士' }}</li>
               </ul>
             </li>
             <li>
-              <ul class="list-unstyled">
-                <li>預計報到日：{{ moment(new Date(userData.CheckInDate)).format('MM/DD') }}</li>
-                <li>預計離單日：{{ moment(new Date(userData.CheckOutDate)).format('MM/DD') }}</li>
+              <ul class="list-unstyled row">
+                <li class="col">
+                  預計報到日：{{ moment(new Date(userData.CheckInDate)).format('MM/DD') }}
+                </li>
+                <li class="col">
+                  預計離單日：{{ moment(new Date(userData.CheckOutDate)).format('MM/DD') }}
+                </li>
               </ul>
             </li>
           </ul>
-          <!-- <h3>歷史掛單資料：</h3>
+        </div>
+        <div class="my-5">
+          <h3>歷史掛單資料</h3>
           <div class="table-responsive">
-            <table class="table">
+            <table
+              class="table table-hover align-middle text-center box-style text-nowrap overflow-hidden"
+            >
               <thead>
-                <tr>
+                <tr class="bg-neutral-40">
                   <th scope="col">歷史掛單日</th>
                   <th scope="col">歷史離單日</th>
                   <th scope="col">寮區</th>
@@ -49,12 +57,17 @@
               </tbody>
             </table>
           </div>
+        </div>
+
+        <div class="my-5">
           <h3>參與過1期佛七</h3>
-          <h4>曾參與佛七列表</h4>
+          <h4 class="h5">曾參與佛七列表</h4>
           <div class="table-responsive">
-            <table class="table">
+            <table
+              class="table table-hover align-middle text-center box-style text-nowrap overflow-hidden w-50"
+            >
               <thead>
-                <tr>
+                <tr class="bg-neutral-40">
                   <th scope="col">佛七期數</th>
                   <th scope="col">起七日</th>
                   <th scope="col">圓滿日</th>
@@ -68,16 +81,25 @@
                 </tr>
               </tbody>
             </table>
-          </div> -->
+          </div>
         </div>
       </div>
-      <div class="btn g-1">
-        <router-link to="/back/booking?step=1" class="btn btn-outline-secondary"
-          >上一步</router-link
+      <div class="d-flex justify-content-end gap-3 mt-5">
+        <router-link
+          to="/back/booking?step=1"
+          type="button"
+          class="btn btn-outline-primary py-3 flex-grow-1"
+          style="max-width: 184px"
         >
-        <router-link :to="`/back/rooms?id=${userData.Id}&step=3`" class="btn btn-secondary"
-          >安排寮房</router-link
+          上一步
+        </router-link>
+        <router-link
+          :to="`/back/rooms?id=${userData.Id}&step=3`"
+          class="btn btn-primary py-3 flex-grow-1"
+          style="max-width: 184px"
         >
+          安排寮房
+        </router-link>
       </div>
     </div>
   </main>
@@ -119,12 +141,3 @@ onMounted(async () => {
   await getUserData();
 });
 </script>
-<style scoped lang="scss">
-.roomTitleArea {
-  height: 100%;
-  h4 {
-    font-size: 20px;
-  }
-  margin-bottom: 80px;
-}
-</style>
