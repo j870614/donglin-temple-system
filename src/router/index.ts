@@ -56,6 +56,7 @@ const router = createRouter({
               path: 'signUp',
               meta: {
                 name: '佛七報名',
+                form: '簡易',
               },
               component: () => import('@/views/back/BuddhaSignUp.vue'),
             },
@@ -86,6 +87,9 @@ const router = createRouter({
                   path: 'new',
                   name: 'addNewAuthorized',
                   component: () => import('@/views/back/AddAuthorization.vue'),
+                  meta: {
+                    form: '簡易',
+                  },
                 },
               ],
             },

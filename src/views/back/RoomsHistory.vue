@@ -4,7 +4,7 @@
       <BackTitle>
         <template #title>歷史掛單紀錄</template>
       </BackTitle>
-      <ProcessSteps :steps="steps"></ProcessSteps>
+      <ProcessSteps :steps="steps" class="w-50"></ProcessSteps>
       <div class="mainArea">
         <div class="box-style p-5">
           <h3 class="mb-5">欲安排寮房之四眾資料：</h3>

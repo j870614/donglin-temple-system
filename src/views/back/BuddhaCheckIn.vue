@@ -60,8 +60,8 @@
               >
                 <td>{{ item.Id }}</td>
                 <td>{{ item.IsMale ? '男' : '女' }}</td>
-                <td>{{ item.CheckInUserDharmaName }}</td>
-                <td>{{ item.CheckInUserName }}</td>
+                <td>{{ item.DharmaName }}</td>
+                <td>{{ item.Name }}</td>
                 <td>{{ item.Mobile || item.Phone }}</td>
                 <td>
                   {{ getCurrentMonth(new Date(item.CheckInDate).valueOf()) }}/{{
@@ -91,17 +91,19 @@
                     {{ item.Status }}
                   </p>
                 </td>
-                <td>{{ item.UpdateUserDharmaName || item.UpdateUserName }}</td>
+                <td>{{ item.CheckInUserDharmaName || item.CheckInUserName }}</td>
                 <td>
-                  {{
-                    new Date(item.CheckInTime).getHours() < 10
-                      ? `0${new Date(item.CheckInTime).getHours()}`
-                      : new Date(item.CheckInTime).getHours()
-                  }}：{{
-                    new Date(item.CheckInTime).getMinutes() < 10
-                      ? `0${new Date(item.CheckInTime).getMinutes()}`
-                      : new Date(item.CheckInTime).getMinutes()
-                  }}
+                  <span v-if="item.CheckInTime">
+                    {{
+                      new Date(item.CheckInTime).getHours() < 10
+                        ? `0${new Date(item.CheckInTime).getHours()}`
+                        : new Date(item.CheckInTime).getHours()
+                    }}：{{
+                      new Date(item.CheckInTime).getMinutes() < 10
+                        ? `0${new Date(item.CheckInTime).getMinutes()}`
+                        : new Date(item.CheckInTime).getMinutes()
+                    }}
+                  </span>
                 </td>
                 <td>{{ item.Remarks }}</td>
               </tr>

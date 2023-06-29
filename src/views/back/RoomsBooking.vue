@@ -5,7 +5,7 @@
         <template #title>佛七預約報名表單</template>
       </BackTitle>
       <!-- 步驟 -->
-      <ProcessSteps :steps="steps"></ProcessSteps>
+      <ProcessSteps :steps="steps" class="w-50"></ProcessSteps>
       <!-- 日期篩選 -->
       <div
         class="d-flex flex-column flex-xl-row gap-xl-4 gap-2 col-12 col-md-5 h-100 gx-xl-5 py-3 py-md-0 mb-5"
@@ -62,12 +62,12 @@
               <th>電話</th>
               <th>預計報到日</th>
               <th>預計離單日</th>
-              <th>報到當天用齋</th>
-              <th>狀態</th>
-              <th>登錄/修改者</th>
               <th>寮區</th>
               <th>寮房編號</th>
+              <th>狀態</th>
               <th>備註</th>
+              <th>報到當天用齋</th>
+              <th>登錄/修改者</th>
               <!-- <th>修改</th> -->
             </tr>
           </template>
@@ -91,14 +91,8 @@
                 {{ getCurrentMonth(new Date(user.CheckOutDate).valueOf()) }} /
                 {{ getCurrentDay(new Date(user.CheckOutDate).valueOf()) }}
               </td>
-              <td>
-                <p class="mb-0" v-if="user.CheckInDateDinner && user.CheckInDateLunch">
-                  用午齋、藥石
-                </p>
-                <p class="mb-0" v-else-if="user.CheckInDateLunch">用午齋</p>
-                <p class="mb-0" v-else-if="user.CheckInDateDinner">用藥石</p>
-                <p class="mb-0" v-else>不用齋</p>
-              </td>
+              <td>{{ user.roomArea }}</td>
+              <td>{{ user.BuildingName + user.ShareId }}</td>
               <td>
                 <p
                   class="py-2 px-3 mb-0 rounded-4"
@@ -109,10 +103,16 @@
                   {{ user.Status }}
                 </p>
               </td>
-              <td>{{ user.UpdateUserName }}</td>
-              <td>{{ user.roomArea }}</td>
-              <td>{{ user.RoomId }}</td>
               <td>{{ user.Remarks }}</td>
+              <td>
+                <p class="mb-0" v-if="user.CheckInDateDinner && user.CheckInDateLunch">
+                  用午齋、藥石
+                </p>
+                <p class="mb-0" v-else-if="user.CheckInDateLunch">用午齋</p>
+                <p class="mb-0" v-else-if="user.CheckInDateDinner">用藥石</p>
+                <p class="mb-0" v-else>不用齋</p>
+              </td>
+              <td>{{ user.UpdateUserName }}</td>
               <!-- <td>
                 <button
                   type="button"
