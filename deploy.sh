@@ -18,7 +18,7 @@
     git init
     git checkout -B main
     git add -A
-    git commit -m '修改 BuddhaList 篩選 bug'
+    git commit -m '初步完成安排寮房'
 
     # if you are deploying to https://j870614.github.io
     # git push -f git@github.com:j870614/j870614.github.io.git main
