@@ -1,0 +1,1 @@
+function a(n){return new Date(n).getFullYear()}function t(n){return new Date(n).getMonth()+1}function e(n){return new Date(n).getDate()}function g(n,r=!1,u="/"){return`${a(n)}${u}${r&&t(n)<10?`0${t(n)}`:t(n)}${u}${r&&e(n)<10?`0${e(n)}`:e(n)}`}export{e as a,a as b,g as f,t as g};
