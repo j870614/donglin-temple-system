@@ -14,7 +14,7 @@
                 <li class="col">法名：{{ userData.DharmaName }}</li>
                 <li class="col">俗名：{{ userData.Name }}</li>
                 <li class="col">性別：{{ userData.IsMale ? '男' : '女' }}</li>
-                <li class="col">身分別：{{ userData.IsMonk ? '法師' : '居士' }}</li>
+                <li class="col">身分別：{{ userData.StayIdentityName }}</li>
               </ul>
             </li>
             <li>
@@ -111,15 +111,13 @@
   </main>
 </template>
 <script setup lang="ts">
+import BuddhaStore from '@/stores/BuddhaStore';
 import { onMounted, ref } from 'vue';
 import BackTitle from '@/components/back/BackTitle.vue';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
 import { useRoute } from 'vue-router';
-import Swal from 'sweetalert2';
-import axios from 'axios';
 import moment from 'moment';
 
-const { VITE_BASEURL } = import.meta.env;
 const steps = ref(['佛七報名名單', '歷史掛單紀錄', '安排寮房']);
 const route = useRoute();
 const { id } = route.query;
@@ -131,19 +129,21 @@ interface UserData {
   CheckOutDate: string;
 }
 const userData = ref<UserData[]>([]);
+const buddhaStore = BuddhaStore();
 
-const getUserData = async () => {
-  try {
-    const response = await axios.get(`${VITE_BASEURL}/buddha-seven/applies/views/${id}`);
-    userData.value = response.data.data.buddhaSevenApplyView;
-  } catch (err: any) {
-    Swal.fire({
-      icon: 'error',
-      title: err.response.data.message,
-    });
-  }
-};
+// const getUserData = async () => {
+//   try {
+//     const response = await axios.get(`${VITE_BASEURL}/buddha-seven/applies/views/${id}`);
+//     userData.value = response.data.data.buddhaSevenApplyView;
+//   } catch (err: any) {
+//     Swal.fire({
+//       icon: 'error',
+//       title: err.response.data.message,
+//     });
+//   }
+// };
 onMounted(async () => {
-  await getUserData();
+  await buddhaStore.getBuddhaUser(id);
+  userData.value = buddhaStore.curBuddhaUser;
 });
 </script>

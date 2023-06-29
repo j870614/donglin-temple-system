@@ -210,23 +210,11 @@
               </td>
               <template v-if="roomData.ongoingUsers.length > 0">
                 <td>
-                  {{
-                    roomData.ongoingUsers[0].IsMonk
-                      ? `${roomData.ongoingUsers[0].DharmaName} 法師`
-                      : !roomData.ongoingUsers[0].DharmaName
-                      ? roomData.ongoingUsers[0].Name
-                      : roomData.ongoingUsers[0].DharmaName
-                  }}
+                  {{ roomData.userOne.DharmaName || roomData.userOne.Name }}
                 </td>
                 <template v-if="roomData.ongoingUsers.length > 1">
                   <td>
-                    {{
-                      roomData.ongoingUsers[0].IsMonk
-                        ? `${roomData.ongoingUsers[0].DharmaName} 法師`
-                        : !roomData.ongoingUsers[0].DharmaName
-                        ? roomData.ongoingUsers[0].Name
-                        : roomData.ongoingUsers[0].DharmaName
-                    }}
+                    {{ roomData.userTwo.DharmaName || roomData.userTwo.Name }}
                   </td>
                 </template>
                 <template v-else>
@@ -277,7 +265,25 @@
             ></button>
           </div>
         </div>
+
         <div class="offcanvas-body">
+          <div class="needArrangeInfo fs-5">
+            <h4 class="h4">欲安排寮房之四眾資料</h4>
+            <div class="d-flex gap-2 justify-content-between">
+              <p>法名：{{ curBuddhaUser.DharmaName }}</p>
+              <p>俗名：{{ curBuddhaUser.Name }}</p>
+              <p>性別：{{ curBuddhaUser.IsMale ? '男' : '女' }}</p>
+            </div>
+            <p>身分別：{{ curBuddhaUser.StayIdentityName }}</p>
+            <div class="d-flex gap-2 justify-content-between">
+              <p>
+                預計報到日：{{ moment(new Date(curBuddhaUser.CheckInDate)).format('YYYY/MM/DD') }}
+              </p>
+              <p>
+                預計離單日：{{ moment(new Date(curBuddhaUser.CheckOutDate)).format('YYYY/MM/DD') }}
+              </p>
+            </div>
+          </div>
           <div class="roomStatus">
             <div class="d-flex justify-content-between pb-3">
               <div class="h5 me-5">
@@ -328,11 +334,7 @@
             <tbody>
               <tr v-for="index in tempRoom.TotalBeds" :key="index">
                 <td>
-                  {{
-                    !tempRoom.ongoingUsers[index - 1]
-                      ? ''
-                      : tempRoom.ongoingUsers[index - 1].BedStayOrderNumber
-                  }}
+                  {{ index }}
                 </td>
                 <td>
                   {{
@@ -381,7 +383,7 @@
           </table>
           <h3 class="mt-5 mb-4 fw-bold">寮房住眾行事曆</h3>
           <FullCalendar :options="calendarOptions" />
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
               <button
                 class="nav-link active"
@@ -540,7 +542,7 @@
             >
               設備報修
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -554,9 +556,11 @@ import FullCalendar from '@fullcalendar/vue3';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import bootstrapPlugin from '@fullcalendar/bootstrap5';
 import ProcessSteps from '@/components/back/ProcessSteps.vue';
+import moment from 'moment';
 import RoomStore from '@/stores/RoomStore';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import BuddhaStore from '@/stores/BuddhaStore';
 
 const steps = ref(['佛七報名名單', '歷史掛單紀錄', '安排寮房']);
 interface RoomUser {
@@ -748,7 +752,11 @@ const calculateRoomStr = computed(() => (roomData: any) => {
   }
 });
 
+const buddhaStore = BuddhaStore();
+const curBuddhaUser = ref({});
 onMounted(async () => {
+  await buddhaStore.getBuddhaUser(route.query.id);
+  curBuddhaUser.value = buddhaStore.curBuddhaUser;
   selectRoomsArea.value = '彌陀家族';
   roomShowType.value = 'map';
   await checkData();
@@ -808,7 +816,8 @@ onMounted(async () => {
   top: 0px;
   border-radius: 8px 0px 12px 0px;
 }
-.roomStatus {
+.roomStatus,
+.needArrangeInfo {
   width: 100%;
   padding: 16px;
   border-radius: 12px;

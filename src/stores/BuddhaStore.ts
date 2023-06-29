@@ -10,6 +10,7 @@ export default defineStore('buddhaStore', {
     totalOrder: [],
     checkInOrder: [],
     ajaxFinish: false,
+    curBuddhaUser: {},
   }),
   actions: {
     // 全部佛七期數
@@ -113,6 +114,18 @@ export default defineStore('buddhaStore', {
       try {
         const res: { data: any } = await axios.get(url);
         this.totalOrder = res.data.data.buddhaSevenApplyViews;
+      } catch (err: any) {
+        Swal.fire({
+          icon: 'error',
+          title: err.response.data.message,
+        });
+      }
+    },
+    // 佛七預約報名表單一資料
+    async getBuddhaUser(id: string | number) {
+      try {
+        const response = await axios.get(`${VITE_BASEURL}/buddha-seven/applies/views/${id}`);
+        this.curBuddhaUser = response.data.data.buddhaSevenApplyView;
       } catch (err: any) {
         Swal.fire({
           icon: 'error',
