@@ -9,10 +9,14 @@
         <div class="loginArea col-12 col-md-6">
           <p class="title text-primary">寺務管理系統</p>
           <p class="title2 fw-bold">歡迎使用</p>
-          <a href="#" class="btn btn-login w-100 fw-bold mb-3 loginBtn py-2"
-            ><img class="login-icons" src="../assets/img/login-icons/LINE_APP_Logo.png" alt="" />
-            使用 Line 帳號登入</a
+          <button
+            @click="loginWithLine"
+            type="button"
+            class="btn btn-login w-100 fw-bold mb-3 loginBtn py-2"
           >
+            <img class="login-icons" src="../assets/img/login-icons/LINE_APP_Logo.png" alt="" />
+            使用 Line 帳號登入
+          </button>
           <a href="#" class="btn btn-login w-100 fw-bold mb-3 loginBtn py-2"
             ><img class="login-icons" src="../assets/img/login-icons/google.png" alt="googleLogo" />
             使用 Google 帳號登入</a
@@ -74,6 +78,8 @@ import userStore from '@/stores/UserStore';
 import { useField, useForm } from 'vee-validate';
 import { string } from 'yup';
 
+const { VITE_BASEURL } = import.meta.env;
+
 // 定義表單字段
 const { handleSubmit } = useForm();
 const VEmail = useField('email', string().email('信箱 格式錯誤').required('信箱 必填'));
@@ -98,6 +104,10 @@ const userInput = ref<UserInput>({
 function login(data: UserInput): void {
   const { email, password, isRemember } = data;
   User.login(email, password, isRemember);
+}
+
+function loginWithLine() {
+  window.location.href = `${VITE_BASEURL}/managers/line/signin`;
 }
 // 提交表單時驗證
 const submit: () => void = handleSubmit(() => {
