@@ -7,8 +7,11 @@ import axios from 'axios';
 
 import App from './App.vue';
 import router from './router';
+import 'bootstrap';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import './assets/stylesheets/all.scss';
 import 'v-calendar/dist/style.css';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 const app = createApp(App);
 

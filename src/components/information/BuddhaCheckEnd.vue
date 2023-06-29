@@ -2,7 +2,7 @@
   <div class="row justify-content-center gap-4 mx-0">
     <section class="col-10 mb-3">
       <p class="h3 mb-0">南無阿彌陀佛</p>
-      <h3 class="h3 mb-5">請詳讀後簽名</h3>
+      <!-- <h3 class="h3 mb-5">請詳讀後簽名</h3> -->
     </section>
   </div>
   <div class="row justify-content-center gap-4 mx-0">
@@ -22,10 +22,10 @@
         />
         <label class="form-check-label" :for="item + index" v-html="item"> </label>
       </li>
-      <li class="d-flex align-items-center justify-content-center mt-5">
+      <!-- <li class="d-flex align-items-center justify-content-center mt-5">
         <p class="mb-0">掛單同意者簽名：</p>
         <button type="button" class="btn btn-lg btn-neutral-40">請點選簽名</button>
-      </li>
+      </li> -->
     </ol>
   </div>
   <div class="d-flex justify-content-end gap-3 mt-3 mt-xl-4">

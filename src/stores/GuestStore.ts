@@ -7,6 +7,7 @@ const { VITE_BASEURL } = import.meta.env;
 export default defineStore('guestStore', {
   state: () => ({
     guestsData: [] as any[],
+    currentUser: {},
   }),
   actions: {
     // 取得全部四眾個資
@@ -82,9 +83,11 @@ export default defineStore('guestStore', {
         console.log(err);
       }
     },
+    // 取得單一個資
     async getUser(id: number) {
       try {
         const res = await axios.get(`${VITE_BASEURL}/users/${id}`);
+        this.currentUser = res.data.data.user;
         sessionStorage.setItem('tempUser', JSON.stringify(res.data.data.user));
       } catch (err: any) {
         console.log(err);

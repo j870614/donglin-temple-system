@@ -67,6 +67,7 @@ watch(
     if (to.startsWith('/back/buddha/signUp') && to.split('step=')[1] !== '1') {
       if (!tempUser) router.push('/back/buddha/signUp?step=1');
     }
+
     if (!to.includes(currentPath)) {
       sessionStorage.removeItem('totalTemp');
       sessionStorage.removeItem('tempUser');

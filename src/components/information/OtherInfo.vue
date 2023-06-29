@@ -108,13 +108,14 @@ const tempUser = ref({
 onMounted(() => {
   tempUser.value = JSON.parse(sessionStorage.tempUser);
   const { Expertise } = tempUser.value;
-  tempUser.value.Expertise = Expertise
+
+  tempUser.value.Expertise = (typeof Expertise === 'string'
     ? JSON.parse(Expertise)
-    : {
-        expertise: [],
-        otherExp: '',
-        otherLag: '',
-      };
+    : Expertise) || {
+    expertise: [],
+    otherExp: '',
+    otherLag: '',
+  };
 });
 
 const expertise = ref<string[]>([

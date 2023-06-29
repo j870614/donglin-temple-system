@@ -34,6 +34,18 @@ const router = createRouter({
           component: () => import('@/views/back/BackIndex.vue'),
         },
         {
+          path: 'rooms',
+          component: () => import('@/views/back/RoomsArrange.vue'),
+        },
+        {
+          path: 'booking',
+          component: () => import('@/views/back/RoomsBooking.vue'),
+        },
+        {
+          path: 'bookingHistory',
+          component: () => import('@/views/back/RoomsHistory.vue'),
+        },
+        {
           path: 'buddha',
           children: [
             {

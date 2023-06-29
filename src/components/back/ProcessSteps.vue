@@ -21,9 +21,8 @@
           class="position-absolute start-50 translate-middle-x fs-6 fw-semibold mb-0"
           style="top: 100%; width: 6rem"
           :class="{ 'text-nowrap text-center': step.length <= 6 }"
-        >
-          {{ step }}
-        </h2>
+          v-html="step"
+        ></h2>
       </div>
       <span
         class="flex-grow-1 border border-2"

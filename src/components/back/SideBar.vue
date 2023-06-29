@@ -145,7 +145,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import SideBarConfigStore from '@/stores/SideBarConfig';
 import userStore from '@/stores/UserStore';
@@ -299,7 +299,7 @@ const permissions: Permissions = {
         isOpen: false,
         children: [
           {
-            path: '',
+            path: '/booking?step=1',
             name: '安排寮房',
           },
           {
@@ -382,24 +382,49 @@ const nav = ref<NavItem[]>([
   },
 ]);
 const identity = ref<string>('管理員'); // 這邊是使用者的身分, 跟下方的控制 sidebar 選項
-switch (identity.value) {
-  case '管理員':
-    nav.value.push(
-      permissions['系統管理'],
-      permissions['知客'],
-      permissions['寮房'],
-      permissions['四眾個人資料'],
-      permissions['查詢用齋人數'],
-    );
-    break;
-  case '知客':
-    nav.value.push(permissions['知客'], permissions['四眾個人資料'], permissions['查詢用齋人數']);
-    break;
-  case '寮房':
-    nav.value.push(permissions['寮房'], permissions['四眾個人資料'], permissions['查詢用齋人數']);
-    break;
-  default:
+
+function setSideBarAuth() {
+  const auth = user.deaconName || sessionStorage.deaconName;
+
+  if (auth.includes('知客')) {
+    identity.value = '知客';
+  } else if (auth.includes('寮房')) {
+    identity.value = '寮房';
+  } else {
+    identity.value = '管理員';
+  }
+  switch (identity.value) {
+    case '管理員':
+      nav.value.push(
+        permissions['系統管理'],
+        permissions['知客'],
+        permissions['寮房'],
+        permissions['四眾個人資料'],
+        permissions['查詢用齋人數'],
+      );
+      break;
+    case '知客':
+      nav.value.push(permissions['知客'], permissions['四眾個人資料'], permissions['查詢用齋人數']);
+      break;
+    case '寮房':
+      nav.value.push(permissions['寮房'], permissions['四眾個人資料'], permissions['查詢用齋人數']);
+      break;
+    default:
+  }
 }
+onMounted(() => {
+  if (!sessionStorage.deaconName) {
+    user.checkLogin(user.getToken());
+  } else {
+    setSideBarAuth();
+  }
+});
+watch(
+  () => user.deaconName,
+  () => {
+    setSideBarAuth();
+  },
+);
 
 const sideNav = ref(nav);
 const hoverNavName = ref('');

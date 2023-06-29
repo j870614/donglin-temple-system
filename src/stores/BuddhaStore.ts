@@ -10,6 +10,7 @@ export default defineStore('buddhaStore', {
     totalOrder: [],
     checkInOrder: [],
     ajaxFinish: false,
+    curBuddhaUser: {},
   }),
   actions: {
     // 全部佛七期數
@@ -120,6 +121,18 @@ export default defineStore('buddhaStore', {
         });
       }
     },
+    // 佛七預約報名表單一資料
+    async getBuddhaUser(id: string | number) {
+      try {
+        const response = await axios.get(`${VITE_BASEURL}/buddha-seven/applies/views/${id}`);
+        this.curBuddhaUser = response.data.data.buddhaSevenApplyView;
+      } catch (err: any) {
+        Swal.fire({
+          icon: 'error',
+          title: err.response.data.message,
+        });
+      }
+    },
     // 取消佛七報名
     async deleteOrder(Id: number, year: number, month: number) {
       const url = `${VITE_BASEURL}/buddha-seven/applies/cancel/${Id}?UpdateUserId=${
@@ -189,7 +202,7 @@ export default defineStore('buddhaStore', {
       const url = `${VITE_BASEURL}/buddha-seven/check-ins/${id}`;
       const data = {
         UpdateUserId: JSON.parse(sessionStorage.user).Id,
-        CheckInUserId: tempUser.Id,
+        CheckInUserId: JSON.parse(sessionStorage.user).Id,
         Remarks: tempUser.Remarks || '',
       };
       try {
