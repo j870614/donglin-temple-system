@@ -33,7 +33,7 @@
           <h3>歷史掛單資料</h3>
           <div class="table-responsive">
             <table
-              class="table table-hover align-middle text-center box-style text-nowrap overflow-hidden"
+              class="table table-hover align-middle text-center box-style text-nowrap overflow-hidden fs-5"
             >
               <thead>
                 <tr class="bg-neutral-40">
@@ -46,25 +46,28 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="">
+                <tr>
+                  <td colspan="6">暫無歷史掛單資料</td>
+                </tr>
+                <!-- <tr class="">
                   <td scope="row">2020/01/01</td>
                   <td>2020/02/02</td>
                   <td>a</td>
                   <td>B22</td>
                   <td>德英</td>
                   <td>張德應</td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </div>
         </div>
 
         <div class="my-5">
-          <h3>參與過1期佛七</h3>
+          <h3>參與過0期佛七</h3>
           <h4 class="h5">曾參與佛七列表</h4>
           <div class="table-responsive">
             <table
-              class="table table-hover align-middle text-center box-style text-nowrap overflow-hidden w-50"
+              class="table table-hover align-middle text-center box-style text-nowrap overflow-hidden w-50 fs-5"
             >
               <thead>
                 <tr class="bg-neutral-40">
@@ -74,11 +77,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="">
+                <tr>
+                  <td colspan="3">暫無歷史佛七資料</td>
+                </tr>
+                <!-- <tr class="">
                   <td scope="row">412</td>
                   <td>2022/02/01</td>
                   <td>2022/02/20</td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </div>

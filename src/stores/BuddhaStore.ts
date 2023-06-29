@@ -189,7 +189,7 @@ export default defineStore('buddhaStore', {
       const url = `${VITE_BASEURL}/buddha-seven/check-ins/${id}`;
       const data = {
         UpdateUserId: JSON.parse(sessionStorage.user).Id,
-        CheckInUserId: tempUser.Id,
+        CheckInUserId: JSON.parse(sessionStorage.user).Id,
         Remarks: tempUser.Remarks || '',
       };
       try {
