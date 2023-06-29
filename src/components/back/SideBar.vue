@@ -137,7 +137,7 @@
       @focus="() => (hoverNavName = '登出')"
       @mouseleave.self="() => (hoverNavName = '')"
       @blur="() => (hoverNavName = '')"
-      @click="user.signOut"
+      @click="user.signOut(router)"
     >
       <span class="material-symbols-outlined"> logout </span>登出
     </button>

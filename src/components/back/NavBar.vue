@@ -118,7 +118,11 @@
                 >帳號設定</router-link
               >
             </li>
-            <li class="btn box-hover p-3 rounded-0 d-flex align-items-center">
+            <li
+              class="btn box-hover p-3 rounded-0 d-flex align-items-center"
+              @click="userStore.signOut(router)"
+              @keyup="userStore.signOut(router)"
+            >
               <span class="material-symbols-outlined me-2"> logout </span>登出
             </li>
           </ul>
@@ -244,7 +248,11 @@
               >帳號設定</router-link
             >
           </li>
-          <li class="btn box-hover p-3 rounded-0 d-flex align-items-center">
+          <li
+            class="btn box-hover p-3 rounded-0 d-flex align-items-center"
+            @click="userStore.signOut(router)"
+            @keyup="userStore.signOut(router)"
+          >
             <span class="material-symbols-outlined me-2"> logout </span>登出
           </li>
         </ul>
@@ -257,9 +265,11 @@
 <script setup lang="ts">
 import NavInfoConfig from '@/stores/NavInfoConfig';
 import UserStore from '@/stores/UserStore';
+import { useRouter } from 'vue-router';
 import OpenSideBar from './OpenSideBar.vue';
 
 const userStore = UserStore();
+const router = useRouter();
 
 const navInfoStore = NavInfoConfig();
 </script>

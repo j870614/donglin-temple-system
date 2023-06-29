@@ -77,7 +77,9 @@ import { ref, onMounted } from 'vue';
 import userStore from '@/stores/UserStore';
 import { useField, useForm } from 'vee-validate';
 import { string } from 'yup';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const { VITE_BASEURL } = import.meta.env;
 
 // 定義表單字段
@@ -103,7 +105,7 @@ const userInput = ref<UserInput>({
 
 function login(data: UserInput): void {
   const { email, password, isRemember } = data;
-  User.login(email, password, isRemember);
+  User.login(email, password, isRemember,router);
 }
 
 function loginWithLine() {
