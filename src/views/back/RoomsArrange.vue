@@ -6,7 +6,7 @@
         <template #title>安排寮房</template>
       </BackTitle>
       <ProcessSteps :steps="steps" class="w-50"></ProcessSteps>
-
+      <!-- 手風琴 -->
       <div class="roomAreaInfo">
         <div class="h-100 gx-xl-5 py-3 py-md-0 mb-xl-2 roomsHeader">
           <div class="accordion-flush" id="roomsInfo">
@@ -67,7 +67,9 @@
                   <select v-model="selectRoomsArea" class="form-select" aria-label="Default select">
                     <option value="彌陀家族">彌陀家族</option>
                     <option value="內院前區">內院前區</option>
-                    <option value="內院大廳">內院大廳</option>
+                    <option value="內院大殿">內院大殿</option>
+                    <option value="大殿">二期大殿</option>
+                    <option value="其他">其他寮區</option>
                   </select>
 
                   <h5 class="mt-4 fw-bold">寮區呈現</h5>
@@ -134,9 +136,6 @@
             </div>
           </div>
         </div>
-        <div class="text-center ms-md-5">
-          <!-- <RoomsProgressBar :roomsState="'安排寮房'" /> -->
-        </div>
       </div>
 
       <div v-if="roomShowType === 'map'">
@@ -161,17 +160,11 @@
           >
             <div class="card-body position-relative">
               <div class="mt-5">
-                <div v-for="index in roomData.TotalBeds" :key="index">
+                <div v-for="(item, index) in ['userOne', 'userTwo']" :key="item + index">
                   <div class="mb-2 d-flex">
-                    <span class="box me-1">{{ index }}</span>
+                    <span class="box me-1">{{ index + 1 }}</span>
                     <p class="card-text">
-                      {{
-                        !roomData.ongoingUsers[index - 1]
-                          ? ''
-                          : !roomData.ongoingUsers[index - 1].DharmaName
-                          ? roomData.ongoingUsers[index - 1].Name
-                          : roomData.ongoingUsers[index - 1].DharmaName
-                      }}
+                      {{ roomData[item] && (roomData[item].DharmaName || roomData[item].Name) }}
                     </p>
                   </div>
                 </div>
@@ -213,7 +206,7 @@
               <td>{{ roomData.TotalBeds }}</td>
               <td>{{ roomData.ongoingUsers.length }}</td>
               <td>
-                {{ roomData.TotalBeds - roomData.ongoingUsers.length - roomData.ReservedBeds }}
+                {{ roomData.TotalBeds - roomData.ReservedBeds }}
               </td>
               <template v-if="roomData.ongoingUsers.length > 0">
                 <td>
@@ -312,7 +305,9 @@
               type="button"
               class="btn btn-primary w-100 p-3"
               @click="setRoom(tempRoom.Id)"
-              :disabled="tempRoom.TotalBeds - tempRoom.ReservedBeds === 0"
+              :disabled="
+                tempRoom.RoomTypeName === '庫房' || tempRoom.TotalBeds - tempRoom.ReservedBeds === 0
+              "
             >
               安排寮房
             </button>
@@ -646,13 +641,18 @@ async function checkData() {
 
 function countRooms(filteredRooms: Array<any>) {
   const { reservedBeds, totalBeds, bookingBeds } = toRefs(countRoomsStatus);
-  let reservedBedsCount = 0;
-  let totalBedsCount = 0;
-  let bookingBedsCount = 0;
+  let reservedBedsCount = 0; // 保留床數
+  let totalBedsCount = 0; // 總床數
+  let bookingBedsCount = 0; // 已安排 / 掛單床數
   filteredRooms.forEach((element) => {
-    reservedBedsCount += element.ReservedBeds;
-    totalBedsCount += element.TotalBeds;
-    bookingBedsCount += element.ongoingUsers.length;
+    if (element.RoomTypeName === '一般寮房') {
+      totalBedsCount += element.TotalBeds;
+      bookingBedsCount += element.ReservedBeds;
+    }
+    if (element.RoomTypeName === '保留房') {
+      reservedBedsCount += element.TotalBeds;
+      totalBedsCount += element.TotalBeds;
+    }
   });
   reservedBeds.value = reservedBedsCount;
   totalBeds.value = totalBedsCount;
@@ -699,7 +699,7 @@ async function setRoom(roomId: number) {
     });
   }
 }
-const selectRoomsArea = ref<string | null>(null);
+const selectRoomsArea = ref<string | null>(null); // 當前寮區
 
 const roomShowType = ref<string | null>(null);
 // const changeShowType = (type: string | null) => {
@@ -728,7 +728,7 @@ const calculateRoomClass = computed(() => (roomData: any, where: string) => {
       return `${where}-neutral-60`;
     case roomData.TotalBeds - roomData.ongoingUsers.length === 0:
       return `${where}-primary`;
-    case roomData.TotalBeds - roomData.ReservedBeds === 0:
+    case roomData.RoomTypeName === '保留房':
       return `${where}-secondary`;
     default:
       return `${where}-success`;
@@ -739,12 +739,12 @@ const calculateRoomStr = computed(() => (roomData: any) => {
   switch (true) {
     case roomData.RoomTypeName === '庫房':
       return '庫房';
-    case roomData.TotalBeds - roomData.ongoingUsers.length === 0:
-      return '已滿';
-    case roomData.TotalBeds - roomData.ReservedBeds === 0:
+    case roomData.RoomTypeName === '保留房':
       return '保留房';
+    case roomData.TotalBeds - roomData.ReservedBeds === 0:
+      return '已滿';
     default:
-      return `剩${roomData.TotalBeds - roomData.ongoingUsers.length}床`;
+      return `剩${roomData.TotalBeds - roomData.ReservedBeds}床`;
   }
 });
 
