@@ -264,7 +264,7 @@ watch(
   },
 );
 onBeforeRouteLeave((to, from, next) => {
-  sessionStorage.clear();
+  sessionStorage.removeItem('tempUser');
   next();
 });
 

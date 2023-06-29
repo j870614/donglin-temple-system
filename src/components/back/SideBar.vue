@@ -385,6 +385,7 @@ const identity = ref<string>('管理員'); // 這邊是使用者的身分, 跟�
 
 function setSideBarAuth() {
   const auth = user.deaconName || sessionStorage.deaconName;
+
   if (auth.includes('知客')) {
     identity.value = '知客';
   } else if (auth.includes('寮房')) {
