@@ -44,10 +44,10 @@ export default defineStore('userStore', {
         sessionStorage.setItem('user', JSON.stringify(user));
       } catch (err: any) {
         console.error(err);
-        // this.overLogin();
+        this.overLogin();
       }
     },
-    async login(Email: string, Password: string, Remember: boolean = false) {
+    async login(Email: string, Password: string, Remember: boolean = false, router) {
       const url: string = `${VITE_BASEURL}/managers/signin`;
       const data: { Email: string; Password: string } = {
         Email,
@@ -69,7 +69,7 @@ export default defineStore('userStore', {
             document.cookie = `token=${res.data.data.token}; expires=${new Date(
               res.data.data.expired * 1000,
             )}`;
-            window.location.href = '/';
+            router.push('/');
           }
         }
       } catch (err: any) {
@@ -79,7 +79,7 @@ export default defineStore('userStore', {
         });
       }
     },
-    async lineLogin(lineLoginRequest: LineLoginRequest) {
+    async lineLogin(lineLoginRequest: LineLoginRequest, router) {
       const url: string = `${VITE_BASEURL}/managers/line/signin`;
       const data: LineLoginRequest = lineLoginRequest;
       try {
@@ -93,7 +93,7 @@ export default defineStore('userStore', {
             document.cookie = `token=${res.data.data.token}; expires=${new Date(
               res.data.data.expired * 1000,
             )}`;
-            window.location.href = '/';
+            router.push('/');
           }
         }
       } catch (err: any) {
@@ -122,10 +122,7 @@ export default defineStore('userStore', {
         const res: { data: any } = await axios.post(url, data);
         if (res.data.status) {
           const swal = await Swal.fire('註冊成功');
-          this.clearCookie();
-          console.log('user register');
-          console.log(res.data);
-          console.log('----------');
+          this.clearCookie();;
           if (swal.isConfirmed || swal.isDismissed) window.location.href = '/';
         }
       } catch (err: any) {
@@ -136,10 +133,10 @@ export default defineStore('userStore', {
         console.error(err.response.data);
       }
     },
-    async signOut() {
+    async signOut(router) {
       this.clearCookie();
       const swal = await Swal.fire('登出成功');
-      if (swal.isConfirmed || swal.isDismissed) window.location.href = '/';
+      if (swal.isConfirmed || swal.isDismissed) router.push('/');
     },
     async overLogin() {
       this.clearCookie();
@@ -153,6 +150,7 @@ export default defineStore('userStore', {
       this.isLogin = false;
       localStorage.setItem('isLogin', 'false');
       document.cookie = `token=;expires=${new Date()}`;
+      sessionStorage.clear();
     },
     getToken(): string {
       if (!document.cookie.includes('token')) return '';

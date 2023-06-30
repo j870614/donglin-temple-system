@@ -20,8 +20,10 @@
 import { onMounted } from 'vue';
 import userStore from '@/stores/UserStore';
 import type { LineLoginRequest } from '@/interface/line.model';
+import { useRouter } from 'vue-router';
 
 const User = userStore();
+const router = useRouter();
 
 // 移除 URL # 後之前端路由
 function removeHashFromUrl(url: string): string {
@@ -51,7 +53,7 @@ onMounted(() => {
     code: String(code),
     state: String(state),
   };
-  User.lineLogin(lineLoginReq);
+  User.lineLogin(lineLoginReq, router);
   console.log(code); // 印出取得的 code
   console.log(state); // 印出取得的 state
 });
