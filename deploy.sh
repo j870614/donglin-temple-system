@@ -18,7 +18,7 @@
     git init
     git checkout -B main
     git add -A
-    git commit -m 'fix: 修正登入登出跳轉問題'
+    git commit -m 'fix: 修正報到disable判斷'
 
     # if you are deploying to https://j870614.github.io
     # git push -f git@github.com:j870614/j870614.github.io.git main

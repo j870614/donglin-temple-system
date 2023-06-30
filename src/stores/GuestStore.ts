@@ -77,6 +77,7 @@ export default defineStore('guestStore', {
       delete data.CheckInDateBreakfast;
       delete data.CheckInDateLunch;
       delete data.CheckInDateDinner;
+      delete data.StayIdentityName;
       try {
         await axios.patch(url, data);
       } catch (err: any) {
