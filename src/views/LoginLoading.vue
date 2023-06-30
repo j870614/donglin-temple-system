@@ -54,8 +54,8 @@ onMounted(() => {
     state: String(state),
   };
   User.lineLogin(lineLoginReq, router);
-  console.log(code); // 印出取得的 code
-  console.log(state); // 印出取得的 state
+  // console.log(code); // 印出取得的 code
+  // console.log(state); // 印出取得的 state
 });
 </script>
 <style>

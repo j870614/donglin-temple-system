@@ -82,6 +82,7 @@ export default defineStore('userStore', {
     async lineLogin(lineLoginRequest: LineLoginRequest, router) {
       const url: string = `${VITE_BASEURL}/managers/line/signin`;
       const data: LineLoginRequest = lineLoginRequest;
+      console.log(data);
       try {
         const res: { data: any } = await axios.post(url, data);
 
@@ -97,10 +98,11 @@ export default defineStore('userStore', {
           }
         }
       } catch (err: any) {
-        Swal.fire({
+        const swal = await Swal.fire({
           icon: 'error',
           title: err.response.data.message,
         });
+        if (swal.isConfirmed) router.push('/admin');
       }
     },
     async register(
@@ -122,7 +124,7 @@ export default defineStore('userStore', {
         const res: { data: any } = await axios.post(url, data);
         if (res.data.status) {
           const swal = await Swal.fire('註冊成功');
-          this.clearCookie();;
+          this.clearCookie();
           if (swal.isConfirmed || swal.isDismissed) window.location.href = '/';
         }
       } catch (err: any) {
