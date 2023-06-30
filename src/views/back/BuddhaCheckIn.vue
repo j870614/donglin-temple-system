@@ -125,7 +125,7 @@
             class="btn btn-primary py-3 flex-grow-1"
             style="max-width: 184px"
             :disabled="
-              !tempUser.Id || tempUser.Status !== '已報名佛七' || tempUser.Status !== '寮房已確認'
+              !tempUser.Id || (tempUser.Status !== '已報名佛七' && tempUser.Status !== '寮房已確認')
             "
             @click="checkIn"
           >

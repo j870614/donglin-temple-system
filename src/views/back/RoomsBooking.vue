@@ -72,58 +72,63 @@
             </tr>
           </template>
           <template #tbody>
-            <tr
-              v-for="user in roomStore.monthAppliess"
-              :key="user.UserId"
-              @click="tempUser = user"
-              :class="{ 'table-active': tempUser.Id === user.Id }"
-            >
-              <td>{{ user.Id }}</td>
-              <td>{{ user.IsMale ? '男' : '女' }}</td>
-              <td>{{ user.DharmaName }}</td>
-              <td>{{ user.Name }}</td>
-              <td>{{ user.Mobile || user.Phone }}</td>
-              <td>
-                {{ getCurrentMonth(new Date(user.CheckInDate).valueOf()) }} /
-                {{ getCurrentDay(new Date(user.CheckInDate).valueOf()) }}
-              </td>
-              <td>
-                {{ getCurrentMonth(new Date(user.CheckOutDate).valueOf()) }} /
-                {{ getCurrentDay(new Date(user.CheckOutDate).valueOf()) }}
-              </td>
-              <td>{{ user.roomArea }}</td>
-              <td>{{ user.BuildingName + user.ShareId }}</td>
-              <td>
-                <p
-                  class="py-2 px-3 mb-0 rounded-4"
-                  :class="`bg-${tagStyle[user.Status].bgColor} text-${
-                    tagStyle[user.Status].textColor
-                  }`"
-                >
-                  {{ user.Status }}
-                </p>
-              </td>
-              <td>{{ user.Remarks }}</td>
-              <td>
-                <p class="mb-0" v-if="user.CheckInDateDinner && user.CheckInDateLunch">
-                  用午齋、藥石
-                </p>
-                <p class="mb-0" v-else-if="user.CheckInDateLunch">用午齋</p>
-                <p class="mb-0" v-else-if="user.CheckInDateDinner">用藥石</p>
-                <p class="mb-0" v-else>不用齋</p>
-              </td>
-              <td>{{ user.UpdateUserName }}</td>
-              <!-- <td>
-                <button
-                  type="button"
-                  class="btn border-0 mb-0 d-flex align-items-center justify-content-center gap-2"
-                  :disabled="user.Status === '已取消掛單'"
-                >
-                  <span class="material-symbols-outlined"> edit </span
-                  ><span class="d-none d-xl-block">修改</span>
-                </button>
-              </td> -->
+            <tr v-if="!roomStore.monthAppliess.length">
+              <td colspan="13">當前無可安排人員</td>
             </tr>
+            <template v-else>
+              <tr
+                v-for="user in roomStore.monthAppliess"
+                :key="user.UserId"
+                @click="tempUser = user"
+                :class="{ 'table-active': tempUser.Id === user.Id }"
+              >
+                <td>{{ user.Id }}</td>
+                <td>{{ user.IsMale ? '男' : '女' }}</td>
+                <td>{{ user.DharmaName }}</td>
+                <td>{{ user.Name }}</td>
+                <td>{{ user.Mobile || user.Phone }}</td>
+                <td>
+                  {{ getCurrentMonth(new Date(user.CheckInDate).valueOf()) }} /
+                  {{ getCurrentDay(new Date(user.CheckInDate).valueOf()) }}
+                </td>
+                <td>
+                  {{ getCurrentMonth(new Date(user.CheckOutDate).valueOf()) }} /
+                  {{ getCurrentDay(new Date(user.CheckOutDate).valueOf()) }}
+                </td>
+                <td>{{ user.roomArea }}</td>
+                <td>{{ user.BuildingName + user.ShareId }}</td>
+                <td>
+                  <p
+                    class="py-2 px-3 mb-0 rounded-4"
+                    :class="`bg-${tagStyle[user.Status].bgColor} text-${
+                      tagStyle[user.Status].textColor
+                    }`"
+                  >
+                    {{ user.Status }}
+                  </p>
+                </td>
+                <td>{{ user.Remarks }}</td>
+                <td>
+                  <p class="mb-0" v-if="user.CheckInDateDinner && user.CheckInDateLunch">
+                    用午齋、藥石
+                  </p>
+                  <p class="mb-0" v-else-if="user.CheckInDateLunch">用午齋</p>
+                  <p class="mb-0" v-else-if="user.CheckInDateDinner">用藥石</p>
+                  <p class="mb-0" v-else>不用齋</p>
+                </td>
+                <td>{{ user.UpdateUserDharmaName || user.UpdateUserName }}</td>
+                <!-- <td>
+                  <button
+                    type="button"
+                    class="btn border-0 mb-0 d-flex align-items-center justify-content-center gap-2"
+                    :disabled="user.Status === '已取消掛單'"
+                  >
+                    <span class="material-symbols-outlined"> edit </span
+                    ><span class="d-none d-xl-block">修改</span>
+                  </button>
+                </td> -->
+              </tr>
+            </template>
           </template>
         </StickyTable>
         <div class="d-flex justify-content-end gap-3 mt-5">
