@@ -134,7 +134,7 @@ const tempUser = ref({ Id: 0 });
 const adminStore = AdminStore();
 const userStore = UserStore();
 
-const url = ref(`${window.location.origin}/#/register?qr=`);
+const url = ref(`${window.location.origin}${window.location.pathname}#/register?qr=`);
 onMounted(() => {
   userStore.checkLogin(userStore.getToken());
   adminStore.getAuthStatus();
