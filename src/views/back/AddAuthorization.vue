@@ -117,7 +117,7 @@ const auth = ref<Auth>({
 });
 const ChurchName: Ref<string> = ref('知客');
 const DeaconName: Ref<string> = ref(auth.value[ChurchName.value][0]);
-const url = ref(`${window.location.origin}/#/register?qr=`);
+const url = ref(`${window.location.origin}${window.location.pathname}#/register?qr=`);
 function createQR() {
   const tempUser = {
     UserId: JSON.parse(sessionStorage.tempUser).Id,

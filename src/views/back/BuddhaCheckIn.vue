@@ -124,7 +124,9 @@
             type="button"
             class="btn btn-primary py-3 flex-grow-1"
             style="max-width: 184px"
-            :disabled="!tempUser.Id || tempUser.Status !== '已報名佛七'"
+            :disabled="
+              !tempUser.Id || tempUser.Status !== '已報名佛七' || tempUser.Status !== '寮房已確認'
+            "
             @click="checkIn"
           >
             報到
@@ -310,7 +312,7 @@ function checkIn() {
       if (res.isConfirmed) {
         // 報到者填寫
         const myModal = new Modal(modal.value as string | Element);
-        url.value = `${window.location.origin}/#/${tempUser.value.UserId}?step=1`;
+        url.value = `${window.location.origin}${window.location.pathname}#/${tempUser.value.UserId}?step=1`;
         myModal.show();
       }
 
