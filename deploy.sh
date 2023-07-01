@@ -18,7 +18,7 @@
     git init
     git checkout -B main
     git add -A
-    git commit -m 'fix: 修正報到disable判斷'
+    git commit -m 'fix: 網址導向'
 
     # if you are deploying to https://j870614.github.io
     # git push -f git@github.com:j870614/j870614.github.io.git main

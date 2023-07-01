@@ -81,9 +81,10 @@
 import { useField, useForm } from 'vee-validate';
 import { string } from 'yup';
 import userStore from '@/stores/UserStore';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
+const router = useRouter();
 
 // 定義表單字段
 const { handleSubmit } = useForm();
@@ -128,6 +129,7 @@ const submit: () => void = handleSubmit(() => {
     userInput.checkPw,
     userInput.userId,
     route.query.qr,
+    router,
   );
 });
 </script>
