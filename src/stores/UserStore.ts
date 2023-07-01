@@ -111,6 +111,7 @@ export default defineStore('userStore', {
       ConfirmPassword: string,
       UserId: number,
       qr: string,
+      router
     ) {
       const url: string = `${VITE_BASEURL}/managers/signup${qr ? `/${qr}` : ''}`;
       // const url: string = `${VITE_BASEURL}/managers/generate`; // 不會被userId驗證
@@ -125,7 +126,7 @@ export default defineStore('userStore', {
         if (res.data.status) {
           const swal = await Swal.fire('註冊成功');
           this.clearCookie();
-          if (swal.isConfirmed || swal.isDismissed) window.location.href = '/';
+          if (swal.isConfirmed || swal.isDismissed) router.push('/');
         }
       } catch (err: any) {
         Swal.fire({
@@ -145,7 +146,7 @@ export default defineStore('userStore', {
       if (window.location.hash !== '#/') {
         const swal = await Swal.fire('請重新登入');
         if (swal.isConfirmed || swal.isDismissed)
-          window.location.href = `${window.location.origin}/#/admin`;
+          window.location.href = `${window.location.origin}${window.location.pathname}#/admin`;
       }
     },
     clearCookie(): void {
